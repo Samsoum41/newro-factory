@@ -1,185 +1,177 @@
-Training: computer-database    
+Formation: newro-factory    
 ===========================  
 
 # Content
-This training material holds a sequence of steps and features to implement in a Computer Database webapp.  
-Here is the macro-planning and timeline of all milestones:  
- * t0    - Start of the project
- * t0+3  - Base Architecture, CLI (Add / Edit features), Logging
+Ce document contient une séquence d'étapes et de fonctionnalités à implémenter dans une webapp nommée newro-factory.
+
+Voici le macro-planning et les différentes étapes de ce projet:  
+ * t0    - Début du projet
+ * t0+3  - Architecture de base, CLI (Add / Edit features), Logging
  * t0+11  - Web UI, Maven, Unit Tests, jQuery Validation, Backend Validation
  * t0+15 - Search, OrderBy, Transactions, Connection-Pool 
  * t0+20 - Spring integration
  * t0+24 - Spring MVC integration, JDBC Template, i18n
  * t0+31 - Maven Multi-modules, Spring Security, Hibernate ORM (JPA, Criteria, QueryDSL, Spring Data JPA)
- * t0+34 - Front (Angular JS, Angular or React)
- * t0+44 - Web Services, end of project
- * t0+48 - Project presentation to sales & tech audience
+ * t0+34 - Web Services, end of project
+ * t0+44 - Front (Vue.JS, Angular ou React)
+ * t0+45 - Présentation commerciale du projet
 
 # Installation
 
-## 1. Database
-Create a local **MySQL** server.  
-Execute scripts **1-SCHEMA.sql**, **2-PRIVILEGES.sql** and **3-ENTRIES.sql** in config/db.  
-Schema created: **computer-database-db**
-Tables created: **company, computer**  
-User created: `admincdb`
-with password: `qwerty1234`
+## 1. Base de données
+Créer un serveur **MySQL** local.  
+Exécuter les scripts **1-SCHEMA.sql**, **2-PRIVILEGES.sql** et **3-ENTRIES.sql** qui se trouvent dans config/db.  
+
+Schema créé: **computer-database-db**
+Tables créées: **company, computer**  
+Utilisateur créé: `admincdb`
+avec le mot de passe : `qwerty1234`
 
 ## 2. IDE  
 ### 2.1. Eclipse  
-- Add your project to the current workspace: **File** -> **Import** -> **Existing projects into workspace**    
-- Create a new Tomcat 8.0 Server: Follow steps **[HERE](http://www.eclipse.org/webtools/jst/components/ws/M4/tutorials/InstallTomcat.html)**
-- In your project properties, select **Project facets**, convert your project to faceted form, and tick **Dynamic Web Module** (3.0) and **Java** (1.8)
-- Select **Runtime** tab (in the previous **project facets** menu)  and check the Tomcat 8.0 Server created above as your project runtime  
-
-### 2.2. IntelliJ IDEA   
-- Add your project to the current workspace: **Import Project**, select **Create project from existing sources**
-- Create a new Tomcat 8.0 Server: **Run** -> **Edit Configurations** and point it to your local Tomcat directory (button **Configure...**) 
-- Set project structure: In **File** -> **Project Structure**, add an Artifact with default options (Artifact tab)  
+- Ajouter votre projet au workspace courant: **File** -> **Import** -> **Existing projects into workspace**    
+- Créer un nouveau serveur Tomcat 10.0 
+- Dans les propriétés du projet sélectionner **Project facets**, convertir votre projet en faceted form, et cocher **Dynamic Web Module** (5.0) et **Java** (17)
+- Sélectionner l'onglet **Runtime**  (dans le menu **project facets** précédent)  et cocher le Tomcat 10.0 créé précédemment comme environnement d'éxécution.
 
 ## 3. Git repository
-- Create your own github account, and initialize a new git repository called "computer-database".  
-- After the initial commit, add and commit a meaningful .gitignore file. 
+- Créer votre compte gitlab **[HERE](https://git.excilys.com)**, et créer un nouveau projet git nommé "newro-factory".  
+- Après le commit initial ajouter un commit avec .gitignore adéquat
 
-You are ready to start coding.
+Vous êtes prêts à démarrer à coder !
 
-## 4. Start coding
-### 4.1. Layout
-Your customer requested to build a computer database application. He owns about 500+ computers made by different manufacturers (companies such as Apple, Acer, Asus...).  
-Ideally, each computer would contain the following: a name, the date when it was introduced, eventually the date when it was discontinued, and the manufacturer. Obviously, for some reasons, the existing data is incomplete, and he requested that only the name should remain mandatory when adding a computer, the other fields being filled when possible. Furthermore, the date it was discontinued must be greater than the one he was introduced.
-The list of computers can be modified, meaning your customer should be able to list, add, delete, and update computers. The list of computers should also be pageable.  
-The list of companies should be exhaustive, and therefore will not require any update, deletion etc...  
+## 4. Démarrage
+### 4.1. Contexte
 
-### 4.2. Command line interface client
-The first iteration will be dedicated to implement a first working version of your computer database, with a CLI-UI.  
-The CLI will have the following features:
+Votre client, Jacques B, chargé de former les stagiaires de son entreprise, vous a demandé de réaliser une application lui permettant de suivre et proposer du contenu à ses stagiaires. Les stagiaires sont identifiés par un nom, un prenom, une date d'arrivée dans l'entreprise, une date de fin de formation et une promotion d'appartenance (ex : février 2022). Toutes les données sont obligatoires sauf la date de fin de formation, la promotion doit obligatoirement être une promotion déjà existante, la date de fin de formation doit forcément être après la date d'arrivée dans l'entreprise. La liste des stagiaires doit pouvoir être modifiée en ajoutant un stagiaire, en supprimer un, en modifier un. Etant donné qu'il peut y avoir beaucoup de stagiaires au fil des années la liste doit pouvoir être pagniée. Dans un premier temps la liste des promotions pourra être stockée en dur dans la base de données et n'aura pas besoin d'être modifiée. Le model contient aussi des cours découpés en chapitres et des questions correspondantes à des chapitres, dans un premier temps ces listes seront aussi figées mais paginées.
 
-- List computers  
-- List companies  
-- Show computer details (the detailed information of only one computer)  
-- Create a computer  
-- Update a computer  
-- Delete a computer  
+### 4.2. Client en ligne de commande
 
-#### 4.2.1. Start
-You will organize your project among several packages, such as model, persistence, service, ui, mapper...  
-Please use Singleton patterns where it makes sense, and implement your own Persistence management layer (for connections).
+La première itération sera dédiée à implémenter une première version fonctionnelle de votre application avec une interface en ligne de commande uniquement. 
 
-#### 4.2.2. Pages
-Now that your app's main features work, implement the pageable feature. We recommend the use of a Page class, containing your entities and the page information.  
+L'interface devra proposer les fonctionnalités suivantes : 
+
+- Lister les stagiaires
+- Lister les promotions
+- Afficher le détail d'un stagiaire
+- Afficher le détail d'une question
+- Créer un stagiaire
+- Editer un stagiaire
+- Supprimer un stagiaire
+
+
+#### 4.2.1. Démarrage
+
+Vous organiserez votre projet en différents packages comme model, persistence, service, ui, mapper, ...
+Utilisez le design pattern Singleton où il pourrait avoir du sens et implémentez votre couche de persistence pour gérer votre connexion à la base de données.
+
+#### 4.2.2. Pagination
+Maintenant que les fonctionnalités principales de votre application fonctionnent, impleméntez la pagination. Nous vous recommandons l'utilisation d'une classe Page contenant vos entités et vos informations de pagination.
 
 #### 4.2.3. CODE REVIEW 1, logging (t0 + 3 days)
-Important Points: Architecture (daos, mappers, services, models, exceptions etc...)? Singleton, IOC patterns? Validation (dirty checking?)? Date API? Secure inputs?  
-Javadoc? Comments? Use Slf4j-api logging library, with the most common implementation: logback.  
 
-### 4.3. CLI + Web interface client 
-Now that your backend skeleton is working, we want to add a second more user-friendly UI, such as a Web-UI.  
-As it will require more and more libraries (more JARs to include in the build path etc...), we should consider using a build manager. Moreover, testing is a very important aspect of QA, and testing libraries should be implemented before going any further, the same for logging.  
-Then, you can work on implementing all features on the provided static pages, using JSTL, Tags, Servlets, JSPs...  
+Points d'attention : Architecture, Singleton, Validation, Date API, Sécurisation des saisies utilisateur, Javadoc, Commentaires, Logging
+
+### 4.3. CLI + Interface Web
+
+Maintenant que votre squelette backend fonctionne nous souhaitons ajouter une seconde interface plus "User-friendly" orientée Web.
+Comme vous allez avoir besoin de plus en plus de librairies vous devriez utiliser un gestionnaire de build. De plus, tester votre application est primordial, vous devriez donc, à minima, implémenter des tests unitaires avant d'aller plus loin. Il en va de même pour le logging.
+Ensuite vous pourrez travailler à implémenter toutes les fonctionnalités avec les pages fournies en utilisant les JSP, les Servlets, JSTL, ...
 
 #### 4.3.1. Maven, Logging & Unit testing
-Refactor your project tree to match maven standards. (Tip: you should exit eclipse, move folders around, and reimport your project using File -> Import -> Existing maven projects).  
-Include necessary libraries such as mysql-connector, JUnit, Mockito, Slf4j, and create the test classes for the backend you have already developed (N.B.: This is against TDD best practices. You should always code your tests simulteanously while developing your features).  
-Creating test classes implies to take into account ALL possibilities: Illegal calls, legal calls with invalid data, and legal calls with valid data.  
-Add and configure the Maven checktyle plugin with the checkstyle.xml and suppressions.xml provided in config/checkstyle/
+Réusinez votre structure de projet pour correspondre aux standards de Maven (Conseil : vous devriez quitter Eclipse, supprimer tous les fichiers propres à Eclispe comme .settings, déplacer vos dossiers, valider vos modification avec la commande mvn install puis ré-importer votre projet avec File -> Import -> Existing maven project)
+Ajouter les librairies nécessaires comme mysql-connector, Junit, Mockito, Slf4j et créez les classes de test pour les classes que vous aviez déjà développé (N.B. : ceci est contre les bonnes pratiques de TDD. Vous devriez toujours développer vos tests en même temps que vos fonctionnalités)
 
-#### 4.3.2. Implement listing and computer add features in the web-ui
-Using the provided template https://github.com/excilys/training-java/tree/master/static, integrate the previous features using Servlets, JSPs, JSTL.  
-Use DTOs (Data Transfer Object) to transport only relevant data to the JSPs.  
-Implement Computer listing (paginated), and add features. 
-Warning: All features will be implemented and tested using Selenium automated with maven.  
+Créer des classes de test implique de prendre en compte TOUTES les possibilités : appels illégitimes, appels légitimes avec des données invalides, appels légitimes avec des données valides.
+Ajouter et configurer le module Maven Checkstyle ves les fichiers checkstyle.xml et suppressions.xml fournis dans /config/checkstyle
 
-#### 4.3.3. Secure through validation
-Implement both frontend (jQuery) and backend validation in the web-ui.
+#### 4.3.2. Implémenter la liste de stagiaires et l'ajout de stagiaire dans l'interface Web
+En utilisant le template fourni dans /static intégrez les fonctionnalités précédentes en utilisant les Servlets, les JPSs, JSTL.
+Utilisez des DTO (Data Transfer Object) pour tranférer seulement les données nécessaires aux JSPs. 
+Implémentez la liste de stagiaires (paginée) et l'ajout de stagiaire.  
+
+#### 4.3.3. Validation = sécurisation
+Implémentez la validation aussi bien côté front (jQuery) que back
 
 #### 4.3.4. CODE REVIEW 2 (t0 + 11 days)
-Important Points: Maven structure? Library scopes? Architecture (daos, mappers, services, models, dtos, controllers, exceptions, validators)? Validation? Unit test coverage? What about selenium integration into maven?  JSTL Tags and HTML documents structure.  
-Prepare a point about Threading (Connections, concurrency), and Transactions.
+Points importants : structure Maven ? Library scopes? Architecture (daos, mappers, services, models, dtos, controllers, exceptions, validators)? Validation? Unit test coverage? JSTL Tags and HTML documents structure.  
 
 #### 4.3.5. Connection pool, Transactions
-Add a connection pool (HikariCP), put your credentials in an external properties file.  
-Implement a solid transaction handling model.  
 
-#### 4.3.6. Implement all other features in the web-ui
-Implement Computer edit, delete, total count features.  
-Warning: All features will be implemented and tested using Selenium automated with maven  
+Ajoutez un pool de connexions (HikariCP), mettez vos credentials dans un fichier properties externe. Implémentez une gestion des transactions solide.
 
-#### 4.3.7. Implement search and order by features
-Search box can look for either computer or company objects.
+#### 4.3.6. Implémenter toutes les autres fonctionnalités Web
+Implémentez la mise à jour, la suppression et le nombre total de stagiaires. Ainsi que la liste de chapitres, la liste de question et le détail d'une question
 
-#### 4.3.8. Add Company deletion feature in cli
-In the command line interface, add a feature which deletes a company, and all computers related to this company. Warning: Using SQL CASCADE is forbidden. This implies the use of a transaction.  
+#### 4.3.7. Implémenter la recherche et l'OrderBy
+Le champ de recherche peut filtrer soit par stagiaire soit par promotion.
 
-#### 4.3.9. CODE REVIEW 3 (t0 + 15 days)
-Important Points: Maven structure? Library scopes? Architecture (daos, mappers, services, models, dtos, controllers, exceptions, validators)? Validation? Unit test coverage? Search and order by design choices? JSTL Tags and HTML documents structure.  
+#### 4.3.8. Ajouter la suppression d'une question à la CLI
+Dans l'interface en ligne de commance, ajoutez une fonctionnalité qui permets de supprimer une questions et toutes les propositions qui lui sont liées. Attention : il est interdit d'utiliser les CASCADE SQL.
+
+#### 4.3.9. CODE REVIEW 3 (t0 + 15 jours)
+Points importants: Maven structure? Library scopes? Architecture (daos, mappers, services, models, dtos, controllers, exceptions, validators)? Validation? Unit test coverage? Search and order by design choices? JSTL Tags and HTML documents structure.  
 Point about Threading (Connections, concurrency), and Transactions.
 
-### 4.5. Embracing Spring Framework
+### 4.5. Introduction au Spring Framework
 
 #### 4.5.1. Spring
-Enable the use of Spring to manage your objects's lifecycle, and transactions.  
-Important: Be careful to use slf4j bridges to display spring logs. Do not forget to setup your logback configuration.  
-Replace your connection pool by a real datasource configured in the spring context.  
-Which problems did you encounter? Study and note all the possible ways of solving the dependency injection issue in servlets.  
-Warning: Do not replace your Servlets by another class. Your controllers should still extend HttpServlet.
+Utilisez Spring pour gérer le cycle de vie de vos objets et vos transactions. 
+Important : utilisez slf4j pour afficher les logs spring. N'oubliez pas de configurer logback.
+Remplacer votre pool de Connexion par une Datasource configurée dans le context Spring.
+Quels problèmes rencontrez vous ? Etudiez et notez toutes les solutions possibles pour résoudre le problème d'injection de dépendance dans une Servlet.
+En gagnant en temps de développement grâce à Spring vous allez désormais pouvoir ajouter de nouvelles fonctionnalités : 
+- lister tous les chapitres présents en base de données 
+- lister toutes les questions présentes en base de données
+- afficher le détail d'une question avec ses propositions
+Attention : ne remplacez pas vos Servlets par d'autres classes. Vos controllers doivent toujours étendre HttpServlet
 
-#### 4.5.2. CODE REVIEW 4 + Point overview: Spring integration (t0 + 20 days)
-How a webapp is started, how spring initializes itself.  
-Explanation of the common problems encountered with the different contexts.  
-Roundtable of the solutions found, best practices.
+#### 4.5.2. CODE REVIEW 4 + Spring integration (t0 + 20 jours)
+Comment une webapp est démarrée, comment Spring se démarre. Explication du problème courant des différents contextes.
 
 #### 4.5.3. JDBCTemplate
-Change your DAO Implementation and use the JDBCTemplate from spring-jdbc to make your requests
+Changez votre implémentation de DAO pour utiliser JDBCTemplate de spring-jdbc pour faire vos requêtes.
 
 #### 4.5.4. Spring MVC
-You can now forget about Servlets and use Spring MVC as Controller for your webapp.  
-Use Spring MVC validation annotations to validate your DTOs.  
-Add custom error pages.  
+Vous pouvez maintenant abandonner les Servlets et utiliser Spring MVC comme Controller pour votre Webapp. Utilisez les annotations de validation de Spring MVC pour valider vos DTOs. Ajouter des pages d'erreur customisées.
 
 #### 4.5.5. i18n
-Implement spring multilingual features (French/English).
+Implémentez les fonctionnalités de Spring multi-langues (Français / Anglais)
 
-#### 4.5.6. CODE REVIEW 5 (t0 + 24 days)
-Important Points: How did you split your Spring / Spring MVC contexts? How to switch from a language to another? How about javascript translation? Did you use spring-mvc annotations, forms and models?
+#### 4.5.6. CODE REVIEW 5 (t0 + 24 jours)
+Points importants : comment avez vous séparé vos contextes Spring / Spring MVC ? Comment passer d'une langue à une autre ? Avez-vous utilisé les annotations Spring-mvc ainsi que les forms et les models ?
 
 ### 4.6. Multi module, ORM, and Security
 
 #### 4.6.1. Hibernate
-Add the Hibernate ORM to your project (managed by spring). You can choose the following APIs to implement it. HQL, JPA/Criteria, QueryDSL, Spring data JPA. 
+Ajoutez l'ORM Hibernate à votre projet (géré par Spring). Vous pouvez choisir une des API parmi HQL, Criteria, QueryDSL et Spring Data JPA.
 
 #### 4.6.2. Maven multi-module
-Now that your app is getting dense, it makes sense to split it into modules.  
-Split your maven app into 6 different modules (we recommend exiting your IDE and making those changes by hand).  
-Warning: you need to also split your applicationContext files: indeed, each module should be able to work as a standalone.  
-Following modules can be created: core, persistence, service, binding, webapp, console.
+Maintenant que votre application se complexifie cela pourrait être intéressant de la séparer en multi-modules.
+Découpez votre projet maven en 6 modules différents (nous vous recommandons de quitter votre IDE et faire ces changements à la main).
+Attention : vous allez aussi avoir besoin de séparer vos fichiers d'applicationContext : en effet chaque module devrait pouvoir fonctionner seul. Vous pouvez créer les modules suivants : core, persistence, service, binding, webapp, console.
 
 #### 4.6.3. Security
-Add Spring Security to your project. Choose a stateless approach, and use an extra UserDAO and related SQL table to store and retrieve user login info.  
-Use Digest HTTP Auth.
+Ajoutez Spring Security à votre projet. Choisissez une approche stateless et ajouter un UserDAO supplémentaire avec une table SQL pour stocker et retrouver les informations de Login.
+Utilisez Digest HTTP.
 
-#### 4.6.4. CODE REVIEW 6 (t0 + 31 days)
-Important points: Which API was the most efficient for your queries? Limitations of those APIs.
-Maven and Spring contexts evaluation, unit tests evaluation.
+#### 4.6.4. CODE REVIEW 6 (t0 + 31 jours)
+Points importants: Quelle API était la plus efficace pour vos requêtes ? Quelles étaient les failles de chaque API ?
 
 ### 4.7. Web Services, REST API
 
-#### 4.7.1. Jackson
-Now, we want your webapp to also produce APIs so that clients could access the resources remotely.  
-To allow the creation of AngularJS, Mobile (Android/iOS) or third party clients, you should expose all features using Jackson and Spring RestController.
+Vous pouvez désormais ajouter des contrôleurs REST API à votre application. Leur rôle sera de servir de la donnée brute au format JSON au lieu de JSPs.
 
-#### 4.7.2. Jax WS / Jax RS
-Refactor your CLI client to act as a remote client to your webapp, using either Jax-RS or Jax-WS libraries.
-
-#### 4.7.3. CODE REVIEW 7 (t0 + 34 days)
-Steps to fix before final release, code quality overview and possible improvements. AngularJs formation.
+#### 4.7.3. CODE REVIEW 7 (t0 + 34 jours)
+Points d'améliorations avant la release finale. Vue d'ensemble de la qualité de code et des améliorations possibles.
 
 ### 4.8. Front End
-Create another project on your Github : **cdb-front**.
+Créez une autre projet sur votre Gitlab : **newro-factory-front**.
 
-**cdb-front** is a Single Page Application (SPA) that enables the listing, creation, deletion and modification of compagnies for an admin user.
+**newro-factory-front** est une Single Page Application (SPA) qui permets la gestion complète des stagiaires et promotion pour un utilisateur admin
 
-You must choose one of the 3 following frameworks (choose wisely) :
-* AngularJs
+Vous devez choisir l'un de ces 3 frameworks front :
+* Vue.JS
 * Angular
 * React
 
@@ -255,24 +247,21 @@ NB: Page's role can also be extended to make the call to the API to hydrate the 
 #### 4.8.3 [VueJS](https://vuejs.org/)
 
 
-### 4.9. Final refactoring, UX, and project presentation
-The final stage is your production release.
+### 4.9. Ré-usinage final, UX et présentation finale
 
 #### 4.9.1. UX
-This is where you will think UX first, challenge the technical choices of the base page template, and customize it to your standards.
+A vous de réfléchir à la meilleure UX possible pour votre application et la mettre en place !
 
-### 4.9.2. Final Presentation (t0 + 48 days)
+### 4.9.2. Présentation finale (t0 + 48 jours)
 
-Goal: Present a release that can be roll out for users. Keep in mind that your CDB is to replace something manual or based on a Excel Sheet. Your audience is mainly functional not technical.
+But : présenter une version qui peut être déployée aux utilisateurs. Gardez à l'esprit que votre newro-factory a pour but de remplacer quelque chose qui était fait manuellement ou via Excel. Vos public est fonctionnel et non pas technique.
 
-The presentation will be made with the whole group, on one project of their choice.  
-It consists of 3 parts:  
-The product-presentation, from a user-centered perspective (non-technical). 
-You are presenting your "Computer database" product, and telling us what it does and how it was made.  
-A live-demonstration. Be careful, the audience may interrupt your demo and ask you to try / show something else.  
-A technical review: you will reassure your client on what he paid for. Give him the necessary technical data and metrics which will allow him to think "they are competent and they did the job, and I am confident that it is maintainable and well coded".
+Chaque équipe présentera son projet. La présentation consiste en 3 parties : 
+- la présentation produit, d'un point de vue utilisateur (non-technique). Vous nous présentez votre newro-factory et nous dites ce qu'il fait et comment il a été fait
+- une démonstration. Attention le public est en droit de vous interrompre pour vous demander d'essayer ou de lui montrer quelque chose
+- une revue technique : vous allez rassurer votre client sur ce qu'il a payé. Donnez lui les informations techniques et les métriques nécessaire qui lui permettront de pensez "ils sont compétents, ils ont fait le job et je suis confiant sur le fait que ce soit maintenable et bien codé"
 
-**Warning**: this presentation is not a restitution of what you have done. It is a **simulation** of the presentation of a project you would deliver to your customer.
+**Attention**: cette présentation n'est pas une restituion de ce que vous avez fait. C'est une **simulation** d'une présentation d'un projet que vous livreriez à votre client.
 
 # 5. Optional modules
 
