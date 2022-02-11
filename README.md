@@ -20,11 +20,10 @@ Voici le macro-planning et les différentes étapes de ce projet:
 
 ## 1. Base de données
 Créer un serveur **MySQL** local.  
-Exécuter les scripts **1-SCHEMA.sql**, **2-PRIVILEGES.sql** et **3-ENTRIES.sql** qui se trouvent dans config/db.  
+Exécuter les scripts **1-SCHEMA.sql**, **2-PRIVILEGES.sql**, **3-ENTRIES.sql** et **4-ENTRIES-QUESTIONS.sql** qui se trouvent dans config/db.  
 
-Schema créé: **computer-database-db**
-Tables créées: **company, computer**  
-Utilisateur créé: `admincdb`
+Schema créé: **newro-factory-db**
+Utilisateur créé: `adminnewro`
 avec le mot de passe : `qwerty1234`
 
 ## 2. IDE  
