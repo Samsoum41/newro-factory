@@ -1,4 +1,5 @@
 Formation: newro-factory      
+==========================
 
 # Content
 Ce document contient une séquence d'étapes et de fonctionnalités à implémenter dans une webapp nommée newro-factory.
