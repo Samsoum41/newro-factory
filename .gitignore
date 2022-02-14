@@ -2,3 +2,5 @@
 .metadata
 .project
 .settings
+/build/
+my_model.mwb
