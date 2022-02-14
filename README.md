@@ -1,5 +1,4 @@
-Formation: newro-factory    
-===========================  
+Formation: newro-factory      
 
 # Content
 Ce document contient une séquence d'étapes et de fonctionnalités à implémenter dans une webapp nommée newro-factory.
@@ -328,3 +327,6 @@ Replace your existing front-end with Thymeleaf
 Split you back-end into microservices
 
 ## 5.9 Batches
+=======
+Salut
+>>>>>>> ae5b5b30392e6169f02ee647a27a4bd9fac48186
