@@ -17,11 +17,19 @@ public class PromotionDAO implements DAO<Promotion>{
 
 	@Override
 	public int add(Promotion data) throws SQLException {
-		String query = "INSERT INTO promotion(name) VALUES(?,?);";
+		String query = "INSERT INTO promotion(name) VALUES(?);";
 		PreparedStatement st = 	con.prepareStatement(query);
 		st.setString(1, data.getName());
-		int n = st.executeUpdate();
-		return n;
+		try {
+			int n = st.executeUpdate();
+			System.out.println("L'enregistrement : " + data + " a bien été enregistré");
+			return n;
+		}
+		catch(SQLException e) {
+			System.out.println("L'enregistrement en base de donné a échoué");
+			System.out.println(e.getMessage());
+			return 0;
+		}
 	}
 
 	@Override

@@ -21,8 +21,16 @@ public class QuestionDAO implements DAO<Question>{
 		st.setString(1, data.getTitle());
 		st.setString(2, data.getStatement());
 		st.setInt(3, data.getChapter_id());
-		int n = st.executeUpdate();
-		return n;
+		try {
+			int n = st.executeUpdate();
+			System.out.println("L'enregistrement : " + data + " a bien été enregistré");
+			return n;
+		}
+		catch(SQLException e) {
+			System.out.println("L'enregistrement en base de donné a échoué");
+			System.out.println(e.getMessage());
+			return 0;
+		}
 	}
 
 	@Override
