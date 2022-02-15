@@ -47,6 +47,7 @@ public class QuestionDAO implements DAO<Question>{
 		PreparedStatement st = con.prepareStatement(query);
 		st.setInt(1, id);
 		ResultSet res = st.executeQuery();
+		res.next();
 		return new Question(res.getInt("id"), res.getString("title"), res.getString("statement"), res.getInt("chapter_id"));
 	}
 	@Override

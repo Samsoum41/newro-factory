@@ -46,6 +46,7 @@ public class ChapterDAO implements DAO<Chapter> {
 		PreparedStatement st = con.prepareStatement(query);
 		st.setInt(1, id);
 		ResultSet res = st.executeQuery();
+		res.next();
 		return new Chapter(res.getInt("id"), res.getString("name"), res.getString("parent_path"));
 	}
 
