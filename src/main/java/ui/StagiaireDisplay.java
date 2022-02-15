@@ -4,65 +4,22 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Scanner;
 
-import data.model.Promotion;
 import data.model.Stagiaire;
 import data.model.dao.PromotionDAO;
 import data.model.dao.StagiaireDAO;
 
-public class Cli {
+public class StagiaireDisplay {
 	private static Scanner sc = new Scanner(System.in);
-	public static void main(String[] args) throws SQLException {
-		Cli.start();
-		boolean chosen = false;
-		int choice = 0;
-		while(!chosen) {
-			choice = sc.nextInt();
-			if (choice<8 && choice >0) {
-				chosen = true;
-			}
-			else {
-				System.out.println("Veuillez entrer un nombre entre 1 et 7");
-			}
+	private static void showOne() throws SQLException {
+		int id = 0;
+		System.out.println("Quel est l'id du stagaiaire que vous recherchez ?");
+		id = sc.nextInt();
+		if(doesExist(id)) {
+			System.out.println(new StagiaireDAO().getOne(id));
 		}
-		switch(choice) {
-		case 1:
-			System.out.println(new StagiaireDAO().getAll());
-			break;
-		case 2:
-			System.out.println(new PromotionDAO().getAll());
-			break;
-		case 3: 
-			showOneStagiaire();
-			break;
-		case 4:
-			showOnePromotion();
-			break;
-		case 5: 
-			addStagiaire();
-			break;
-		case 6:
-			updateStagiaire();
-			break;
-		case 7:
-			deleteStagiaire();
-			break;
-			
+		else {
+			System.out.println("Il n'y a aucun stagiaire à ce numéro d'id.");
 		}
-	}
-	private static void start(){
-		System.out.println("Bienvenue dans le newro-factory.");
-		System.out.println("Ici, on prépare l'OCA en 1 semaine");
-		System.out.println("");
-		System.out.println("Choisissez l'opération que vous souhaitez réaliser :");
-		System.out.println("1. Lister les stagiaires");
-		System.out.println("2. Lister les promotions");
-		System.out.println("3. Afficher le détail d'un stagiaire");
-		System.out.println("4. Afficher le détail d'une question");
-		System.out.println("5. Créer un stagiaire");
-		System.out.println("6. Editer un stagiaire");
-		System.out.println("7. Supprimer un stagiaire");
-		System.out.println("");
-		System.out.println("A vous :");
 	}
 	private static void addStagiaire() throws SQLException {
 		System.out.println("Quel est le prénom du stagiaire que vous souhaitez ajouter ?");
@@ -90,7 +47,6 @@ public class Cli {
 		}
 		new StagiaireDAO().add(new Stagiaire(first_name, last_name, arrival, formation_over, promotion_id));
 	}
-	
 	private static void updateStagiaire() throws SQLException {
 		System.out.println("Quel est l'id du stagiaire que vous souhaitez modifier ?");
 		int stagiaire_id = 0;
@@ -136,46 +92,4 @@ public class Cli {
 		}
 		new StagiaireDAO().update(new Stagiaire(stagiaire_id,first_name, last_name, arrival, formation_over, promotion_id));
 	}
-	
-
-	private static void showOnePromotion() throws SQLException {
-		int id = 0;
-		System.out.println("Quel est l'id de la promotion que vous recherchez ?");
-		id = sc.nextInt();
-		if(promotionExist(id)) {
-			System.out.println(new PromotionDAO().getOne(id));
-		}
-		else {
-			System.out.println("Il n'y a aucune promotion à ce numéro d'id.");
-		}
-	}
-	
-
-
-	private static boolean promotionExist(int id) {
-		try {
-			new PromotionDAO().getOne(id);
-			return true;
-		}
-		catch(SQLException e) {
-			return false;
-		}
-	}
-
-	private static Promotion needPromotion() throws SQLException {
-		int promotion_id = 0;
-		while (promotion_id == 0) {
-			promotion_id = sc.nextInt();
-			try {
-				return new PromotionDAO().getOne(promotion_id);
-			}
-			catch(SQLException e){
-				promotion_id=0;
-				System.out.println("Aucune promotion ne correpond à ce numéro");
-				System.out.println("Tentez à nouveau :");
-			}
-		}
-		return null;
-	}
-
 }
