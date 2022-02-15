@@ -23,10 +23,26 @@ public class Stagiaire {
 	public void setFirst_name(String first_name) {
 		this.first_name = first_name;
 	}
+	public Stagiaire(String first_name, String last_name, LocalDate arrival, int promotion_id) {
+		super();
+		this.first_name = first_name;
+		this.last_name = last_name;
+		this.arrival = arrival;
+		this.promotion_id = promotion_id;
+	}
 	public Stagiaire(int id, String first_name, String last_name, LocalDate arrival, LocalDate formation_over,
 			int promotion_id) {
 		super();
 		this.id = id;
+		this.first_name = first_name;
+		this.last_name = last_name;
+		this.arrival = arrival;
+		this.formation_over = formation_over;
+		this.promotion_id = promotion_id;
+	}
+	public Stagiaire(String first_name, String last_name, LocalDate arrival, LocalDate formation_over,
+			int promotion_id) {
+		super();
 		this.first_name = first_name;
 		this.last_name = last_name;
 		this.arrival = arrival;

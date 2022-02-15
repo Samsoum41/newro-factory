@@ -16,11 +16,10 @@ public class ChapterDAO implements DAO<Chapter> {
 	
 	@Override
 	public int add(Chapter data) throws SQLException {
-		String query = "INSERT INTO chapter(id, name, parent_path) VALUES(?,?,?);";
+		String query = "INSERT INTO chapter(name, parent_path) VALUES(?,?,?);";
 		PreparedStatement st = 	con.prepareStatement(query);
-		st.setInt(1, data.getId());
-		st.setString(2, data.getName());
-		st.setString(3, data.getParent_path());
+		st.setString(1, data.getName());
+		st.setString(2, data.getParent_path());
 		int n = st.executeUpdate();
 		return n;
 	}

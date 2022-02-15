@@ -17,10 +17,9 @@ public class PromotionDAO implements DAO<Promotion>{
 
 	@Override
 	public int add(Promotion data) throws SQLException {
-		String query = "INSERT INTO promotion(id, name) VALUES(?,?);";
+		String query = "INSERT INTO promotion(name) VALUES(?,?);";
 		PreparedStatement st = 	con.prepareStatement(query);
-		st.setInt(1, data.getId());
-		st.setString(2, data.getName());
+		st.setString(1, data.getName());
 		int n = st.executeUpdate();
 		return n;
 	}

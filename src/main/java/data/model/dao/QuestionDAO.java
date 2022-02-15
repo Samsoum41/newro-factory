@@ -16,12 +16,11 @@ public class QuestionDAO implements DAO<Question>{
 
 	@Override
 	public int add(Question data) throws SQLException {
-		String query = "INSERT INTO chapter(id, title, statement, chapter_id) VALUES(?,?,?,?);";
+		String query = "INSERT INTO chapter(title, statement, chapter_id) VALUES(?,?,?);";
 		PreparedStatement st = 	con.prepareStatement(query);
-		st.setInt(1, data.getId());
-		st.setString(2, data.getTitle());
-		st.setString(3, data.getStatement());
-		st.setInt(4, data.getChapter_id());
+		st.setString(1, data.getTitle());
+		st.setString(2, data.getStatement());
+		st.setInt(3, data.getChapter_id());
 		int n = st.executeUpdate();
 		return n;
 	}

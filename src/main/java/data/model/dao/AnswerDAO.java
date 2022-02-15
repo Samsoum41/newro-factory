@@ -15,13 +15,12 @@ public class AnswerDAO implements DAO<Answer> {
 	@Override
 	public int add(Answer data) throws SQLException {
 		// TODO Auto-generated method stub
-		String query = "INSERT INTO answer(id, label, text,valid_answer, question_id) VALUES(?,?,?,?,?);";
+		String query = "INSERT INTO answer(label, text,valid_answer, question_id) VALUES(?,?,?,?,?);";
 		PreparedStatement st = 	con.prepareStatement(query);
-		st.setInt(1, data.getId());
-		st.setString(2, data.getLabel());
-		st.setString(3, data.getText());
-		st.setInt(4, data.getValid_answer());
-		st.setInt(5, data.getQuestion_id());
+		st.setString(1, data.getLabel());
+		st.setString(2, data.getText());
+		st.setInt(3, data.getValid_answer());
+		st.setInt(4, data.getQuestion_id());
 		int n = st.executeUpdate();
 		return n;
 	}
