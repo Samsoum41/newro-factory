@@ -49,6 +49,7 @@ public class AnswerDAO implements DAO<Answer> {
 		PreparedStatement st = con.prepareStatement(query);
 		st.setInt(1, id);
 		ResultSet res = st.executeQuery();
+		res.next();
 		return new Answer(res.getInt("id"), res.getString("label"), res.getString("text"), res.getShort("valid_answer"), res.getInt("question_id"));
 	}
 

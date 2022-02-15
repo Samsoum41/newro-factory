@@ -56,6 +56,7 @@ public class StagiaireDAO implements DAO<Stagiaire>{
 		PreparedStatement st = con.prepareStatement(query);
 		st.setInt(1, id);
 		ResultSet res = st.executeQuery();
+		res.next();
 		return new Stagiaire(res.getInt("id"), res.getString("first_name"), res.getString("last_name"), res.getDate("arrival").toLocalDate(), res.getDate("formation_over").toLocalDate(), res.getInt("promotion_id"));
 	}
 
@@ -85,7 +86,13 @@ public class StagiaireDAO implements DAO<Stagiaire>{
 		st.setInt(5, data.getPromotion_id());
 		st.setInt(6, data.getId());
 
-		st.executeUpdate();
+		try {
+			st.executeUpdate();
+			System.out.println("Le stagiaire : " + data + " a bien été supprimé !");
+		}
+		catch(SQLException e) {
+			System.out.println(e.getMessage());
+		}
 	}
 	
 }

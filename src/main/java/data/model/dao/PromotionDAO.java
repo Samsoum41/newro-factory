@@ -46,6 +46,7 @@ public class PromotionDAO implements DAO<Promotion>{
 		PreparedStatement st = con.prepareStatement(query);
 		st.setInt(1, id);
 		ResultSet res = st.executeQuery();
+		res.next();
 		return new Promotion(res.getInt("id"), res.getString("name"));
 	}
 
