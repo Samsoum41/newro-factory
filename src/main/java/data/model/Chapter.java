@@ -12,6 +12,16 @@ public class Chapter {
 	public int getId() {
 		return id;
 	}
+	@Override
+	public String toString() {
+		return "Chapter [id=" + id + ", name=" + name + ", parent_path=" + parent_path + "]";
+	}
+	public Chapter(int id, String name, String parent_path) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.parent_path = parent_path;
+	}
 	public void setId(int id) {
 		this.id = id;
 	}

@@ -3,6 +3,11 @@ package data.model;
 import java.time.LocalDate;
 
 public class Stagiaire {
+	@Override
+	public String toString() {
+		return "Stagiaire [id=" + id + ", first_name=" + first_name + ", last_name=" + last_name + ", arrival="
+				+ arrival + ", formation_over=" + formation_over + ", promotion_id=" + promotion_id + "]";
+	}
 	private int id;
 	private String first_name;
 	private String last_name;
@@ -17,6 +22,16 @@ public class Stagiaire {
 	}
 	public void setFirst_name(String first_name) {
 		this.first_name = first_name;
+	}
+	public Stagiaire(int id, String first_name, String last_name, LocalDate arrival, LocalDate formation_over,
+			int promotion_id) {
+		super();
+		this.id = id;
+		this.first_name = first_name;
+		this.last_name = last_name;
+		this.arrival = arrival;
+		this.formation_over = formation_over;
+		this.promotion_id = promotion_id;
 	}
 	public String getLast_name() {
 		return last_name;

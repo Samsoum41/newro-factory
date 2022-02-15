@@ -4,7 +4,10 @@ public class Answer {
 	private int id;
 	private String label;
 	private String text;
-	private short valid_answer;
+	private int valid_answer;
+	public void setValid_answer(int valid_answer) {
+		this.valid_answer = valid_answer;
+	}
 	private int question_id;
 	public int getId() {
 		return id;
@@ -21,7 +24,7 @@ public class Answer {
 	public String getText() {
 		return text;
 	}
-	public Answer(int id, String label, String text, short valid_answer, int question_id) {
+	public Answer(int id, String label, String text, int valid_answer, int question_id) {
 		super();
 		this.id = id;
 		this.label = label;
@@ -32,7 +35,8 @@ public class Answer {
 	public void setText(String text) {
 		this.text = text;
 	}
-	public short getValid_answer() {
+
+	public int getValid_answer() {
 		return valid_answer;
 	}
 	public void setValid_answer(short valid_answer) {
@@ -43,5 +47,27 @@ public class Answer {
 	}
 	public void setQuestion_id(int question_id) {
 		this.question_id = question_id;
+	}
+	@Override
+	public String toString() {
+		return (this.id + " "+  this.label + " " + this.text);
+	}
+	
+	@Override
+    public boolean equals(Object o) {
+		if (o == this) {
+			return true;
+		}
+		if (!(o instanceof Answer)) {
+			return false;
+		}
+		else {
+			Answer ans = (Answer) o;
+			return this.label.equals(ans.getLabel()) &&
+					this.question_id == ans.getQuestion_id() &&
+					this.text.equals(ans.getText()) &&
+					this.valid_answer == ans.getValid_answer();
+					
+		}
 	}
 }

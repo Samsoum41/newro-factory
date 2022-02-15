@@ -20,7 +20,7 @@ public class AnswerDAO implements DAO<Answer> {
 		st.setInt(1, data.getId());
 		st.setString(2, data.getLabel());
 		st.setString(3, data.getText());
-		st.setShort(4, data.getValid_answer());
+		st.setInt(4, data.getValid_answer());
 		st.setInt(5, data.getQuestion_id());
 		int n = st.executeUpdate();
 		return n;
@@ -65,7 +65,7 @@ public class AnswerDAO implements DAO<Answer> {
 		PreparedStatement st = con.prepareStatement(query);
 		st.setString(1, data.getLabel());
 		st.setString(2, data.getText());
-		st.setShort(3, data.getValid_answer());
+		st.setInt(3, data.getValid_answer());
 		st.setInt(4, data.getQuestion_id());
 		st.setInt(5, data.getId());
 		st.executeUpdate();

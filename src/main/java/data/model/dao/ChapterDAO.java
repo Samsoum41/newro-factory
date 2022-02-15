@@ -2,10 +2,13 @@ package data.model.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import data.DatabaseConnection;
+import data.model.Answer;
 import data.model.Chapter;
 
 public class ChapterDAO implements DAO<Chapter> {
@@ -32,20 +35,34 @@ public class ChapterDAO implements DAO<Chapter> {
 
 	@Override
 	public Chapter getOne(int id) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		String query = "SELECT * FROM chapter WHERE id=?;";
+		PreparedStatement st = con.prepareStatement(query);
+		st.setInt(1, id);
+		ResultSet res = st.executeQuery();
+		return new Chapter(res.getInt("id"), res.getString("name"), res.getString("parent_path"));
 	}
 
 	@Override
 	public List<Chapter> getAll() throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		String query = "SELECT * FROM chapter";
+		PreparedStatement st = con.prepareStatement(query);
+		ResultSet res = st.executeQuery();
+		ArrayList<Chapter> liste = new ArrayList<>();
+		while(res.next()) {
+			liste.add(new Chapter(res.getInt("id"), res.getString("name"), res.getString("parent_path"))); 
+		}
+		return liste;
 	}
 
 	@Override
 	public void update(Chapter data) throws SQLException {
 		// TODO Auto-generated method stub
-		
+		String query = "UPDATE answer SET name=?, parent_path=? WHERE id=?;";
+		PreparedStatement st = con.prepareStatement(query);
+		st.setString(1, data.getName());
+		st.setString(2, data.getParent_path());
+		st.setInt(3, data.getId());
+		st.executeUpdate();
 	}
 
 }

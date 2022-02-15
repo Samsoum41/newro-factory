@@ -2,10 +2,13 @@ package data.model.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import data.DatabaseConnection;
+import data.model.Chapter;
 import data.model.Question;
 
 public class QuestionDAO implements DAO<Question>{
@@ -33,14 +36,22 @@ public class QuestionDAO implements DAO<Question>{
 
 	@Override
 	public Question getOne(int id) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		String query = "SELECT * FROM Question WHERE id=?;";
+		PreparedStatement st = con.prepareStatement(query);
+		st.setInt(1, id);
+		ResultSet res = st.executeQuery();
+		return new Question(res.getInt("id"), res.getString("title"), res.getString("statement"), res.getInt("chapter_id"));
 	}
-
 	@Override
 	public List<Question> getAll() throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		String query = "SELECT * FROM Question";
+		PreparedStatement st = con.prepareStatement(query);
+		ResultSet res = st.executeQuery();
+		ArrayList<Question> liste = new ArrayList<>();
+		while(res.next()) {
+			liste.add(new Question(res.getInt("id"), res.getString("title"), res.getString("statement"), res.getInt("chapter_id"))); 
+		}
+		return liste;
 	}
 
 	@Override
