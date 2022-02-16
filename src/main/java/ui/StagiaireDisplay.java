@@ -16,7 +16,7 @@ public class StagiaireDisplay {
 		System.out.println("Quel est l'id du stagaiaire que vous recherchez ?");
 		id = Utilitaire.needInt("Ce n'est pas un entier ça, réessayez :");
 		if(StagiaireUtilitaire.doesExist(id)) {
-			System.out.println(new StagiaireDAO().getOne(id));
+			StagiaireUtilitaire.print(new StagiaireDAO().getOne(id));
 		}
 		else {
 			System.out.println("Il n'y a aucun stagiaire à ce numéro d'id.");
@@ -25,9 +25,10 @@ public class StagiaireDisplay {
 	
 	public static void showAll() throws SQLException {
 		while(true) {
+			StagiaireUtilitaire.printAttributes();
 			List<Stagiaire> stagiaires = new StagiaireDAO().getPaginated();
 			for (Stagiaire stagiaire : stagiaires) {
-				System.out.println(stagiaire);
+				StagiaireUtilitaire.print(stagiaire);
 			}
 			if(StagiaireDAO.page!=1) {
 				System.out.print(" <  pour passer à la page précédente  |");

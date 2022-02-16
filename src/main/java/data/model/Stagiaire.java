@@ -40,9 +40,6 @@ public class Stagiaire {
 
 	@Override
 	public String toString() {
-		StringBuilder res = new StringBuilder();
-		String format = "%-40s%s%n";
-		System.out.printf(format, id, first_name, last_name, arrival, formation_over, promotion_id);
 		return id + " \t  " + first_name + " \t  " + last_name + " \t  " + arrival + " \t  " + formation_over
 				+ " \t  " + promotion_id ;
 	}
