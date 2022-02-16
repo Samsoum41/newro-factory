@@ -78,7 +78,7 @@ public class StagiaireDAO implements DAO<Stagiaire>{
 		return liste;
 	}
 	
-
+	@Override
 	public List<Stagiaire> getPaginated() throws SQLException{
 		String query = "SELECT * FROM stagiaire ORDER BY id LIMIT ?, ?;";
 		PreparedStatement st = con.prepareStatement(query);

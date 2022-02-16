@@ -3,6 +3,8 @@ package data.model.dao;
 import java.sql.*;
 import java.util.List;
 
+import data.model.Stagiaire;
+
 public interface DAO <T> {
     public int add(T data)
             throws SQLException;
@@ -14,4 +16,6 @@ public interface DAO <T> {
         throws SQLException;
     public void update(T data)
         throws SQLException;
+    public List<T> getPaginated()
+    	throws SQLException; 
 }

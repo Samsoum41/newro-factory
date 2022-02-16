@@ -12,10 +12,11 @@ import data.model.Question;
 
 public class QuestionDAO implements DAO<Question>{
 	static Connection con = DatabaseConnection.getConnection();
-
+	public static int page = 1;
+	private final static int ROWS_PER_PAGE = 10;
 	@Override
 	public int add(Question data) throws SQLException {
-		String query = "INSERT INTO chapter(title, statement, chapter_id) VALUES(?,?,?);";
+		String query = "INSERT INTO question(title, statement, chapter_id) VALUES(?,?,?);";
 		PreparedStatement st = 	con.prepareStatement(query);
 		st.setString(1, data.getTitle());
 		st.setString(2, data.getStatement());
@@ -42,7 +43,7 @@ public class QuestionDAO implements DAO<Question>{
 
 	@Override
 	public Question getOne(int id) throws SQLException {
-		String query = "SELECT * FROM Question WHERE id=?;";
+		String query = "SELECT * FROM question WHERE id=?;";
 		PreparedStatement st = con.prepareStatement(query);
 		st.setInt(1, id);
 		ResultSet res = st.executeQuery();
@@ -51,8 +52,22 @@ public class QuestionDAO implements DAO<Question>{
 	}
 	@Override
 	public List<Question> getAll() throws SQLException {
-		String query = "SELECT * FROM Question";
+		String query = "SELECT * FROM question";
 		PreparedStatement st = con.prepareStatement(query);
+		ResultSet res = st.executeQuery();
+		ArrayList<Question> liste = new ArrayList<>();
+		while(res.next()) {
+			liste.add(new Question(res.getInt("id"), res.getString("title"), res.getString("statement"), res.getInt("chapter_id"))); 
+		}
+		return liste;
+	}
+	
+	@Override
+	public List<Question> getPaginated() throws SQLException{
+		String query = "SELECT * FROM question ORDER BY id LIMIT ?, ?;";
+		PreparedStatement st = con.prepareStatement(query);
+		st.setInt(1, (QuestionDAO.page -1)*QuestionDAO.ROWS_PER_PAGE);
+		st.setInt(2, QuestionDAO.ROWS_PER_PAGE);
 		ResultSet res = st.executeQuery();
 		ArrayList<Question> liste = new ArrayList<>();
 		while(res.next()) {

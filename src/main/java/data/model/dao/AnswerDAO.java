@@ -12,6 +12,9 @@ import data.model.Answer;
 
 public class AnswerDAO implements DAO<Answer> {
 	static Connection con = DatabaseConnection.getConnection();
+	public static int page = 1;
+	private final static int ROWS_PER_PAGE = 10;
+	
 	@Override
 	public int add(Answer data) throws SQLException {
 		// TODO Auto-generated method stub
@@ -65,7 +68,21 @@ public class AnswerDAO implements DAO<Answer> {
 		}
 		return liste;
 	}
-
+	
+	@Override
+	public List<Answer> getPaginated() throws SQLException{
+		String query = "SELECT * FROM answer ORDER BY id LIMIT ?, ?;";
+		PreparedStatement st = con.prepareStatement(query);
+		st.setInt(1, (AnswerDAO.page -1)*AnswerDAO.ROWS_PER_PAGE);
+		st.setInt(2, AnswerDAO.ROWS_PER_PAGE);
+		ResultSet res = st.executeQuery();
+		ArrayList<Answer> liste = new ArrayList<>();
+		while(res.next()) {
+			liste.add(new Answer(res.getInt("id"), res.getString("label"), res.getString("text"), res.getShort("valid_answer"), res.getInt("question_id"))); 
+		}
+		return liste;
+	}
+	
 	@Override
 	public void update(Answer data) throws SQLException {
 		// TODO Auto-generated method stub

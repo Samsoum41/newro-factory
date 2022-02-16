@@ -3,26 +3,13 @@ package data.model;
 import java.time.LocalDate;
 
 public class Stagiaire {
-	@Override
-	public String toString() {
-		return "Stagiaire [id=" + id + ", first_name=" + first_name + ", last_name=" + last_name + ", arrival="
-				+ arrival + ", formation_over=" + formation_over + ", promotion_id=" + promotion_id + "]";
-	}
 	private int id;
 	private String first_name;
 	private String last_name;
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
-	}
-	public String getFirst_name() {
-		return first_name;
-	}
-	public void setFirst_name(String first_name) {
-		this.first_name = first_name;
-	}
+	private LocalDate arrival;
+	private LocalDate formation_over;
+	private int promotion_id;
+	
 	public Stagiaire(String first_name, String last_name, LocalDate arrival, int promotion_id) {
 		super();
 		this.first_name = first_name;
@@ -49,6 +36,28 @@ public class Stagiaire {
 		this.formation_over = formation_over;
 		this.promotion_id = promotion_id;
 	}
+	
+
+	@Override
+	public String toString() {
+		StringBuilder res = new StringBuilder();
+		String format = "%-40s%s%n";
+		System.out.printf(format, id, first_name, last_name, arrival, formation_over, promotion_id);
+		return id + " \t  " + first_name + " \t  " + last_name + " \t  " + arrival + " \t  " + formation_over
+				+ " \t  " + promotion_id ;
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getFirst_name() {
+		return first_name;
+	}
+	public void setFirst_name(String first_name) {
+		this.first_name = first_name;
+	}
 	public String getLast_name() {
 		return last_name;
 	}
@@ -73,7 +82,4 @@ public class Stagiaire {
 	public void setPromotion_id(int promotion_id) {
 		this.promotion_id = promotion_id;
 	}
-	private LocalDate arrival;
-	private LocalDate formation_over;
-	private int promotion_id;
 }

@@ -8,11 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import data.DatabaseConnection;
-import data.model.Answer;
 import data.model.Chapter;
 
 public class ChapterDAO implements DAO<Chapter> {
 	static Connection con = DatabaseConnection.getConnection();
+	public static int page = 1;
+	private final static int ROWS_PER_PAGE = 10;
 	
 	@Override
 	public int add(Chapter data) throws SQLException {
@@ -61,7 +62,20 @@ public class ChapterDAO implements DAO<Chapter> {
 		}
 		return liste;
 	}
-
+	
+	@Override
+	public List<Chapter> getPaginated() throws SQLException{
+		String query = "SELECT * FROM chapter ORDER BY id LIMIT ?, ?;";
+		PreparedStatement st = con.prepareStatement(query);
+		st.setInt(1, (ChapterDAO.page -1)*ChapterDAO.ROWS_PER_PAGE);
+		st.setInt(2, ChapterDAO.ROWS_PER_PAGE);
+		ResultSet res = st.executeQuery();
+		ArrayList<Chapter> liste = new ArrayList<>();
+		while(res.next()) {
+			liste.add(new Chapter(res.getInt("id"), res.getString("name"), res.getString("parent_path"))); 
+		}
+		return liste;
+	}
 	@Override
 	public void update(Chapter data) throws SQLException {
 		// TODO Auto-generated method stub

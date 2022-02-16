@@ -1,6 +1,7 @@
 package ui;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import data.model.Promotion;
 import data.model.dao.PromotionDAO;
@@ -27,6 +28,27 @@ public class PromotionDisplay {
 			}
 			else {
 				System.out.println("Aucune promotion ne corresond à cet id, réessayez :");
+			}
+		}
+	}
+	
+	public static void showAll() throws SQLException {
+		while(true) {
+			List<Promotion> promotions = new PromotionDAO().getPaginated();
+			for (Promotion promotion : promotions) {
+				System.out.println(promotion);
+			}
+			if(PromotionDAO.page!=1) {
+				System.out.print(" <  pour passer à la page précédente  |");
+			}
+			
+			System.out.println(" > pour passer à la page suivante");
+			String arrow = Utilitaire.getArrowKey();
+			if (arrow.equals(">")) {
+				PromotionDAO.page +=1;
+			}
+			else if(arrow.equals("<") && PromotionDAO.page !=1) {
+				PromotionDAO.page -=1;
 			}
 		}
 	}

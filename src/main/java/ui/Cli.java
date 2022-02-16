@@ -31,7 +31,7 @@ public class Cli {
 			StagiaireDisplay.showOne();
 			break;
 		case 4:
-			PromotionDisplay.showOne();
+			QuestionDisplay.showOne();
 			break;
 		case 5: 
 			StagiaireDisplay.addOne();

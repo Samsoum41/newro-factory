@@ -12,7 +12,8 @@ import data.model.Promotion;
 
 public class PromotionDAO implements DAO<Promotion>{
 	static Connection con = DatabaseConnection.getConnection();
-
+	public static int page = 1;
+	private final static int ROWS_PER_PAGE = 10;
 	@Override
 	public int add(Promotion data) throws SQLException {
 		String query = "INSERT INTO promotion(name) VALUES(?);";
@@ -56,6 +57,20 @@ public class PromotionDAO implements DAO<Promotion>{
 	public List<Promotion> getAll() throws SQLException {
 		String query = "SELECT * FROM promotion";
 		PreparedStatement st = con.prepareStatement(query);
+		ResultSet res = st.executeQuery();
+		ArrayList<Promotion> liste = new ArrayList<>();
+		while(res.next()) {
+			liste.add(new Promotion(res.getInt("id"), res.getString("name"))); 
+		}
+		return liste;
+	}
+	
+	@Override
+	public List<Promotion> getPaginated() throws SQLException{
+		String query = "SELECT * FROM promotion ORDER BY id LIMIT ?, ?;";
+		PreparedStatement st = con.prepareStatement(query);
+		st.setInt(1, (PromotionDAO.page -1)*PromotionDAO.ROWS_PER_PAGE);
+		st.setInt(2, PromotionDAO.ROWS_PER_PAGE);
 		ResultSet res = st.executeQuery();
 		ArrayList<Promotion> liste = new ArrayList<>();
 		while(res.next()) {
