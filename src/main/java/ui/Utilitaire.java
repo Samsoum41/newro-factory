@@ -28,7 +28,7 @@ public class Utilitaire {
 				System.out.println("Réessayer svp :");
 			}
 		}
-		return null;
+		return arrival;
 	}
 	
 	public static int needInt(String errorMessage) {
@@ -66,5 +66,18 @@ public class Utilitaire {
 			}
 		}
 		return result;
+	}
+	
+	public static String getArrowKey() {
+		String arrow;
+		while(true) {
+			arrow = sc.nextLine().trim();
+			if (arrow.equals(">") || arrow.equals("<")) {
+				return arrow;
+			}
+			else {
+				System.out.println("Entrée incorrecte");
+			}
+		}
 	}
 }
