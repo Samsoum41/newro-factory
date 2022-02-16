@@ -1,17 +1,13 @@
 package data.model.utilitaire;
 
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.util.Scanner;
 
 import data.model.Stagiaire;
-import data.model.dao.PromotionDAO;
 import data.model.dao.StagiaireDAO;
-import ui.Cli;
+import ui.Utilitaire;
 
-public class StagiaireUtilitaire {
-	private static Scanner sc = new Scanner(System.in);
-	private static boolean doesExist(int id){
+public class StagiaireUtilitaire {	
+	public static boolean doesExist(int id){
 		try {
 			new StagiaireDAO().getOne(id);
 			return true;
@@ -20,8 +16,20 @@ public class StagiaireUtilitaire {
 			return false;
 		}
 	}
+	public static Stagiaire needStagiaire() throws SQLException {
+		int id = 0;
+		while (true) {
+			id = Utilitaire.needInt("Ce n'est pas un entier coco, réessaye :");
+			if (StagiaireUtilitaire.doesExist(id)) {
+				return new StagiaireDAO().getOne(id);
+			}
+			else {
+				System.out.println("Aucune stagiaire ne corresond à cet id, réessayez :");
+			}
+		}
+	}
 
-	private static void delete() throws SQLException {
+	public static void delete() throws SQLException {
 		System.out.println("Quel est l'id du stagiaire que vous souhaitez supprimer ?");
 		int id = 0;
 		if(doesExist(id)) {

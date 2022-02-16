@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import data.DatabaseConnection;
-import data.model.Answer;
-import data.model.Chapter;
 import data.model.Promotion;
 
 public class PromotionDAO implements DAO<Promotion>{
@@ -46,8 +44,12 @@ public class PromotionDAO implements DAO<Promotion>{
 		PreparedStatement st = con.prepareStatement(query);
 		st.setInt(1, id);
 		ResultSet res = st.executeQuery();
-		res.next();
-		return new Promotion(res.getInt("id"), res.getString("name"));
+		if(res.next()) {
+			return new Promotion(res.getInt("id"), res.getString("name"));
+		}
+		else {
+			throw new SQLException("Il n'y a aucune promotion associée à cet id");
+		}
 	}
 
 	@Override

@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import data.DatabaseConnection;
-import data.model.Chapter;
 import data.model.Question;
 
 public class QuestionDAO implements DAO<Question>{

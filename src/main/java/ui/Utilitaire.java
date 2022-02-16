@@ -7,7 +7,7 @@ import java.util.Scanner;
 public class Utilitaire {
 	private static Scanner sc = new Scanner(System.in);
 	
-	private static LocalDate askUSLocalDate() {
+	public static LocalDate askUSLocalDate() {
 		LocalDate date = null;			
 		String dateString = sc.nextLine();
 		try {
@@ -20,7 +20,7 @@ public class Utilitaire {
 		}
 	}
 	
-	private static LocalDate needLocalDate() throws SQLException{
+	public static LocalDate needLocalDate() throws SQLException{
 		LocalDate arrival = null;
 		while (arrival == null) {
 			arrival = askUSLocalDate();
@@ -29,5 +29,42 @@ public class Utilitaire {
 			}
 		}
 		return null;
+	}
+	
+	public static int needInt(String errorMessage) {
+		// On est sur que result sera modifie
+		int result=0;
+		boolean chosen = false;
+		while(!chosen) {
+			try {
+				result = sc.nextInt();
+				chosen=true;
+			}
+			catch(Exception e){
+				System.out.println(errorMessage);
+			}
+		}
+		return result;
+	}
+	
+	public static String needNotEmptyString(String errorMessage) {
+		String result = null;
+		while(result == null) {
+			result = sc.nextLine();
+			if (result == null) {
+				System.out.println(errorMessage);
+			}
+		}
+		return result;
+	}
+	public static String needNotEmptyString() {
+		String result = null;
+		while(result == null) {
+			result = sc.nextLine();
+			if (result == null) {
+				System.out.println("Le champ est vide, veuillez entrer une valeur non nulle :");
+			}
+		}
+		return result;
 	}
 }
