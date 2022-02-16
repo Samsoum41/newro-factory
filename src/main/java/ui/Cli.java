@@ -1,13 +1,9 @@
 package ui;
 
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.Scanner;
 
-import data.model.Promotion;
-import data.model.Stagiaire;
 import data.model.dao.PromotionDAO;
-import data.model.dao.StagiaireDAO;
 
 public class Cli {
 	private static Scanner sc = new Scanner(System.in);
@@ -26,25 +22,25 @@ public class Cli {
 		}
 		switch(choice) {
 		case 1:
-			System.out.println(new StagiaireDAO().getAll());
+			StagiaireDisplay.showAll();
 			break;
 		case 2:
 			System.out.println(new PromotionDAO().getAll());
 			break;
 		case 3: 
-			showOneStagiaire();
+			StagiaireDisplay.showOne();
 			break;
 		case 4:
-			showOnePromotion();
+			PromotionDisplay.showOne();
 			break;
 		case 5: 
-			addStagiaire();
+			StagiaireDisplay.addOne();
 			break;
 		case 6:
-			updateStagiaire();
+			StagiaireDisplay.updateOne();
 			break;
 		case 7:
-			deleteStagiaire();
+			StagiaireDisplay.deleteOne();
 			break;
 			
 		}
@@ -64,16 +60,4 @@ public class Cli {
 		System.out.println("");
 		System.out.println("A vous :");
 	}
-
-	
-
-
-
-	
-
-
-
-
-
-
 }

@@ -15,7 +15,8 @@ import data.model.Stagiaire;
 
 public class StagiaireDAO implements DAO<Stagiaire>{
 	static Connection con = DatabaseConnection.getConnection();
-
+	public static int page = 1;
+	private final static int ROWS_PER_PAGE = 10;
 	@Override
 	public int add(Stagiaire data) throws SQLException {
 		String query = "INSERT INTO stagiaire(first_name, last_name, arrival, formation_over, promotion_id) VALUES(?,?,?,?,?);";
@@ -48,6 +49,7 @@ public class StagiaireDAO implements DAO<Stagiaire>{
 		PreparedStatement st = con.prepareStatement(query);
 		st.setInt(1, id);
 		st.executeUpdate();		
+		System.out.println("Le stagiaire d'id " + id + " a bien été supprimé"); 
 	}
 
 	@Override
@@ -57,13 +59,31 @@ public class StagiaireDAO implements DAO<Stagiaire>{
 		st.setInt(1, id);
 		ResultSet res = st.executeQuery();
 		res.next();
-		return new Stagiaire(res.getInt("id"), res.getString("first_name"), res.getString("last_name"), res.getDate("arrival").toLocalDate(), res.getDate("formation_over").toLocalDate(), res.getInt("promotion_id"));
+		LocalDate arrival = res.getDate("arrival") == null  ? null : res.getDate("arrival").toLocalDate();
+		LocalDate formation_over = res.getDate("formation_over") == null ? null : res.getDate("arrival").toLocalDate();
+		return new Stagiaire(res.getInt("id"), res.getString("first_name"), res.getString("last_name"), arrival, formation_over, res.getInt("promotion_id"));
 	}
 
 	@Override
 	public List<Stagiaire> getAll() throws SQLException {
-		String query = "SELECT * FROM stagiaire";
+		String query = "SELECT * FROM stagiaire;";
 		PreparedStatement st = con.prepareStatement(query);
+		ResultSet res = st.executeQuery();
+		ArrayList<Stagiaire> liste = new ArrayList<>();
+		while(res.next()) {
+			LocalDate arrival = res.getDate("arrival") == null  ? null : res.getDate("arrival").toLocalDate();
+			LocalDate formation_over = res.getDate("formation_over") == null ? null : res.getDate("arrival").toLocalDate();
+			liste.add(new Stagiaire(res.getInt("id"), res.getString("first_name"), res.getString("last_name"), arrival, formation_over, res.getInt("promotion_id"))); 
+		}
+		return liste;
+	}
+	
+
+	public List<Stagiaire> getPaginated() throws SQLException{
+		String query = "SELECT * FROM stagiaire ORDER BY id LIMIT ?, ?;";
+		PreparedStatement st = con.prepareStatement(query);
+		st.setInt(1, (StagiaireDAO.page -1)*StagiaireDAO.ROWS_PER_PAGE);
+		st.setInt(2, StagiaireDAO.ROWS_PER_PAGE);
 		ResultSet res = st.executeQuery();
 		ArrayList<Stagiaire> liste = new ArrayList<>();
 		while(res.next()) {
@@ -78,17 +98,19 @@ public class StagiaireDAO implements DAO<Stagiaire>{
 	public void update(Stagiaire data) throws SQLException {
 		String query = "UPDATE stagiaire SET first_name=?, last_name=?, arrival=?, formation_over=?, promotion_id=? WHERE id=?;";
 		PreparedStatement st = con.prepareStatement(query);
+		Date arrival = data.getArrival() == null ? null : Date.valueOf(data.getArrival());
+		Date formation_over = data.getFormation_over() == null ? null : Date.valueOf(data.getFormation_over());
 
 		st.setString(1, data.getFirst_name());
 		st.setString(2, data.getLast_name());
-		st.setDate(3, Date.valueOf(data.getArrival()));
-		st.setDate(4, Date.valueOf(data.getFormation_over()));
+		st.setDate(3, arrival);
+		st.setDate(4, formation_over);
 		st.setInt(5, data.getPromotion_id());
 		st.setInt(6, data.getId());
 
 		try {
 			st.executeUpdate();
-			System.out.println("Le stagiaire : " + data + " a bien été supprimé !");
+			System.out.println("Le stagiaire : " + data + " a bien été modifié !");
 		}
 		catch(SQLException e) {
 			System.out.println(e.getMessage());
