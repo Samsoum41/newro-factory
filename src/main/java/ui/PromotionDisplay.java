@@ -8,11 +8,21 @@ import data.model.dao.PromotionDAO;
 import data.model.utilitaire.PromotionUtilitaire;
 
 public class PromotionDisplay {
+	private static String format = "%-20s%20s%n";
+
+	public static void print(Promotion promotion) {
+		System.out.printf(format, promotion.getId(), promotion.getName() + "   ");
+	}	
+	public static void printAttributes() {
+		System.out.printf(format, "id", "name   ");
+	}
+	
 	public static void showOne() throws SQLException {
 		System.out.println("Quel est l'id de la promotion que vous recherchez ?");
 		int id = Utilitaire.needInt("Ce n'est pas un entier ! Réessayez :");
 		if(PromotionUtilitaire.doesExist(id)) {
-			System.out.println(new PromotionDAO().getOne(id));
+			PromotionDisplay.printAttributes();
+			PromotionDisplay.print(new PromotionDAO().getOne(id));
 		}
 		else {
 			System.out.println("Il n'y a aucune promotion à ce numéro d'id.");
@@ -35,8 +45,9 @@ public class PromotionDisplay {
 	public static void showAll() throws SQLException {
 		while(true) {
 			List<Promotion> promotions = new PromotionDAO().getPaginated();
+			PromotionDisplay.printAttributes();
 			for (Promotion promotion : promotions) {
-				System.out.println(promotion);
+				PromotionDisplay.print(promotion);
 			}
 			if(PromotionDAO.page!=1) {
 				System.out.print(" <  pour passer à la page précédente  |");

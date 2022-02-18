@@ -3,8 +3,6 @@ package ui;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-import data.model.dao.PromotionDAO;
-
 public class Cli {
 	private static Scanner sc = new Scanner(System.in);
 	public static void main(String[] args) throws SQLException {
@@ -25,7 +23,7 @@ public class Cli {
 			StagiaireDisplay.showAll();
 			break;
 		case 2:
-			System.out.println(new PromotionDAO().getAll());
+			PromotionDisplay.showAll();
 			break;
 		case 3: 
 			StagiaireDisplay.showOne();

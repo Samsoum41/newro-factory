@@ -8,11 +8,21 @@ import data.model.dao.QuestionDAO;
 import data.model.utilitaire.QuestionUtilitaire;
 
 public class QuestionDisplay {
+	private static String format = "%-20s%20s%20s%20s%20s%20s%n";
+
+	public static void print(Question question) {
+		System.out.printf(format, question.getId(), question.getStatement(), question.getChapter_id());
+	}
+	public static void printAttributes() {
+		System.out.printf(format, "id", "title ", "statement", "chapter_id   ");
+	}
+	
 	public static void showOne() throws SQLException {
 		System.out.println("Quel est l'id de la question que vous recherchez ?");
 		int id = Utilitaire.needInt("Ce n'est pas un entier ! Réessayez :");
 		if(QuestionUtilitaire.doesExist(id)) {
-			System.out.println(new QuestionDAO().getOne(id));
+			QuestionDisplay.printAttributes();
+			QuestionDisplay.print(new QuestionDAO().getOne(id));
 		}
 		else {
 			System.out.println("Il n'y a aucune question à ce numéro d'id.");
@@ -35,8 +45,9 @@ public class QuestionDisplay {
 	public static void showAll() throws SQLException {
 		while(true) {
 			List<Question> questions = new QuestionDAO().getPaginated();
+			QuestionDisplay.printAttributes();
 			for (Question question : questions) {
-				System.out.println(question);
+				QuestionDisplay.print(question);
 			}
 			if(QuestionDAO.page!=1) {
 				System.out.print(" <  pour passer à la page précédente  |");

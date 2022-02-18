@@ -11,12 +11,21 @@ import data.model.utilitaire.StagiaireUtilitaire;
 
 public class StagiaireDisplay {
 	private static Scanner sc = new Scanner(System.in);
+	private static String format = "%-20s%20s%20s%20s%20s%20s%n";
+
+	public static void print(Stagiaire stagiaire) {
+		System.out.printf(format, stagiaire.getId(), stagiaire.getFirst_name(), stagiaire.getLast_name(), stagiaire.getArrival(), stagiaire.getFormation_over(), stagiaire.getPromotion_id() + "   ");
+	}
+	public static void printAttributes() {
+		System.out.printf(format, "id", "first_name ", "last_name", "arrival", "formation_over", "promotion_id   ");
+	}
 	public static void showOne() throws SQLException {
 		int id = 0;
 		System.out.println("Quel est l'id du stagaiaire que vous recherchez ?");
 		id = Utilitaire.needInt("Ce n'est pas un entier ça, réessayez :");
 		if(StagiaireUtilitaire.doesExist(id)) {
-			StagiaireUtilitaire.print(new StagiaireDAO().getOne(id));
+			StagiaireDisplay.printAttributes();
+			StagiaireDisplay.print(new StagiaireDAO().getOne(id));
 		}
 		else {
 			System.out.println("Il n'y a aucun stagiaire à ce numéro d'id.");
@@ -24,19 +33,26 @@ public class StagiaireDisplay {
 	}
 	
 	public static void showAll() throws SQLException {
+		List<Stagiaire> stagiaires;
+		boolean hasNextPage;
 		while(true) {
-			StagiaireUtilitaire.printAttributes();
-			List<Stagiaire> stagiaires = new StagiaireDAO().getPaginated();
+			stagiaires = new StagiaireDAO().getPaginated();
+			hasNextPage = new StagiaireDAO().hasNext();
+			// Printing data
+			StagiaireDisplay.printAttributes();
 			for (Stagiaire stagiaire : stagiaires) {
-				StagiaireUtilitaire.print(stagiaire);
+				StagiaireDisplay.print(stagiaire);
 			}
+			// Printing controls
 			if(StagiaireDAO.page!=1) {
 				System.out.print(" <  pour passer à la page précédente  |");
 			}
-			
-			System.out.println(" > pour passer à la page suivante");
+			if(hasNextPage){
+				System.out.println(" > pour passer à la page suivante");
+			}
+			// Logic of skiping pages
 			String arrow = Utilitaire.getArrowKey();
-			if (arrow.equals(">")) {
+			if (arrow.equals(">") && hasNextPage) {
 				StagiaireDAO.page +=1;
 			}
 			else if(arrow.equals("<") && StagiaireDAO.page !=1) {
@@ -55,11 +71,9 @@ public class StagiaireDisplay {
 		System.out.println("Le stagiaire est-il partie ? Si oui, entrez la date de départ au format yyyy-MM-dd. Par exemple aujourd'hui on est le " + LocalDate.now());
 		System.out.println("Sinon, entrez une bêtise");
 		LocalDate formation_over = null;
-		while(formation_over == null || !arrival.isBefore(formation_over)){
-			formation_over = Utilitaire.askUSLocalDate();
-			if(!arrival.isBefore(formation_over)) {
-				System.out.println("La date que vous avez renseignée est avant la date d'arrivée du stagiaire, c'est une erreur, réessaeyer :");
-			}
+		formation_over = Utilitaire.askUSLocalDate();
+		if(formation_over != null && !arrival.isBefore(formation_over)) {
+			System.out.println("La date que vous avez renseignée est avant la date d'arrivée du stagiaire, c'est une erreur, réessaeyer :");
 		}
 		System.out.println("Quel est l'id de la promotion du stagiaire que vous souhaitez ajouter ?");
 		int promotion_id = PromotionDisplay.needOne().getId();

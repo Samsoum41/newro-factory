@@ -41,6 +41,7 @@ public class Utilitaire {
 				chosen=true;
 			}
 			catch(Exception e){
+				sc.next();
 				System.out.println(errorMessage);
 			}
 		}

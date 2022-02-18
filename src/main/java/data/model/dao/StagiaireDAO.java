@@ -16,7 +16,7 @@ import data.model.Stagiaire;
 public class StagiaireDAO implements DAO<Stagiaire>{
 	static Connection con = DatabaseConnection.getConnection();
 	public static int page = 1;
-	private final static int ROWS_PER_PAGE = 10;
+	private final static int ROWS_PER_PAGE = 40;
 	@Override
 	public int add(Stagiaire data) throws SQLException {
 		String query = "INSERT INTO stagiaire(first_name, last_name, arrival, formation_over, promotion_id) VALUES(?,?,?,?,?);";
@@ -80,9 +80,13 @@ public class StagiaireDAO implements DAO<Stagiaire>{
 	
 	@Override
 	public List<Stagiaire> getPaginated() throws SQLException{
+		return this.getPaginated(StagiaireDAO.page);
+	}
+	
+	public List<Stagiaire> getPaginated( int page) throws SQLException{
 		String query = "SELECT * FROM stagiaire ORDER BY id LIMIT ?, ?;";
 		PreparedStatement st = con.prepareStatement(query);
-		st.setInt(1, (StagiaireDAO.page -1)*StagiaireDAO.ROWS_PER_PAGE);
+		st.setInt(1, (page -1)*StagiaireDAO.ROWS_PER_PAGE);
 		st.setInt(2, StagiaireDAO.ROWS_PER_PAGE);
 		ResultSet res = st.executeQuery();
 		ArrayList<Stagiaire> liste = new ArrayList<>();
@@ -92,6 +96,10 @@ public class StagiaireDAO implements DAO<Stagiaire>{
 			liste.add(new Stagiaire(res.getInt("id"), res.getString("first_name"), res.getString("last_name"), arrival, formation_over, res.getInt("promotion_id"))); 
 		}
 		return liste;
+	}
+	
+	public boolean hasNext() throws SQLException {
+		return !getPaginated(page +1).isEmpty();
 	}
 
 	@Override
