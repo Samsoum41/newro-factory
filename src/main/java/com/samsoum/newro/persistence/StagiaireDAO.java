@@ -60,7 +60,7 @@ public class StagiaireDAO {
 
 	public void delete(int id) throws SQLException {
 		try(Connection con = DatabaseConnection.getConnection(); 
-		PreparedStatement st = con.prepareStatement(deleteQuery);){
+			PreparedStatement st = con.prepareStatement(deleteQuery);){
 			st.setInt(1, id);
 			st.executeUpdate();		
 			System.out.println("Le stagiaire d'id " + id + " a bien été supprimé"); 
@@ -69,7 +69,7 @@ public class StagiaireDAO {
 
 	public Stagiaire getOne(int id) throws SQLException {
 		try(Connection con = DatabaseConnection.getConnection(); 
-		PreparedStatement st = con.prepareStatement(getOneQuery);){
+			PreparedStatement st = con.prepareStatement(getOneQuery);){
 			st.setInt(1, id);
 			ResultSet res = st.executeQuery();
 			res.next();

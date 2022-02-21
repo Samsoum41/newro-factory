@@ -15,7 +15,7 @@ public class PromotionDAO{
 	private static PromotionDAO instance;
 	private String insertQuery = "INSERT INTO promotion(name) VALUES(?);";
 	private String deleteQuery = "DELETE FROM promotion WHERE id=?;"; 
-	private String getOneQuery = "DELETE FROM promotion WHERE id=?;"; 
+	private String getOneQuery = "SELECT * FROM promotion WHERE id=?;"; 
 	private String getAllQuery = "SELECT * FROM promotion;";
 	private String getPaginatedQuery = "SELECT * FROM promotion ORDER BY id LIMIT ?, ?;";
 	private String updateQuery = "UPDATE promotion SET name=? WHERE id=?;";
@@ -33,6 +33,7 @@ public class PromotionDAO{
 		try(Connection con = DatabaseConnection.getConnection(); 
 			PreparedStatement st = 	con.prepareStatement(insertQuery);){
 			st.setString(1, data.getName());
+
 			try {
 				int n = st.executeUpdate();
 				System.out.println("L'enregistrement : " + data + " a bien été enregistré");
@@ -56,7 +57,7 @@ public class PromotionDAO{
 
 	public Promotion getOne(int id) throws SQLException {
 		try(Connection con = DatabaseConnection.getConnection(); 
-			PreparedStatement st = con.prepareStatement(getOneQuery);){
+			PreparedStatement st = con.prepareStatement(getOneQuery); ) {
 			st.setInt(1, id);
 			ResultSet res = st.executeQuery();
 			if(res.next()) {
@@ -81,8 +82,8 @@ public class PromotionDAO{
 	}
 	
 	public List<Promotion> getPaginated() throws SQLException{
-		try(Connection con = DatabaseConnection.getConnection(); 
-			PreparedStatement st = con.prepareStatement(getPaginatedQuery);){
+		try(Connection con = DatabaseConnection.getConnection(); ){
+			PreparedStatement st = con.prepareStatement(getPaginatedQuery);
 			st.setInt(1, (PromotionDAO.page -1)*PromotionDAO.ROWS_PER_PAGE);
 			st.setInt(2, PromotionDAO.ROWS_PER_PAGE);
 			ResultSet res = st.executeQuery();
