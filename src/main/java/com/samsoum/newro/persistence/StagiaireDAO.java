@@ -18,6 +18,13 @@ public class StagiaireDAO {
 	public static int page = 1;
 	private final static int ROWS_PER_PAGE = 40;
 	private static StagiaireDAO instance;
+	private String insertQuery = "INSERT INTO stagiaire(first_name, last_name, arrival, formation_over, promotion_id) VALUES(?,?,?,?,?);";
+	private String deleteQuery = "DELETE FROM stagiaire WHERE id=?;"; 
+	private String getOneQuery = "SELECT * FROM stagiaire WHERE id=?;";
+	private String getAllQuery = "SELECT * FROM stagiaire;";
+	private String getPaginatedQuery = "SELECT * FROM stagiaire ORDER BY id LIMIT ?, ?;";
+	private String updateQuery = "UPDATE stagiaire SET first_name=?, last_name=?, arrival=?, formation_over=?, promotion_id=? WHERE id=?;";
+
 	
 	private StagiaireDAO() {
 		
@@ -30,8 +37,7 @@ public class StagiaireDAO {
 	}
 	
 	public int add(Stagiaire data) throws SQLException {
-		String query = "INSERT INTO stagiaire(first_name, last_name, arrival, formation_over, promotion_id) VALUES(?,?,?,?,?);";
-		PreparedStatement st = 	con.prepareStatement(query);
+		PreparedStatement st = 	con.prepareStatement(insertQuery);
 		
 		Timestamp arrival = data.getArrival() == null  ? null : Timestamp.valueOf(data.getArrival().atStartOfDay());
 		Timestamp formation_over = data.getFormation_over() == null ? null : Timestamp.valueOf(data.getFormation_over().atStartOfDay());
@@ -56,16 +62,14 @@ public class StagiaireDAO {
 
 
 	public void delete(int id) throws SQLException {
-		String query = "DELETE FROM stagiaire WHERE id=?;"; 
-		PreparedStatement st = con.prepareStatement(query);
+		PreparedStatement st = con.prepareStatement(deleteQuery);
 		st.setInt(1, id);
 		st.executeUpdate();		
 		System.out.println("Le stagiaire d'id " + id + " a bien été supprimé"); 
 	}
 
 	public Stagiaire getOne(int id) throws SQLException {
-		String query = "SELECT * FROM stagiaire WHERE id=?;";
-		PreparedStatement st = con.prepareStatement(query);
+		PreparedStatement st = con.prepareStatement(getOneQuery);
 		st.setInt(1, id);
 		ResultSet res = st.executeQuery();
 		res.next();
@@ -75,8 +79,7 @@ public class StagiaireDAO {
 	}
 
 	public List<Stagiaire> getAll() throws SQLException {
-		String query = "SELECT * FROM stagiaire;";
-		PreparedStatement st = con.prepareStatement(query);
+		PreparedStatement st = con.prepareStatement(getAllQuery);
 		ResultSet res = st.executeQuery();
 		ArrayList<Stagiaire> liste = new ArrayList<>();
 		while(res.next()) {
@@ -92,8 +95,7 @@ public class StagiaireDAO {
 	}
 	
 	public List<Stagiaire> getPaginated( int page) throws SQLException{
-		String query = "SELECT * FROM stagiaire ORDER BY id LIMIT ?, ?;";
-		PreparedStatement st = con.prepareStatement(query);
+		PreparedStatement st = con.prepareStatement(getPaginatedQuery);
 		st.setInt(1, (page -1)*StagiaireDAO.ROWS_PER_PAGE);
 		st.setInt(2, StagiaireDAO.ROWS_PER_PAGE);
 		ResultSet res = st.executeQuery();
@@ -111,8 +113,7 @@ public class StagiaireDAO {
 	}
 
 	public void update(Stagiaire data) throws SQLException {
-		String query = "UPDATE stagiaire SET first_name=?, last_name=?, arrival=?, formation_over=?, promotion_id=? WHERE id=?;";
-		PreparedStatement st = con.prepareStatement(query);
+		PreparedStatement st = con.prepareStatement(updateQuery);
 		Date arrival = data.getArrival() == null ? null : Date.valueOf(data.getArrival());
 		Date formation_over = data.getFormation_over() == null ? null : Date.valueOf(data.getFormation_over());
 

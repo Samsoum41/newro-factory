@@ -14,6 +14,12 @@ public class PromotionDAO{
 	public static int page = 1;
 	private final static int ROWS_PER_PAGE = 10;
 	private static PromotionDAO instance;
+	private String insertQuery = "INSERT INTO promotion(name) VALUES(?);";
+	private String deleteQuery = "DELETE FROM promotion WHERE id=?;"; 
+	private String getOneQuery = "DELETE FROM promotion WHERE id=?;"; 
+	private String getAllQuery = "SELECT * FROM promotion;";
+	private String getPaginatedQuery = "SELECT * FROM promotion ORDER BY id LIMIT ?, ?;";
+	private String updateQuery = "UPDATE promotion SET name=? WHERE id=?;";
 	
 	private PromotionDAO() {
 		
@@ -25,8 +31,7 @@ public class PromotionDAO{
 		return PromotionDAO.instance;
 	}
 	public int add(Promotion data) throws SQLException {
-		String query = "INSERT INTO promotion(name) VALUES(?);";
-		PreparedStatement st = 	con.prepareStatement(query);
+		PreparedStatement st = 	con.prepareStatement(insertQuery);
 		st.setString(1, data.getName());
 		try {
 			int n = st.executeUpdate();
@@ -41,15 +46,13 @@ public class PromotionDAO{
 	}
 
 	public void delete(int id) throws SQLException {
-		String query = "DELETE FROM promotion WHERE id=?;"; 
-		PreparedStatement st = con.prepareStatement(query);
+		PreparedStatement st = con.prepareStatement(deleteQuery);
 		st.setInt(1, id);
 		st.executeUpdate();		
 	}
 
 	public Promotion getOne(int id) throws SQLException {
-		String query = "SELECT * FROM promotion WHERE id=?;";
-		PreparedStatement st = con.prepareStatement(query);
+		PreparedStatement st = con.prepareStatement(getOneQuery);
 		st.setInt(1, id);
 		ResultSet res = st.executeQuery();
 		if(res.next()) {
@@ -61,8 +64,7 @@ public class PromotionDAO{
 	}
 
 	public List<Promotion> getAll() throws SQLException {
-		String query = "SELECT * FROM promotion";
-		PreparedStatement st = con.prepareStatement(query);
+		PreparedStatement st = con.prepareStatement(getAllQuery);
 		ResultSet res = st.executeQuery();
 		ArrayList<Promotion> liste = new ArrayList<>();
 		while(res.next()) {
@@ -72,8 +74,7 @@ public class PromotionDAO{
 	}
 	
 	public List<Promotion> getPaginated() throws SQLException{
-		String query = "SELECT * FROM promotion ORDER BY id LIMIT ?, ?;";
-		PreparedStatement st = con.prepareStatement(query);
+		PreparedStatement st = con.prepareStatement(getPaginatedQuery);
 		st.setInt(1, (PromotionDAO.page -1)*PromotionDAO.ROWS_PER_PAGE);
 		st.setInt(2, PromotionDAO.ROWS_PER_PAGE);
 		ResultSet res = st.executeQuery();
@@ -85,8 +86,7 @@ public class PromotionDAO{
 	}
 
 	public void update(Promotion data) throws SQLException {
-		String query = "UPDATE promotion SET name=? WHERE id=?;";
-		PreparedStatement st = con.prepareStatement(query);
+		PreparedStatement st = con.prepareStatement(updateQuery);
 		st.setString(1, data.getName());
 		st.setInt(2, data.getId());
 		st.executeUpdate();

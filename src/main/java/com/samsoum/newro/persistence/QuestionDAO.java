@@ -15,7 +15,12 @@ public class QuestionDAO {
 	public static int page = 1;
 	private final static int ROWS_PER_PAGE = 10;
 	private static QuestionDAO instance;
-	
+	private String insertQuery = "INSERT INTO question(title, statement, chapter_id) VALUES(?,?,?);";
+	private String deleteQuery = "DELETE FROM question WHERE id=?;"; 
+	private String getOneQuery = "SELECT * FROM question WHERE id=?;";
+	private String getAllQuery = "SELECT * FROM question;";
+	private String getPaginated = "SELECT * FROM question ORDER BY id LIMIT ?, ?;";
+
 	private QuestionDAO() {
 		
 	}
@@ -27,8 +32,7 @@ public class QuestionDAO {
 	}
 	
 	public int add(Question data) throws SQLException {
-		String query = "INSERT INTO question(title, statement, chapter_id) VALUES(?,?,?);";
-		PreparedStatement st = 	con.prepareStatement(query);
+		PreparedStatement st = 	con.prepareStatement(insertQuery);
 		st.setString(1, data.getTitle());
 		st.setString(2, data.getStatement());
 		st.setInt(3, data.getChapter_id());
@@ -45,15 +49,13 @@ public class QuestionDAO {
 	}
 
 	public void delete(int id) throws SQLException {
-		String query = "DELETE FROM question WHERE id=?;"; 
-		PreparedStatement st = con.prepareStatement(query);
+		PreparedStatement st = con.prepareStatement(deleteQuery);
 		st.setInt(1, id);
 		st.executeUpdate();		
 	}
 
 	public Question getOne(int id) throws SQLException {
-		String query = "SELECT * FROM question WHERE id=?;";
-		PreparedStatement st = con.prepareStatement(query);
+		PreparedStatement st = con.prepareStatement(getOneQuery);
 		st.setInt(1, id);
 		ResultSet res = st.executeQuery();
 		res.next();
@@ -61,8 +63,7 @@ public class QuestionDAO {
 	}
 
 	public List<Question> getAll() throws SQLException {
-		String query = "SELECT * FROM question";
-		PreparedStatement st = con.prepareStatement(query);
+		PreparedStatement st = con.prepareStatement(getAllQuery);
 		ResultSet res = st.executeQuery();
 		ArrayList<Question> liste = new ArrayList<>();
 		while(res.next()) {
@@ -72,8 +73,7 @@ public class QuestionDAO {
 	}
 	
 	public List<Question> getPaginated() throws SQLException{
-		String query = "SELECT * FROM question ORDER BY id LIMIT ?, ?;";
-		PreparedStatement st = con.prepareStatement(query);
+		PreparedStatement st = con.prepareStatement(getPaginated);
 		st.setInt(1, (QuestionDAO.page -1)*QuestionDAO.ROWS_PER_PAGE);
 		st.setInt(2, QuestionDAO.ROWS_PER_PAGE);
 		ResultSet res = st.executeQuery();

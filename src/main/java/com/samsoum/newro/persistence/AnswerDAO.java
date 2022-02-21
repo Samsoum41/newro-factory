@@ -17,6 +17,14 @@ public class AnswerDAO {
 	private final static int ROWS_PER_PAGE = 10;
 	private static AnswerDAO instance;
 	
+	
+	private String insertQuery = "INSERT INTO answer(label, text,valid_answer, question_id) VALUES(?,?,?,?,?);";
+	private String deleteQuery = "DELETE FROM answer WHERE id=?;"; 
+	private String getOneQuery = "SELECT * FROM answer WHERE id=?;";
+	private String getAllQuery = "SELECT * FROM answer;";
+	private String getPaginatedQuery = "SELECT * FROM answer ORDER BY id LIMIT ?, ?;";
+	private String updateQuery = "UPDATE answer SET label=?, text=?, valid_answer=?, question_id=? WHERE id=?;";
+	
 	private AnswerDAO() {
 		
 	}
@@ -30,8 +38,7 @@ public class AnswerDAO {
 	
 	public int add(Answer data) throws SQLException {
 		// TODO Auto-generated method stub
-		String query = "INSERT INTO answer(label, text,valid_answer, question_id) VALUES(?,?,?,?,?);";
-		PreparedStatement st = 	con.prepareStatement(query);
+		PreparedStatement st = 	con.prepareStatement(insertQuery);
 		st.setString(1, data.getLabel());
 		st.setString(2, data.getText());
 		st.setInt(3, data.getValid_answer());
@@ -49,17 +56,13 @@ public class AnswerDAO {
 	}
 
 	public void delete(int id) throws SQLException {
-		// TODO Auto-generated method stub
-		String query = "DELETE FROM answer WHERE id=?;"; 
-		PreparedStatement st = con.prepareStatement(query);
+		PreparedStatement st = con.prepareStatement(deleteQuery);
 		st.setInt(1, id);
 		st.executeUpdate();
 	}
 
 	public Answer getOne(int id) throws SQLException {
-		// TODO Auto-generated method stub
-		String query = "SELECT * FROM answer WHERE id=?;";
-		PreparedStatement st = con.prepareStatement(query);
+		PreparedStatement st = con.prepareStatement(getOneQuery);
 		st.setInt(1, id);
 		ResultSet res = st.executeQuery();
 		res.next();
@@ -67,9 +70,7 @@ public class AnswerDAO {
 	}
 
 	public List<Answer> getAll() throws SQLException {
-		// TODO Auto-generated method stub
-		String query = "SELECT * FROM answer";
-		PreparedStatement st = con.prepareStatement(query);
+		PreparedStatement st = con.prepareStatement(getAllQuery);
 		ResultSet res = st.executeQuery();
 		ArrayList<Answer> liste = new ArrayList<>();
 		while(res.next()) {
@@ -79,8 +80,7 @@ public class AnswerDAO {
 	}
 	
 	public List<Answer> getPaginated() throws SQLException{
-		String query = "SELECT * FROM answer ORDER BY id LIMIT ?, ?;";
-		PreparedStatement st = con.prepareStatement(query);
+		PreparedStatement st = con.prepareStatement(getPaginatedQuery);
 		st.setInt(1, (AnswerDAO.page -1)*AnswerDAO.ROWS_PER_PAGE);
 		st.setInt(2, AnswerDAO.ROWS_PER_PAGE);
 		ResultSet res = st.executeQuery();
@@ -92,9 +92,7 @@ public class AnswerDAO {
 	}
 	
 	public void update(Answer data) throws SQLException {
-		// TODO Auto-generated method stub
-		String query = "UPDATE answer SET label=?, text=?, valid_answer=?, question_id=? WHERE id=?;";
-		PreparedStatement st = con.prepareStatement(query);
+		PreparedStatement st = con.prepareStatement(updateQuery);
 		st.setString(1, data.getLabel());
 		st.setString(2, data.getText());
 		st.setInt(3, data.getValid_answer());

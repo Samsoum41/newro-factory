@@ -16,6 +16,13 @@ public class ChapterDAO {
 	private final static int ROWS_PER_PAGE = 10;
 	private static ChapterDAO instance;
 	
+	private String insertQuery = "INSERT INTO chapter(name, parent_path) VALUES(?,?,?);";
+	private String deleteQuery = "DELETE FROM chapter WHERE id=?;"; 
+	private String getOneQuery = "SELECT * FROM chapter WHERE id=?;";
+	private String getAllQuery = "SELECT * FROM chapter;";
+	private String getPaginatedQuery = "SELECT * FROM chapter ORDER BY id LIMIT ?, ?;";
+	private String updateQuery = "UPDATE chapter SET name=?, parent_path=? WHERE id=?;";
+	
 	private ChapterDAO() {
 		
 	}
@@ -27,8 +34,7 @@ public class ChapterDAO {
 	}
 	
 	public int add(Chapter data) throws SQLException {
-		String query = "INSERT INTO chapter(name, parent_path) VALUES(?,?,?);";
-		PreparedStatement st = 	con.prepareStatement(query);
+		PreparedStatement st = 	con.prepareStatement(insertQuery);
 		st.setString(1, data.getName());
 		st.setString(2, data.getParent_path());
 		try {
@@ -44,15 +50,13 @@ public class ChapterDAO {
 	}
 
 	public void delete(int id) throws SQLException {
-		String query = "DELETE FROM chapter WHERE id=?;"; 
-		PreparedStatement st = con.prepareStatement(query);
+		PreparedStatement st = con.prepareStatement(deleteQuery);
 		st.setInt(1, id);
 		st.executeUpdate();		
 	}
 
 	public Chapter getOne(int id) throws SQLException {
-		String query = "SELECT * FROM chapter WHERE id=?;";
-		PreparedStatement st = con.prepareStatement(query);
+		PreparedStatement st = con.prepareStatement(getOneQuery);
 		st.setInt(1, id);
 		ResultSet res = st.executeQuery();
 		res.next();
@@ -60,8 +64,7 @@ public class ChapterDAO {
 	}
 
 	public List<Chapter> getAll() throws SQLException {
-		String query = "SELECT * FROM chapter";
-		PreparedStatement st = con.prepareStatement(query);
+		PreparedStatement st = con.prepareStatement(getAllQuery);
 		ResultSet res = st.executeQuery();
 		ArrayList<Chapter> liste = new ArrayList<>();
 		while(res.next()) {
@@ -71,8 +74,7 @@ public class ChapterDAO {
 	}
 	
 	public List<Chapter> getPaginated() throws SQLException{
-		String query = "SELECT * FROM chapter ORDER BY id LIMIT ?, ?;";
-		PreparedStatement st = con.prepareStatement(query);
+		PreparedStatement st = con.prepareStatement(getPaginatedQuery);
 		st.setInt(1, (ChapterDAO.page -1)*ChapterDAO.ROWS_PER_PAGE);
 		st.setInt(2, ChapterDAO.ROWS_PER_PAGE);
 		ResultSet res = st.executeQuery();
@@ -85,8 +87,7 @@ public class ChapterDAO {
 
 	public void update(Chapter data) throws SQLException {
 		// TODO Auto-generated method stub
-		String query = "UPDATE answer SET name=?, parent_path=? WHERE id=?;";
-		PreparedStatement st = con.prepareStatement(query);
+		PreparedStatement st = con.prepareStatement(updateQuery);
 		st.setString(1, data.getName());
 		st.setString(2, data.getParent_path());
 		st.setInt(3, data.getId());
