@@ -27,7 +27,7 @@ public class StagiaireView {
 		id = Utilitaire.needInt("Ce n'est pas un entier ça, réessayez :");
 		if(StagiaireService.doesExist(id)) {
 			StagiaireView.printAttributes();
-			StagiaireView.print(new StagiaireDAO().getOne(id));
+			StagiaireView.print(StagiaireService.getInstance().getOne(id));
 		}
 		else {
 			System.out.println("Il n'y a aucun stagiaire à ce numéro d'id.");
@@ -38,8 +38,8 @@ public class StagiaireView {
 		List<Stagiaire> stagiaires;
 		boolean hasNextPage;
 		while(true) {
-			stagiaires = new StagiaireDAO().getPaginated();
-			hasNextPage = new StagiaireDAO().hasNext();
+			stagiaires = StagiaireService.getInstance().getPaginated();
+			hasNextPage = StagiaireService.getInstance().hasNextPage();
 			// Printing data
 			StagiaireView.printAttributes();
 			for (Stagiaire stagiaire : stagiaires) {
@@ -79,7 +79,7 @@ public class StagiaireView {
 		}
 		System.out.println("Quel est l'id de la promotion du stagiaire que vous souhaitez ajouter ?");
 		int promotion_id = PromotionView.needOne().getId();
-		new StagiaireDAO().add(new Stagiaire(first_name, last_name, arrival, formation_over, promotion_id));
+		StagiaireService.getInstance().add(new Stagiaire(first_name, last_name, arrival, formation_over, promotion_id));
 	}
 	public static void updateOne() throws SQLException {
 		System.out.println("Quel est l'id du stagiaire que vous souhaitez modifier ?");
@@ -103,14 +103,14 @@ public class StagiaireView {
 		}
 		System.out.println("Quel est le nouvel id de la promotion du stagiaire que vous souhaitez modifier ?");
 		int promotion_id = PromotionView.needOne().getId();
-		new StagiaireDAO().update(new Stagiaire(stagiaire_id,first_name, last_name, arrival, formation_over, promotion_id));
+		StagiaireService.getInstance().update(new Stagiaire(stagiaire_id,first_name, last_name, arrival, formation_over, promotion_id));
 	}
 	
 	public static void deleteOne() throws SQLException {
 		System.out.println("Quel est l'id du stagiaire que vous souhaitez supprimer ?");
 		int id = Utilitaire.needInt("C'est pas un entier ça");
 		if(StagiaireService.doesExist(id)) {
-			new StagiaireDAO().delete(id);
+			StagiaireService.getInstance().delete(id);
 		}
 		else {
 			System.out.println("Il n'y a aucun stagiaire à ce numéro d'id.");
@@ -122,7 +122,7 @@ public class StagiaireView {
 		while (true) {
 			id = Utilitaire.needInt("Ce n'est pas un entier coco, réessaye :");
 			if (StagiaireService.doesExist(id)) {
-				return new StagiaireDAO().getOne(id);
+				return StagiaireService.getInstance().getOne(id);
 			}
 			else {
 				System.out.println("Aucune stagiaire ne corresond à cet id, réessayez :");

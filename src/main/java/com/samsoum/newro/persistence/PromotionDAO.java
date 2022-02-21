@@ -13,7 +13,17 @@ public class PromotionDAO{
 	static Connection con = DatabaseConnection.getConnection();
 	public static int page = 1;
 	private final static int ROWS_PER_PAGE = 10;
-
+	private static PromotionDAO instance;
+	
+	private PromotionDAO() {
+		
+	}
+	public static PromotionDAO getInstance() {
+		if (PromotionDAO.instance == null) {
+			PromotionDAO.instance = new PromotionDAO();
+		}
+		return PromotionDAO.instance;
+	}
 	public int add(Promotion data) throws SQLException {
 		String query = "INSERT INTO promotion(name) VALUES(?);";
 		PreparedStatement st = 	con.prepareStatement(query);

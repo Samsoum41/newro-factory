@@ -24,7 +24,7 @@ public class QuestionView {
 		int id = Utilitaire.needInt("Ce n'est pas un entier ! Réessayez :");
 		if(QuestionService.doesExist(id)) {
 			QuestionView.printAttributes();
-			QuestionView.print(new QuestionDAO().getOne(id));
+			QuestionView.print(QuestionService.getInstance().getOne(id));
 		}
 		else {
 			System.out.println("Il n'y a aucune question à ce numéro d'id.");
@@ -36,7 +36,7 @@ public class QuestionView {
 		while (true) {
 			question_id = Utilitaire.needInt("Ce n'est pas un entier coco, réessaye :");
 			if (QuestionService.doesExist(question_id)) {
-				return new QuestionDAO().getOne(question_id);
+				return QuestionService.getInstance().getOne(question_id);
 			}
 			else {
 				System.out.println("Aucune question ne corresond à cet id, réessayez :");
@@ -46,7 +46,7 @@ public class QuestionView {
 	
 	public static void showAll() throws SQLException {
 		while(true) {
-			List<Question> questions = new QuestionDAO().getPaginated();
+			List<Question> questions = QuestionService.getInstance().getPaginated();
 			QuestionView.printAttributes();
 			for (Question question : questions) {
 				QuestionView.print(question);

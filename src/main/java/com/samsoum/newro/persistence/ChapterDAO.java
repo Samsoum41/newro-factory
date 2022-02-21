@@ -14,6 +14,17 @@ public class ChapterDAO {
 	static Connection con = DatabaseConnection.getConnection();
 	public static int page = 1;
 	private final static int ROWS_PER_PAGE = 10;
+	private static ChapterDAO instance;
+	
+	private ChapterDAO() {
+		
+	}
+	public static ChapterDAO getInstance() {
+		if (ChapterDAO.instance == null) {
+			ChapterDAO.instance = new ChapterDAO();
+		}
+		return ChapterDAO.instance;
+	}
 	
 	public int add(Chapter data) throws SQLException {
 		String query = "INSERT INTO chapter(name, parent_path) VALUES(?,?,?);";

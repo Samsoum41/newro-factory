@@ -14,7 +14,18 @@ public class QuestionDAO {
 	static Connection con = DatabaseConnection.getConnection();
 	public static int page = 1;
 	private final static int ROWS_PER_PAGE = 10;
-
+	private static QuestionDAO instance;
+	
+	private QuestionDAO() {
+		
+	}
+	public static QuestionDAO getInstance() {
+		if (QuestionDAO.instance == null) {
+			QuestionDAO.instance = new QuestionDAO();
+		}
+		return QuestionDAO.instance;
+	}
+	
 	public int add(Question data) throws SQLException {
 		String query = "INSERT INTO question(title, statement, chapter_id) VALUES(?,?,?);";
 		PreparedStatement st = 	con.prepareStatement(query);

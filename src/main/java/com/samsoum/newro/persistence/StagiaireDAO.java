@@ -17,7 +17,18 @@ public class StagiaireDAO {
 	static Connection con = DatabaseConnection.getConnection();
 	public static int page = 1;
 	private final static int ROWS_PER_PAGE = 40;
-
+	private static StagiaireDAO instance;
+	
+	private StagiaireDAO() {
+		
+	}
+	public static StagiaireDAO getInstance() {
+		if (StagiaireDAO.instance == null) {
+			StagiaireDAO.instance = new StagiaireDAO();
+		}
+		return StagiaireDAO.instance;
+	}
+	
 	public int add(Stagiaire data) throws SQLException {
 		String query = "INSERT INTO stagiaire(first_name, last_name, arrival, formation_over, promotion_id) VALUES(?,?,?,?,?);";
 		PreparedStatement st = 	con.prepareStatement(query);
@@ -95,7 +106,7 @@ public class StagiaireDAO {
 		return liste;
 	}
 	
-	public boolean hasNext() throws SQLException {
+	public boolean hasNextPage() throws SQLException {
 		return !getPaginated(page +1).isEmpty();
 	}
 

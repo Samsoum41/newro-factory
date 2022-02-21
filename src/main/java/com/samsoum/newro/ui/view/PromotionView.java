@@ -23,7 +23,7 @@ public class PromotionView {
 		int id = Utilitaire.needInt("Ce n'est pas un entier ! Réessayez :");
 		if(PromotionService.doesExist(id)) {
 			PromotionView.printAttributes();
-			PromotionView.print(new PromotionDAO().getOne(id));
+			PromotionView.print(PromotionService.getInstance().getOne(id));
 		}
 		else {
 			System.out.println("Il n'y a aucune promotion à ce numéro d'id.");
@@ -35,7 +35,7 @@ public class PromotionView {
 		while (true) {
 			promotion_id = Utilitaire.needInt("Ce n'est pas un entier coco, réessaye :");
 			if (PromotionService.doesExist(promotion_id)) {
-				return new PromotionDAO().getOne(promotion_id);
+				return PromotionService.getInstance().getOne(promotion_id);
 			}
 			else {
 				System.out.println("Aucune promotion ne corresond à cet id, réessayez :");
@@ -45,7 +45,7 @@ public class PromotionView {
 	
 	public static void showAll() throws SQLException {
 		while(true) {
-			List<Promotion> promotions = new PromotionDAO().getPaginated();
+			List<Promotion> promotions = PromotionService.getInstance().getPaginated();
 			PromotionView.printAttributes();
 			for (Promotion promotion : promotions) {
 				PromotionView.print(promotion);

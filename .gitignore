@@ -2,6 +2,6 @@
 .metadata
 .project
 .settings
-/build/
+build/
 target/
 my_model.mwb

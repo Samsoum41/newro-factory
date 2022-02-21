@@ -15,6 +15,18 @@ public class AnswerDAO {
 	static Connection con = DatabaseConnection.getConnection();
 	public static int page = 1;
 	private final static int ROWS_PER_PAGE = 10;
+	private static AnswerDAO instance;
+	
+	private AnswerDAO() {
+		
+	}
+	
+	public static AnswerDAO getInstance() {
+		if (AnswerDAO.instance == null) {
+			AnswerDAO.instance = new AnswerDAO();
+		}
+		return AnswerDAO.instance;
+	}
 	
 	public int add(Answer data) throws SQLException {
 		// TODO Auto-generated method stub
