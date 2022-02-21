@@ -11,7 +11,6 @@ import java.util.List;
 import com.samsoum.newro.model.Chapter;
 
 public class ChapterDAO {
-	static Connection con = DatabaseConnection.getConnection();
 	public static int page = 1;
 	private final static int ROWS_PER_PAGE = 10;
 	private static ChapterDAO instance;
@@ -34,64 +33,75 @@ public class ChapterDAO {
 	}
 	
 	public int add(Chapter data) throws SQLException {
-		PreparedStatement st = 	con.prepareStatement(insertQuery);
-		st.setString(1, data.getName());
-		st.setString(2, data.getParent_path());
-		try {
-			int n = st.executeUpdate();
-			System.out.println("L'enregistrement : " + data + " a bien été enregistré");
-			return n;
-		}
-		catch(SQLException e) {
-			System.out.println("L'enregistrement en base de donné a échoué");
-			System.out.println(e.getMessage());
-			return 0;
+		try(Connection con = DatabaseConnection.getConnection(); 
+			PreparedStatement st = 	con.prepareStatement(insertQuery);){
+			st.setString(1, data.getName());
+			st.setString(2, data.getParent_path());
+			try {
+				int n = st.executeUpdate();
+				System.out.println("L'enregistrement : " + data + " a bien été enregistré");
+				return n;
+			}
+			catch(SQLException e) {
+				System.out.println("L'enregistrement en base de donné a échoué");
+				System.out.println(e.getMessage());
+				return 0;
+			}
 		}
 	}
 
 	public void delete(int id) throws SQLException {
-		PreparedStatement st = con.prepareStatement(deleteQuery);
-		st.setInt(1, id);
-		st.executeUpdate();		
+		try(Connection con = DatabaseConnection.getConnection(); 
+			PreparedStatement st = con.prepareStatement(deleteQuery);){
+			st.setInt(1, id);
+			st.executeUpdate();	
+		}	
 	}
 
 	public Chapter getOne(int id) throws SQLException {
-		PreparedStatement st = con.prepareStatement(getOneQuery);
-		st.setInt(1, id);
-		ResultSet res = st.executeQuery();
-		res.next();
-		return new Chapter(res.getInt("id"), res.getString("name"), res.getString("parent_path"));
+		try(Connection con = DatabaseConnection.getConnection(); 
+			PreparedStatement st = con.prepareStatement(getOneQuery);){
+			st.setInt(1, id);
+			ResultSet res = st.executeQuery();
+			res.next();
+			return new Chapter(res.getInt("id"), res.getString("name"), res.getString("parent_path"));
+		}
 	}
 
 	public List<Chapter> getAll() throws SQLException {
-		PreparedStatement st = con.prepareStatement(getAllQuery);
-		ResultSet res = st.executeQuery();
-		ArrayList<Chapter> liste = new ArrayList<>();
-		while(res.next()) {
-			liste.add(new Chapter(res.getInt("id"), res.getString("name"), res.getString("parent_path"))); 
+		try(Connection con = DatabaseConnection.getConnection(); 
+			PreparedStatement st = con.prepareStatement(getAllQuery);){
+			ResultSet res = st.executeQuery();
+			ArrayList<Chapter> liste = new ArrayList<>();
+			while(res.next()) {
+				liste.add(new Chapter(res.getInt("id"), res.getString("name"), res.getString("parent_path"))); 
+			}
+			return liste;
 		}
-		return liste;
 	}
 	
 	public List<Chapter> getPaginated() throws SQLException{
-		PreparedStatement st = con.prepareStatement(getPaginatedQuery);
-		st.setInt(1, (ChapterDAO.page -1)*ChapterDAO.ROWS_PER_PAGE);
-		st.setInt(2, ChapterDAO.ROWS_PER_PAGE);
-		ResultSet res = st.executeQuery();
-		ArrayList<Chapter> liste = new ArrayList<>();
-		while(res.next()) {
-			liste.add(new Chapter(res.getInt("id"), res.getString("name"), res.getString("parent_path"))); 
+		try(Connection con = DatabaseConnection.getConnection(); 
+			PreparedStatement st = con.prepareStatement(getPaginatedQuery);){
+			st.setInt(1, (ChapterDAO.page -1)*ChapterDAO.ROWS_PER_PAGE);
+			st.setInt(2, ChapterDAO.ROWS_PER_PAGE);
+			ResultSet res = st.executeQuery();
+			ArrayList<Chapter> liste = new ArrayList<>();
+			while(res.next()) {
+				liste.add(new Chapter(res.getInt("id"), res.getString("name"), res.getString("parent_path"))); 
+			}
+			return liste;
 		}
-		return liste;
 	}
 
 	public void update(Chapter data) throws SQLException {
-		// TODO Auto-generated method stub
-		PreparedStatement st = con.prepareStatement(updateQuery);
-		st.setString(1, data.getName());
-		st.setString(2, data.getParent_path());
-		st.setInt(3, data.getId());
-		st.executeUpdate();
+		try(Connection con = DatabaseConnection.getConnection(); 
+			PreparedStatement st = con.prepareStatement(updateQuery);){
+			st.setString(1, data.getName());
+			st.setString(2, data.getParent_path());
+			st.setInt(3, data.getId());
+			st.executeUpdate();
+		}
 	}
 
 }
