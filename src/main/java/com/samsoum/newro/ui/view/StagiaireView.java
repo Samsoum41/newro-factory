@@ -5,7 +5,9 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 
+import com.samsoum.newro.model.Promotion;
 import com.samsoum.newro.model.Stagiaire;
+import com.samsoum.newro.persistence.PromotionDAO;
 import com.samsoum.newro.persistence.StagiaireDAO;
 import com.samsoum.newro.service.StagiaireService;
 import com.samsoum.newro.ui.Utilitaire;
@@ -16,7 +18,7 @@ public class StagiaireView {
 	private static String format = "%-20s%20s%20s%20s%20s%20s%n";
 
 	public static void print(Stagiaire stagiaire) {
-		System.out.printf(format, stagiaire.getId(), stagiaire.getFirst_name(), stagiaire.getLast_name(), stagiaire.getArrival(), stagiaire.getFormation_over(), stagiaire.getPromotion_id() + "   ");
+		System.out.printf(format, stagiaire.getId(), stagiaire.getFirst_name(), stagiaire.getLast_name(), stagiaire.getArrival(), stagiaire.getFormation_over(), stagiaire.getPromotion() + "   ");
 	}
 	public static void printAttributes() {
 		System.out.printf(format, "id", "first_name ", "last_name", "arrival", "formation_over", "promotion_id   ");
@@ -79,7 +81,8 @@ public class StagiaireView {
 		}
 		System.out.println("Quel est l'id de la promotion du stagiaire que vous souhaitez ajouter ?");
 		int promotion_id = PromotionView.needOne().getId();
-		StagiaireService.getInstance().add(new Stagiaire(first_name, last_name, arrival, formation_over, promotion_id));
+		Promotion stagiairePromotion = PromotionDAO.getInstance().getOne(promotion_id);
+		StagiaireService.getInstance().add(new Stagiaire(first_name, last_name, arrival, formation_over, stagiairePromotion));
 	}
 	public static void updateOne() throws SQLException {
 		System.out.println("Quel est l'id du stagiaire que vous souhaitez modifier ?");
@@ -103,7 +106,8 @@ public class StagiaireView {
 		}
 		System.out.println("Quel est le nouvel id de la promotion du stagiaire que vous souhaitez modifier ?");
 		int promotion_id = PromotionView.needOne().getId();
-		StagiaireService.getInstance().update(new Stagiaire(stagiaire_id,first_name, last_name, arrival, formation_over, promotion_id));
+		Promotion stagiairePromotion = PromotionDAO.getInstance().getOne(promotion_id);
+		StagiaireService.getInstance().update(new Stagiaire(stagiaire_id,first_name, last_name, arrival, formation_over, stagiairePromotion));
 	}
 	
 	public static void deleteOne() throws SQLException {

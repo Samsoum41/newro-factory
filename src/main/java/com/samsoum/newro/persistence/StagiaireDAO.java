@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.samsoum.newro.model.Promotion;
 import com.samsoum.newro.model.Stagiaire;
 
 
@@ -44,7 +45,7 @@ public class StagiaireDAO {
 			st.setString(2, data.getLast_name());
 			st.setTimestamp(3, arrival);
 			st.setTimestamp(4, formation_over);
-			st.setInt(5, data.getPromotion_id());
+			st.setInt(5, data.getPromotion().getId());
 			try {
 				st.executeUpdate();
 				System.out.println("L'enregistrement : " + data + " a bien été enregistré");
@@ -74,7 +75,8 @@ public class StagiaireDAO {
 			res.next();
 			LocalDate arrival = res.getDate("arrival") == null  ? null : res.getDate("arrival").toLocalDate();
 			LocalDate formation_over = res.getDate("formation_over") == null ? null : res.getDate("arrival").toLocalDate();
-			return new Stagiaire(res.getInt("id"), res.getString("first_name"), res.getString("last_name"), arrival, formation_over, res.getInt("promotion_id"));
+			Promotion stagiairePromotion = PromotionDAO.getInstance().getOne(res.getInt("promotion_id"));
+			return new Stagiaire(res.getInt("id"), res.getString("first_name"), res.getString("last_name"), arrival, formation_over, stagiairePromotion);
 		} 
 	}
 
@@ -86,7 +88,8 @@ public class StagiaireDAO {
 			while(res.next()) {
 				LocalDate arrival = res.getDate("arrival") == null  ? null : res.getDate("arrival").toLocalDate();
 				LocalDate formation_over = res.getDate("formation_over") == null ? null : res.getDate("arrival").toLocalDate();
-				liste.add(new Stagiaire(res.getInt("id"), res.getString("first_name"), res.getString("last_name"), arrival, formation_over, res.getInt("promotion_id"))); 
+				Promotion stagiairePromotion = PromotionDAO.getInstance().getOne(res.getInt("promotion_id"));
+				liste.add(new Stagiaire(res.getInt("id"), res.getString("first_name"), res.getString("last_name"), arrival, formation_over, stagiairePromotion)); 
 			}
 			return liste;
 		}
@@ -106,7 +109,8 @@ public class StagiaireDAO {
 			while(res.next()) {
 				LocalDate arrival = res.getDate("arrival") == null  ? null : res.getDate("arrival").toLocalDate();
 				LocalDate formation_over = res.getDate("formation_over") == null ? null : res.getDate("arrival").toLocalDate();
-				liste.add(new Stagiaire(res.getInt("id"), res.getString("first_name"), res.getString("last_name"), arrival, formation_over, res.getInt("promotion_id"))); 
+				Promotion stagiairePromotion = PromotionDAO.getInstance().getOne(res.getInt("promotion_id"));
+				liste.add(new Stagiaire(res.getInt("id"), res.getString("first_name"), res.getString("last_name"), arrival, formation_over, stagiairePromotion)); 
 			}
 			return liste;
 		}
@@ -126,7 +130,7 @@ public class StagiaireDAO {
 			st.setString(2, data.getLast_name());
 			st.setDate(3, arrival);
 			st.setDate(4, formation_over);
-			st.setInt(5, data.getPromotion_id());
+			st.setInt(5, data.getPromotion().getId());
 			st.setInt(6, data.getId());
 
 			try {
