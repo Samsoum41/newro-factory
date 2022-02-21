@@ -3,23 +3,23 @@ package com.samsoum.newro.persistence;
 import java.sql.*;
 
 public class DatabaseConnection {
-    private static Connection con = null;
+    private Connection con;
+    static final String URL = "jdbc:mysql:// localhost:3306/newro-factory-db";
+    static final String USERNAME = "adminnewro";
+    static final String PASSWORD = "qwerty1234";
     
-    static
+    private DatabaseConnection()
     {
-        String url = "jdbc:mysql:// localhost:3306/newro-factory-db";
-        String username = "adminnewro";
-        String password = "qwerty1234";
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection(url, username, password);
+            con = DriverManager.getConnection(URL, USERNAME, PASSWORD);
         }
         catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
     }
     public static Connection getConnection()
-    {
-        return con;
+    { 
+        return new DatabaseConnection().con;
     }
 }
