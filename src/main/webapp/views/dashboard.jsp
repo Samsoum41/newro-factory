@@ -1,15 +1,20 @@
 <!DOCTYPE html>
 <html>
-<head>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%><head>
+
 <title>Newro Factory</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="utf-8">
 <!-- Bootstrap -->
-<link href="../css/bootstrap.min.css" rel="stylesheet" media="screen">
-<link href="../css/font-awesome.css" rel="stylesheet" media="screen">
-<link href="../css/main.css" rel="stylesheet" media="screen">
+<link href="<%= request.getContextPath() %>/css/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="<%= request.getContextPath() %>/css/font-awesome.css" rel="stylesheet" media="screen">
+<link href="<%= request.getContextPath() %>/css/main.css" rel="stylesheet" media="screen">
 </head>
 <body>
+	<c:forEach items="${stagiaires}" var="stagiaire">
+		<c:out value="${stagiaire.first_name }"></c:out>
+		<br/>
+	</c:forEach>
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <a class="navbar-brand" href="dashboard"> Newro Factory </a>
@@ -24,7 +29,7 @@
             <div id="actions" class="form-horizontal">
                 <div class="pull-left">
                     <form id="searchForm" action="#" method="GET" class="form-inline">
-
+ 
                         <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" />
                         <input type="submit" id="searchsubmit" value="Filter by name"
                         class="btn btn-primary" />
@@ -60,7 +65,7 @@
                             Stagiaire
                         </th>
                         <th>
-                            Date d'arrivÃ©e
+                            Date d'arrivée
                         </th>
                         <!-- Table header for Discontinued Date -->
                         <th>
@@ -79,27 +84,21 @@
                    			<td class="editMode">
                    				<input type="checkbox" name="cb" class="cb" value="0">
                    			</td> 
-                        </td>
-                   			</td> 
-                        </td>
-                   			</td> 
-                        </td>
-                   			</td> 
                    			<td><a href="editStagiaire.html" onclick="">Jean Dupont</a></td>
                    			<td>07/02/2022</td>
                    			<td></td>
-                   			<td>FÃ©vrier 2022</td>
+                   			<td>Février 2022</td>
                    		</tr>
                    		<tr>
                    			<td class="editMode"></td> 
                    			<td><a href="editStagiaire.html" onclick="">Ulysse Coscoy</a></td>
                    			<td>07/02/2021</td>
                    			<td>08/04/2021</td>
-                   			<td>FÃ©vrier 2021</td>
+                   			<td>Février 2021</td>
                    		</tr>
                    		<tr>
                    			<td class="editMode"></td> 
-                   			<td><a href="editStagiaire.html" onclick="">MathÃ©o Allard</a></td>
+                   			<td><a href="editStagiaire.html" onclick="">Mathéo Allard</a></td>
                    			<td>01/03/2021</td>
                    			<td>01/05/2021</td>
                    			<td>Mars 2021</td>
