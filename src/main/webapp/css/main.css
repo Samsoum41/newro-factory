@@ -10,15 +10,27 @@ footer {
 	width: 100%;
 	background: #FEFEFE;
 	border-top: 1px solid #CCC;
-	height: 60px;
+	height: auto;
+}
+
+.flex-center{
+	display: flex;
+	justify-content : center;
+}
+
+.highlighted {
+	background-color : aquamarine;
 }
 
 footer .pagination {
 	margin: 10px 0px;
+	
 }
 
 footer .btn-group {
 	margin: 10px 10px;
+	display: flex;
+	height:fit-content;
 }
 
 input[type='checkbox'] {

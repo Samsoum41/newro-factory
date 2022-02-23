@@ -16,9 +16,10 @@ import com.samsoum.newro.model.Stagiaire;
 
 public class StagiaireDAO {
 	public static int page = 1;
-	private final static int ROWS_PER_PAGE = 40;
+	private static int rowsPerPage = 40;
 	private static StagiaireDAO instance;
 	private String insertQuery = "INSERT INTO stagiaire(first_name, last_name, arrival, formation_over, promotion_id) VALUES(?,?,?,?,?);";
+	private String countQuery = "SELECT COUNT(*) AS rowcount FROM stagiaire;";
 	private String deleteQuery = "DELETE FROM stagiaire WHERE id=?;"; 
 	private String getOneQuery = "SELECT * FROM stagiaire WHERE id=?;";
 	private String getAllQuery = "SELECT * FROM stagiaire;";
@@ -80,6 +81,17 @@ public class StagiaireDAO {
 		} 
 	}
 
+	public int getNumberOfPages() throws SQLException {
+		try(Connection con = DatabaseConnection.getConnection(); 
+				PreparedStatement st = con.prepareStatement(countQuery);) {
+				ResultSet res = st.executeQuery();
+				res.next();
+				int numOfRows = res.getInt("rowcount");
+				// We need to add one page to store the last rows
+				int numOfPages = (numOfRows/StagiaireDAO.rowsPerPage)+1;
+				return numOfPages;
+		}
+	}
 	public List<Stagiaire> getAll() throws SQLException {
 		try(Connection con = DatabaseConnection.getConnection(); 
 			PreparedStatement st = con.prepareStatement(getAllQuery);) {
@@ -102,8 +114,9 @@ public class StagiaireDAO {
 	public List<Stagiaire> getPaginated( int page) throws SQLException{
 		try(Connection con = DatabaseConnection.getConnection(); 
 			PreparedStatement st = con.prepareStatement(getPaginatedQuery);){
-			st.setInt(1, (page -1)*StagiaireDAO.ROWS_PER_PAGE);
-			st.setInt(2, StagiaireDAO.ROWS_PER_PAGE);
+			st.setInt(1, (page -1)*StagiaireDAO.rowsPerPage);
+			st.setInt(2, StagiaireDAO.rowsPerPage);
+			System.out.println(rowsPerPage);
 			ResultSet res = st.executeQuery();
 			ArrayList<Stagiaire> liste = new ArrayList<>();
 			while(res.next()) {
@@ -141,6 +154,9 @@ public class StagiaireDAO {
 				System.out.println(e.getMessage());
 			}
 		}
+	}
+	public void setRowsPerPage(int numOfRows) {
+		rowsPerPage = numOfRows;
 	}
 	
 }
