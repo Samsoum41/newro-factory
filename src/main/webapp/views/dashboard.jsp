@@ -97,14 +97,14 @@
 						<span aria-hidden="true">&laquo;</span>
 					</a>
 				</li>
-				<c:forEach var="i" begin="1" end="${numOfPages}" step="1">
+				<c:forEach items="${navigationPages}" var="page">
 					<li>
 					<c:choose>
-						<c:when test="${ i==currentPage }">
-							<a href="dashboard?page=${i}" class ="highlighted">${i}</a>
+						<c:when test="${ page==currentPage }">
+							<a href="dashboard?page=${page}" id ="highlighted-li">${page}</a>
 						</c:when>
 						<c:otherwise>
-							<a href="dashboard?page=${i}">${i}</a>
+							<a href="dashboard?page=${page}">${page}</a>
 						</c:otherwise>
 					</c:choose>
 					</li>
