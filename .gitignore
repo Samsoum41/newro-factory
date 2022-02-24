@@ -5,3 +5,4 @@
 build/
 target/
 my_model.mwb
+src/main/resources/config.properties

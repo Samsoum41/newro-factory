@@ -16,6 +16,7 @@ footer {
 .flex-center{
 	display: flex;
 	justify-content : center;
+	color:blue;
 }
 
 .highlighted {
