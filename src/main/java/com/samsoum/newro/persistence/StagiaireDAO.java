@@ -81,7 +81,7 @@ public class StagiaireDAO {
 		} 
 	}
 
-	public int getNumberOfPages() throws SQLException {
+	public int getNumberOfStagiaires() throws SQLException {
 		try(Connection con = DatabaseConnection.getConnection(); 
 				PreparedStatement st = con.prepareStatement(countQuery);) {
 				ResultSet res = st.executeQuery();
@@ -91,6 +91,9 @@ public class StagiaireDAO {
 				int numOfPages = (numOfRows/StagiaireDAO.rowsPerPage)+1;
 				return numOfPages;
 		}
+	}
+	public int getRowsPerPage() {
+		return rowsPerPage;
 	}
 	public List<Stagiaire> getAll() throws SQLException {
 		try(Connection con = DatabaseConnection.getConnection(); 

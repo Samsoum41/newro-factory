@@ -44,7 +44,9 @@ public class DashboardServlet extends HttpServlet {
 		currentPage = page;
 		try {
 			List<Stagiaire> stagiaires = StagiaireService.getInstance().getPaginated(page);
-			int numOfPages = StagiaireService.getInstance().getNumberOfPages();
+			int totalStagiaires = StagiaireService.getInstance().getNumberOfStagiaires();
+			int numOfPages = (totalStagiaires/StagiaireService.getInstance().getRowsPerPage())+1;
+					
 			request.setAttribute("stagiaires", stagiaires);
 			request.setAttribute("numOfPages", numOfPages);
 			request.setAttribute("page", currentPage);

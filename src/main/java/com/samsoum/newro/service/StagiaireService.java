@@ -37,8 +37,12 @@ public class StagiaireService {
 	public Stagiaire getOne(int id) throws SQLException {
 		return StagiaireDAO.getInstance().getOne(id);
 	}
+	public int getNumberOfStagiaires() throws SQLException {
+		return StagiaireDAO.getInstance().getNumberOfStagiaires();
+	}
 	public int getNumberOfPages() throws SQLException {
-		return StagiaireDAO.getInstance().getNumberOfPages();
+		int nbStagiaires =  StagiaireService.getInstance().getNumberOfStagiaires();
+		return (nbStagiaires/StagiaireDAO.getInstance().getRowsPerPage())+1;
 	}
 	public List<Stagiaire> getPaginated() throws SQLException {
 		return StagiaireDAO.getInstance().getPaginated();
@@ -54,6 +58,9 @@ public class StagiaireService {
 	}
 	public boolean hasNextPage() throws SQLException {
 		return StagiaireDAO.getInstance().hasNextPage();
+	}
+	public int getRowsPerPage() {
+		return StagiaireDAO.getInstance().getRowsPerPage();
 	}
 	public void setRowsPerPage(int numOfRows) {
 		StagiaireDAO.getInstance().setRowsPerPage(numOfRows);
