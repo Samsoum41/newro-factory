@@ -33,7 +33,7 @@ public class StagiaireDAO {
 		return StagiaireDAO.instance;
 	}
 	
-	public void add(Stagiaire data) throws DatabaseException {
+	public void add(Stagiaire data) throws DAOException {
 		try(Connection con = DatabaseConnection.getConnection(); ){
 			PreparedStatement st = 	con.prepareStatement(INSERT_QUERY);
 			st = StagiaireMapper.getInstance().toStatement(data, st);
@@ -44,18 +44,18 @@ public class StagiaireDAO {
 			catch(SQLException e) {
 				// TODO : Logger cette exception
 				e.printStackTrace();
-				throw new DatabaseException("Problème dans l'enregistrement du stagaiaire " + data + " en base de donnée.");
+				throw new DAOException("Problème dans l'enregistrement du stagaiaire " + data + " en base de donnée.");
 			} 
 		}
 		catch(SQLException e) {
 			// TODO : Logger
 			e.printStackTrace();
-			throw new DatabaseException("Problème dans la connexion à la base de donnée");
+			throw new DAOException("Problème dans la connexion à la base de donnée");
 		}
 	}
 
 
-	public void delete(int id) throws DatabaseException {
+	public void delete(int id) throws DAOException {
 		try(Connection con = DatabaseConnection.getConnection(); ){
 			PreparedStatement st = con.prepareStatement(DELETE_QUERY);
 			st.setInt(1, id);
@@ -65,17 +65,17 @@ public class StagiaireDAO {
 			}
 			catch(SQLException e) {
 				e.printStackTrace();
-				throw new DatabaseException("Problème dans la suppression du stagiaire d'identifiant : " + id + " en base de donnée.");
+				throw new DAOException("Problème dans la suppression du stagiaire d'identifiant : " + id + " en base de donnée.");
 			}
 		}
 		catch(SQLException e) {
 			// TODO : Logger
 			e.printStackTrace();
-			throw new DatabaseException("Problème dans la connexion à la base de donnée");
+			throw new DAOException("Problème dans la connexion à la base de donnée");
 		}
 	}
 
-	public Stagiaire getOne(int id) throws DatabaseException {
+	public Stagiaire getOne(int id) throws DAOException {
 		try(Connection con = DatabaseConnection.getConnection(); 
 			PreparedStatement st = con.prepareStatement(GET_ONE_QUERY);){
 			st.setInt(1, id);
@@ -86,17 +86,17 @@ public class StagiaireDAO {
 			}
 			catch(SQLException e) {
 				e.printStackTrace();
-				throw new DatabaseException("Problème dans l'accès au stagiaire d'identifiant : " + id + " dans la base de donnée.");
+				throw new DAOException("Problème dans l'accès au stagiaire d'identifiant : " + id + " dans la base de donnée.");
 			}
 		} 
 		catch(SQLException e) {
 			// TODO : Logger
 			e.printStackTrace();
-			throw new DatabaseException("Problème dans la connexion à la base de donnée");
+			throw new DAOException("Problème dans la connexion à la base de donnée");
 		}
 	}
 
-	public int getNumberOfStagiaires() throws DatabaseException {
+	public int getNumberOfStagiaires() throws DAOException {
 		try(Connection con = DatabaseConnection.getConnection(); ) {
 				PreparedStatement st = con.prepareStatement(COUNT_QUERY);
 				try {
@@ -107,20 +107,20 @@ public class StagiaireDAO {
 				}
 				catch(SQLException e) {
 					e.printStackTrace();
-					throw new DatabaseException("Problème dans la réalisation du décompte de stagiaires en base de donnée.");
+					throw new DAOException("Problème dans la réalisation du décompte de stagiaires en base de donnée.");
 				}
 
 		}
 		catch(SQLException e) {
 			// TODO : Logger
 			e.printStackTrace();
-			throw new DatabaseException("Problème dans la connexion à la base de donnée");
+			throw new DAOException("Problème dans la connexion à la base de donnée");
 		}
 	}
 	public int getRowsPerPage() {
 		return rowsPerPage;
 	}
-	public List<Stagiaire> getAll() throws DatabaseException {
+	public List<Stagiaire> getAll() throws DAOException {
 		try(Connection con = DatabaseConnection.getConnection(); ) {
 			PreparedStatement st = con.prepareStatement(GET_ALL_QUERY);
 			try {
@@ -134,21 +134,21 @@ public class StagiaireDAO {
 			}
 			catch(SQLException e) {
 				e.printStackTrace();
-				throw new DatabaseException("Problème dans l'accès à l'ensemble des stagiaires en base de donnée.");
+				throw new DAOException("Problème dans l'accès à l'ensemble des stagiaires en base de donnée.");
 			}
 		}
 		catch(SQLException e) {
 			// TODO : Logger
 			e.printStackTrace();
-			throw new DatabaseException("Problème dans la connexion à la base de donnée");
+			throw new DAOException("Problème dans la connexion à la base de donnée");
 		}
 	}
 	
-	public List<Stagiaire> getPaginated() throws DatabaseException{
+	public List<Stagiaire> getPaginated() throws DAOException{
 		return this.getPaginated(StagiaireDAO.page);
 	}
 	
-	public List<Stagiaire> getPaginated( int page) throws DatabaseException{
+	public List<Stagiaire> getPaginated( int page) throws DAOException{
 		try(Connection con = DatabaseConnection.getConnection(); ){
 			PreparedStatement st = con.prepareStatement(GET_PAGINATED_QUERY);
 			int premierId = (page -1)*StagiaireDAO.rowsPerPage;
@@ -166,21 +166,21 @@ public class StagiaireDAO {
 			catch(SQLException e) {
 				e.printStackTrace();
 				String messageErreur = "Problème dans l'accès à l'ensemble des stagiaires entre les identifiants "+ premierId + " et " + (premierId+StagiaireDAO.rowsPerPage) + " en base de donnée.";
-				throw new DatabaseException(messageErreur);
+				throw new DAOException(messageErreur);
 			}
 		}
 		catch(SQLException e) {
 			// TODO : Logger
 			e.printStackTrace();
-			throw new DatabaseException("Problème dans la connexion à la base de donnée");
+			throw new DAOException("Problème dans la connexion à la base de donnée");
 		}
 	}
 	
-	public boolean hasNextPage() throws DatabaseException {
+	public boolean hasNextPage() throws DAOException {
 		return !getPaginated(page +1).isEmpty();
 	}
 
-	public void update(Stagiaire stagiaire) throws DatabaseException {
+	public void update(Stagiaire stagiaire) throws DAOException {
 		try(Connection con = DatabaseConnection.getConnection();){
 			PreparedStatement statement = con.prepareStatement(UPDATE_QUERY);
 			statement = StagiaireMapper.getInstance().toUpdateStatement(stagiaire, statement);
@@ -191,13 +191,13 @@ public class StagiaireDAO {
 			catch(SQLException e) {
 				e.printStackTrace();
 				String messageErreur = "Problème dans la mise à jour du stagiaire " + stagiaire + " en base de donnée.";
-				throw new DatabaseException(messageErreur);
+				throw new DAOException(messageErreur);
 			}
 		}
 		catch(SQLException e) {
 			// TODO : Logger
 			e.printStackTrace();
-			throw new DatabaseException("Problème dans la connexion à la base de donnée");
+			throw new DAOException("Problème dans la connexion à la base de donnée");
 		}
 	}
 	public void setRowsPerPage(int numOfRows) {

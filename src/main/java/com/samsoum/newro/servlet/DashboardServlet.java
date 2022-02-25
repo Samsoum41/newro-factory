@@ -1,11 +1,11 @@
 package com.samsoum.newro.servlet;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.samsoum.newro.model.Stagiaire;
+import com.samsoum.newro.service.ServiceException;
 import com.samsoum.newro.service.StagiaireService;
 
 import jakarta.servlet.ServletException;
@@ -36,14 +36,11 @@ public class DashboardServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// Getting and setting rows per page and index of page
-		if (request.getParameter("rows")!=null) {
-			int rows = Integer.parseInt(request.getParameter("rows"));
-			StagiaireService.getInstance().setRowsPerPage(rows);
-		}
-		int page = request.getParameter("page")==null ? STARTING_PAGE : Integer.parseInt(request.getParameter("page"));
-		currentPage = page;
+		String rowsParameter = request.getParameter("rows");
+		setRows(rowsParameter);
+		int currentPage = request.getParameter("page")==null ? STARTING_PAGE : Integer.parseInt(request.getParameter("page"));
 		try {
-			List<Stagiaire> stagiaires = StagiaireService.getInstance().getPaginated(page);
+			List<Stagiaire> stagiaires = StagiaireService.getInstance().getPaginated(currentPage);
 			int totalStagiaires = StagiaireService.getInstance().getNumberOfStagiaires();
 			int numOfPages = (totalStagiaires/StagiaireService.getInstance().getRowsPerPage())+1;
 			System.out.println("total stagiaires : " + totalStagiaires);
@@ -57,11 +54,11 @@ public class DashboardServlet extends HttpServlet {
 			request.setAttribute("navigationPages", getNavigationPages(currentPage, numOfPages));
 			request.getRequestDispatcher("/views/dashboard.jsp").forward(request, response);
 
-		} catch(SQLException e) {
+		} catch(ServiceException e) {
 			request.getRequestDispatcher("/views/500.jsp").forward(request, response);
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 		}
-		System.out.println(8);
+		System.out.println(1);
 	}
 
 	/**
@@ -72,6 +69,13 @@ public class DashboardServlet extends HttpServlet {
 		doGet(request, response);
 	}
 	
+	
+	private void setRows(String rowsString) {
+		if(rowsString != null) {
+			int rowsInt = Integer.parseInt(rowsString);
+			StagiaireService.getInstance().setRowsPerPage(rowsInt);
+		}
+	}
 	/**
 	 *  Méthode qui renvoie l'indice de la page précédente pour une page donnée.
 	 * 

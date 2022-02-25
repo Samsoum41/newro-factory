@@ -3,65 +3,120 @@ package com.samsoum.newro.service;
 import java.util.List;
 
 import com.samsoum.newro.model.Stagiaire;
-import com.samsoum.newro.persistence.DatabaseException;
+import com.samsoum.newro.persistence.DAOException;
 import com.samsoum.newro.persistence.StagiaireDAO;
 
 public class StagiaireService {
 	private static StagiaireService instance;
-	
+
 	private StagiaireService() {
-		
+
 	}
+
 	public static StagiaireService getInstance() {
 		if (StagiaireService.instance == null) {
 			StagiaireService.instance = new StagiaireService();
 		}
 		return StagiaireService.instance;
 	}
-	
-	public static boolean doesExist(int id){
+
+	//TODO : Méthode mal faite au niveau des exceptions
+	public static boolean doesExist(int id) {
 		try {
 			StagiaireDAO.getInstance().getOne(id);
 			return true;
-		}
-		catch(DatabaseException e) {
+		} catch (DAOException e) {
 			return false;
 		}
 	}
-	public List<Stagiaire> getAll() throws DatabaseException {
-		return StagiaireDAO.getInstance().getAll();
+
+	public List<Stagiaire> getAll() throws ServiceException {
+		try {
+			return StagiaireDAO.getInstance().getAll();
+		} catch (DAOException e) {
+			throw new ServiceException();
+		}
 	}
-	public void add(Stagiaire data) throws DatabaseException {
-		StagiaireDAO.getInstance().add(data);
+
+	public void add(Stagiaire data) throws ServiceException {
+		try {
+			StagiaireDAO.getInstance().add(data);
+		} catch (DAOException e) {
+			throw new ServiceException();
+		}
 	}
-	public Stagiaire getOne(int id) throws DatabaseException {
-		return StagiaireDAO.getInstance().getOne(id);
+
+	public Stagiaire getOne(int id) throws ServiceException {
+		try {
+			return StagiaireDAO.getInstance().getOne(id);
+		} catch (DAOException e) {
+			throw new ServiceException();
+		}
 	}
-	public int getNumberOfStagiaires() throws DatabaseException {
-		return StagiaireDAO.getInstance().getNumberOfStagiaires();
+
+	public int getNumberOfStagiaires() throws ServiceException {
+		try {
+			return StagiaireDAO.getInstance().getNumberOfStagiaires();
+		} catch (DAOException e) {
+			throw new ServiceException();
+		}
 	}
-	public int getNumberOfPages() throws DatabaseException {
-		int nbStagiaires =  StagiaireService.getInstance().getNumberOfStagiaires();
-		return (nbStagiaires/StagiaireDAO.getInstance().getRowsPerPage())+1;
+
+	// TODO : revoir cette méthode avec la manipulation des variables de pagination
+	// dans la DAO..
+	public int getNumberOfPages() throws ServiceException {
+		int nbStagiaires = StagiaireService.getInstance().getNumberOfStagiaires();
+		return (nbStagiaires / StagiaireDAO.getInstance().getRowsPerPage()) + 1;
 	}
-	public List<Stagiaire> getPaginated() throws DatabaseException {
-		return StagiaireDAO.getInstance().getPaginated();
+
+	public List<Stagiaire> getPaginated() throws ServiceException {
+		try {
+			return StagiaireDAO.getInstance().getPaginated();
+		} catch (DAOException e) {
+			throw new ServiceException();
+		}
 	}
-	public List<Stagiaire> getPaginated(int page) throws DatabaseException {
-		return StagiaireDAO.getInstance().getPaginated(page);
+
+	public List<Stagiaire> getPaginated(int page) throws ServiceException {
+		try {
+			return StagiaireDAO.getInstance().getPaginated(page);
+		} catch (DAOException e) {
+			throw new ServiceException();
+		}
 	}
-	public void delete(int id) throws DatabaseException{
-		StagiaireDAO.getInstance().delete(id);
+
+	public void delete(int id) throws ServiceException {
+		try {
+			StagiaireDAO.getInstance().delete(id);
+		} catch (DAOException e) {
+			throw new ServiceException();
+		}
 	}
-	public void update(Stagiaire promotion) throws DatabaseException{
-		StagiaireDAO.getInstance().update(promotion);
+
+	public void update(Stagiaire promotion) throws ServiceException {
+		try {
+			StagiaireDAO.getInstance().update(promotion);
+		} catch (DAOException e) {
+			throw new ServiceException();
+		}
 	}
-	public boolean hasNextPage() throws DatabaseException {
-		return StagiaireDAO.getInstance().hasNextPage();
+
+	public boolean hasNextPage() throws ServiceException {
+		try {
+			return StagiaireDAO.getInstance().hasNextPage();
+		} catch (DAOException e) {
+			throw new ServiceException();
+		}
 	}
+
+	// TODO : revoir cette méthode avec la manipulation des variables de pagination
+	// dans la DAO..
 	public int getRowsPerPage() {
 		return StagiaireDAO.getInstance().getRowsPerPage();
 	}
+
+	// TODO : revoir cette méthode avec la manipulation des variables de pagination
+	// dans la DAO..
 	public void setRowsPerPage(int numOfRows) {
 		StagiaireDAO.getInstance().setRowsPerPage(numOfRows);
 	}
