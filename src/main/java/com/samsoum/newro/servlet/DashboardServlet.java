@@ -46,7 +46,8 @@ public class DashboardServlet extends HttpServlet {
 			List<Stagiaire> stagiaires = StagiaireService.getInstance().getPaginated(page);
 			int totalStagiaires = StagiaireService.getInstance().getNumberOfStagiaires();
 			int numOfPages = (totalStagiaires/StagiaireService.getInstance().getRowsPerPage())+1;
-					
+			System.out.println("total stagiaires : " + totalStagiaires);
+			System.out.println("numOfPages : " + numOfPages);
 			request.setAttribute("stagiaires", stagiaires);
 			request.setAttribute("numOfPages", numOfPages);
 			request.setAttribute("page", currentPage);
@@ -85,6 +86,7 @@ public class DashboardServlet extends HttpServlet {
 		else {
 			previousPage = currentPage - 1; 
 		}
+		System.out.println("previous : " + previousPage);
 		return previousPage;
 	}
 	/**
@@ -102,6 +104,8 @@ public class DashboardServlet extends HttpServlet {
 		else {
 			nextPage = currentPage + 1; 
 		}
+		System.out.println("next : " + nextPage);
+
 		return nextPage;
 	}
 	/**

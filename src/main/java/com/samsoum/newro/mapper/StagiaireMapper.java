@@ -8,7 +8,7 @@ import java.time.LocalDate;
 
 import com.samsoum.newro.model.Promotion;
 import com.samsoum.newro.model.Stagiaire;
-import com.samsoum.newro.persistence.PromotionDAO;
+import com.samsoum.newro.service.PromotionService;
 
 public class StagiaireMapper {
 	private static StagiaireMapper instance;
@@ -21,7 +21,7 @@ public class StagiaireMapper {
 		// TODO : Remplacer les instructions ternaires par des Optionals
 		LocalDate arrival = res.getDate("arrival") == null  ? null : res.getDate("arrival").toLocalDate();
 		LocalDate formation_over = res.getDate("formation_over") == null ? null : res.getDate("arrival").toLocalDate();
-		Promotion stagiairePromotion = PromotionDAO.getInstance().getOne(res.getInt("promotion_id"));
+		Promotion stagiairePromotion = PromotionService.getInstance().getOne(res.getInt("promotion_id"));
 		return new Stagiaire(res.getInt("id"), res.getString("first_name"), res.getString("last_name"), arrival, formation_over, stagiairePromotion);
 	}
 	
