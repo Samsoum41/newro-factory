@@ -2,11 +2,11 @@ package com.samsoum.newro.servlet;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
-import com.samsoum.newro.model.Stagiaire;
 import com.samsoum.newro.service.ServiceException;
 import com.samsoum.newro.service.StagiaireService;
+import com.samsoum.newro.ui.PageStagiaire;
+import com.samsoum.newro.ui.PaginationException;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -20,8 +20,6 @@ import jakarta.servlet.http.HttpServletResponse;
 @WebServlet("/dashboard")
 public class DashboardServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private final static int STARTING_PAGE = 1;
-	public static int currentPage = STARTING_PAGE;
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -37,24 +35,23 @@ public class DashboardServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// Getting and setting rows per page and index of page
 		String rowsParameter = request.getParameter("rows");
-		setRows(rowsParameter);
-		int currentPage = request.getParameter("page")==null ? STARTING_PAGE : Integer.parseInt(request.getParameter("page"));
+		String pageIndexParameter = request.getParameter("page");
 		try {
-			List<Stagiaire> stagiaires = StagiaireService.getInstance().getPaginated(currentPage);
-			int totalStagiaires = StagiaireService.getInstance().getNumberOfStagiaires();
-			int numOfPages = (totalStagiaires/StagiaireService.getInstance().getRowsPerPage())+1;
-			System.out.println("total stagiaires : " + totalStagiaires);
-			System.out.println("numOfPages : " + numOfPages);
-			request.setAttribute("stagiaires", stagiaires);
+			int nbRows = convertRows(rowsParameter);
+			PageStagiaire page = getPageFromParameter(pageIndexParameter, nbRows);
+			int nb_stagiaires = StagiaireService.getInstance().getNumberOfStagiaires();
+			int numOfPages = page.getNumberOfPages();
+			request.setAttribute("nb_stagiaires", nb_stagiaires);
+			request.setAttribute("page_stagiaires", page);
+			request.setAttribute("rows", nbRows);
 			request.setAttribute("numOfPages", numOfPages);
-			request.setAttribute("page", currentPage);
-			request.setAttribute("nextPage", getNextPage(currentPage, numOfPages));
-			request.setAttribute("currentPage", currentPage);
-			request.setAttribute("previousPage", getPreviousPage(currentPage));
-			request.setAttribute("navigationPages", getNavigationPages(currentPage, numOfPages));
+			request.setAttribute("nextPage", PageStagiaire.next(page));
+			request.setAttribute("page", page.getNumero());
+			request.setAttribute("previousPage", PageStagiaire.previous(page));
+			request.setAttribute("navigationPages", getNavigationPages(page.getNumero(), numOfPages));
 			request.getRequestDispatcher("/views/dashboard.jsp").forward(request, response);
 
-		} catch(ServiceException e) {
+		} catch(ServiceException | PaginationException e) {
 			request.getRequestDispatcher("/views/500.jsp").forward(request, response);
 			e.printStackTrace();
 		}
@@ -69,49 +66,33 @@ public class DashboardServlet extends HttpServlet {
 		doGet(request, response);
 	}
 	
+	private PageStagiaire getPageFromParameter(String pageIndexParameter, int nbRows) throws ServiceException {
+		PageStagiaire page;
+		if (pageIndexParameter==null) {
+			page = StagiaireService.getInstance().getPaginated(PageStagiaire.STARTING_PAGE, nbRows);
+		}
+		else {
+			int askedPage = Integer.parseInt(pageIndexParameter);
+			page = StagiaireService.getInstance().getPaginated(askedPage, nbRows);
+		}
+		return page;
+	}
 	
-	private void setRows(String rowsString) {
+	private int convertRows(String rowsString) {
 		if(rowsString != null) {
-			int rowsInt = Integer.parseInt(rowsString);
-			StagiaireService.getInstance().setRowsPerPage(rowsInt);
-		}
-	}
-	/**
-	 *  Méthode qui renvoie l'indice de la page précédente pour une page donnée.
-	 * 
-	 * @param currentPage	: Numéro de la page actuelle
-	 * @return				: Numéro de la page précédente
-	 */
-	private int getPreviousPage(int currentPage) {
-		int previousPage;
-		if(currentPage == 1) {
-			previousPage = 1;
+			int rows =  Integer.parseInt(rowsString);
+			if(rows<=100) {
+				return rows;
+			}
+			else {
+				return 100;
+			}
 		}
 		else {
-			previousPage = currentPage - 1; 
+			return PageStagiaire.NOMBRES_DE_LIGNES_PAR_DEFAUT;
 		}
-		System.out.println("previous : " + previousPage);
-		return previousPage;
 	}
-	/**
-	 *  Méthode qui renvoie l'indice de la page suivante pour une page donnée.
-	 * 
-	 * @param currentPage	: Numéro de la page actuelle
-	 * @param nbOfPages		: Nombre total de pages dans la pagination
-	 * @return				: Numéro de la page suivante
-	 */
-	private int getNextPage(int currentPage, int nbOfPages) {
-		int nextPage;
-		if(currentPage == nbOfPages) {
-			nextPage = currentPage;
-		}
-		else {
-			nextPage = currentPage + 1; 
-		}
-		System.out.println("next : " + nextPage);
-
-		return nextPage;
-	}
+	
 	/**
 	 * Méthode qui renvoie le triplet de nombres qui représentent les pages disponible dans la navigation pour une page donnée
 	 * 

@@ -5,6 +5,7 @@ import java.util.List;
 import com.samsoum.newro.model.Stagiaire;
 import com.samsoum.newro.persistence.DAOException;
 import com.samsoum.newro.persistence.StagiaireDAO;
+import com.samsoum.newro.ui.PageStagiaire;
 
 public class StagiaireService {
 	private static StagiaireService instance;
@@ -69,7 +70,7 @@ public class StagiaireService {
 		return (nbStagiaires / StagiaireDAO.getInstance().getRowsPerPage()) + 1;
 	}
 
-	public List<Stagiaire> getPaginated() throws ServiceException {
+	public PageStagiaire getPaginated() throws ServiceException {
 		try {
 			return StagiaireDAO.getInstance().getPaginated();
 		} catch (DAOException e) {
@@ -77,7 +78,15 @@ public class StagiaireService {
 		}
 	}
 
-	public List<Stagiaire> getPaginated(int page) throws ServiceException {
+	public PageStagiaire getPaginated(int page, int rowsPerPage) throws ServiceException {
+		try {
+			return StagiaireDAO.getInstance().getPaginated(page,rowsPerPage);
+		} catch (DAOException e) {
+			throw new ServiceException();
+		}
+	}
+	
+	public PageStagiaire getPaginated(int page) throws ServiceException {
 		try {
 			return StagiaireDAO.getInstance().getPaginated(page);
 		} catch (DAOException e) {
@@ -96,14 +105,6 @@ public class StagiaireService {
 	public void update(Stagiaire promotion) throws ServiceException {
 		try {
 			StagiaireDAO.getInstance().update(promotion);
-		} catch (DAOException e) {
-			throw new ServiceException();
-		}
-	}
-
-	public boolean hasNextPage() throws ServiceException {
-		try {
-			return StagiaireDAO.getInstance().hasNextPage();
 		} catch (DAOException e) {
 			throw new ServiceException();
 		}

@@ -73,7 +73,7 @@
 				</thead>
 				<!-- Browse attribute computers -->
 				<tbody id="results">
-					<c:forEach items="${stagiaires}" var="stagiaire">
+					<c:forEach items="${page_stagiaires.contenu}" var="stagiaire">
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"
 								class="cb" value="0"></td>
@@ -93,24 +93,24 @@
 		<div class="container text-center flex-center">
 			<ul class="pagination">
 				<li>
-					<a href="dashboard?page=${ previousPage }" aria-label="Previous"> 
+					<a href="dashboard?page=${ previousPage }&rows=${rows}" aria-label="Previous"> 
 						<span aria-hidden="true">&laquo;</span>
 					</a>
 				</li>
 				<c:forEach items="${navigationPages}" var="page">
 					<li>
 					<c:choose>
-						<c:when test="${ page==currentPage }">
-							<a href="dashboard?page=${page}" id ="highlighted-li">${page}</a>
+						<c:when test="${ page==page_stagiaire.numero }">
+							<a href="dashboard?page=${page}&rows=${rows}" id ="highlighted-li">${page}</a>
 						</c:when>
 						<c:otherwise>
-							<a href="dashboard?page=${page}">${page}</a>
+							<a href="dashboard?page=${page}&rows=${rows}">${page}</a>
 						</c:otherwise>
 					</c:choose>
 					</li>
 				</c:forEach>
 				<li>
-					<a href="dashboard?page=${ nextPage }" aria-label="Next"> 
+					<a href="dashboard?page=${ nextPage }&rows=${rows}" aria-label="Next"> 
 						<span aria-hidden="true">&raquo;</span>
 					</a>
 				</li>

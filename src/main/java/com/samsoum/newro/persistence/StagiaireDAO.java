@@ -9,6 +9,7 @@ import java.util.List;
 
 import com.samsoum.newro.mapper.StagiaireMapper;
 import com.samsoum.newro.model.Stagiaire;
+import com.samsoum.newro.ui.PageStagiaire;
 
 
 public class StagiaireDAO {
@@ -144,24 +145,50 @@ public class StagiaireDAO {
 		}
 	}
 	
-	public List<Stagiaire> getPaginated() throws DAOException{
+	public PageStagiaire getPaginated() throws DAOException{
 		return this.getPaginated(StagiaireDAO.page);
 	}
 	
-	public List<Stagiaire> getPaginated( int page) throws DAOException{
+	public PageStagiaire getPaginated(int page) throws DAOException{
 		try(Connection con = DatabaseConnection.getConnection(); ){
 			PreparedStatement st = con.prepareStatement(GET_PAGINATED_QUERY);
-			int premierId = (page -1)*StagiaireDAO.rowsPerPage;
-			st.setInt(1, premierId);
-			st.setInt(2, StagiaireDAO.rowsPerPage);
-			System.out.println(rowsPerPage);
+			int premiereLigne = (page -1)*PageStagiaire.NOMBRES_DE_LIGNES_PAR_DEFAUT;
+			st.setInt(1, premiereLigne);
+			st.setInt(2, PageStagiaire.NOMBRES_DE_LIGNES_PAR_DEFAUT);
 			try {
 				ResultSet res = st.executeQuery();
 				ArrayList<Stagiaire> liste = new ArrayList<>();
 				while(res.next()) {
 					liste.add(StagiaireMapper.getInstance().toModel(res)); 
 				}
-				return liste;
+				return new PageStagiaire(page, PageStagiaire.NOMBRES_DE_LIGNES_PAR_DEFAUT, liste);
+			}
+			catch(SQLException e) {
+				e.printStackTrace();
+				String messageErreur = "Problème dans l'accès à l'ensemble des stagiaires entre les identifiants "+ premiereLigne + " et " + (premiereLigne+StagiaireDAO.rowsPerPage) + " en base de donnée.";
+				throw new DAOException(messageErreur);
+			}
+		}
+		catch(SQLException e) {
+			// TODO : Logger
+			e.printStackTrace();
+			throw new DAOException("Problème dans la connexion à la base de donnée");
+		}
+	}
+	
+	public PageStagiaire getPaginated( int page, int rowsPerPage) throws DAOException{
+		try(Connection con = DatabaseConnection.getConnection(); ){
+			PreparedStatement st = con.prepareStatement(GET_PAGINATED_QUERY);
+			int premierId = (page -1)*rowsPerPage;
+			st.setInt(1, premierId);
+			st.setInt(2, rowsPerPage);
+			try {
+				ResultSet res = st.executeQuery();
+				ArrayList<Stagiaire> liste = new ArrayList<>();
+				while(res.next()) {
+					liste.add(StagiaireMapper.getInstance().toModel(res)); 
+				}
+				return new PageStagiaire(page, rowsPerPage, liste);
 			}
 			catch(SQLException e) {
 				e.printStackTrace();
@@ -174,10 +201,6 @@ public class StagiaireDAO {
 			e.printStackTrace();
 			throw new DAOException("Problème dans la connexion à la base de donnée");
 		}
-	}
-	
-	public boolean hasNextPage() throws DAOException {
-		return !getPaginated(page +1).isEmpty();
 	}
 
 	public void update(Stagiaire stagiaire) throws DAOException {
