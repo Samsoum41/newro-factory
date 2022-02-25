@@ -185,15 +185,7 @@ public class StagiaireDAO {
 	public void update(Stagiaire stagiaire) throws DAODatabaseException {
 		try(Connection con = DatabaseConnection.getConnection();){
 			PreparedStatement statement = con.prepareStatement(UPDATE_QUERY);
-			Date arrival = stagiaire.getArrival() == null ? null : Date.valueOf(stagiaire.getArrival());
-			Date formation_over = stagiaire.getFormation_over() == null ? null : Date.valueOf(stagiaire.getFormation_over());
-
-			statement.setString(1, stagiaire.getFirst_name());
-			statement.setString(2, stagiaire.getLast_name());
-			statement.setDate(3, arrival);
-			statement.setDate(4, formation_over);
-			statement.setInt(5, stagiaire.getPromotion().getId());
-			statement.setInt(6, stagiaire.getId());
+			statement = StagiaireMapper.getInstance().toUpdateStatement(stagiaire, statement);
 			try {
 				statement.executeUpdate();
 				System.out.println("Le stagiaire : " + stagiaire + " a bien été modifié !");

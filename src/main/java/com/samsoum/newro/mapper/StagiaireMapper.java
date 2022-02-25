@@ -1,5 +1,6 @@
 package com.samsoum.newro.mapper;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -41,5 +42,17 @@ public class StagiaireMapper {
 			instance = new StagiaireMapper();
 		}
 		return instance;
+	}
+	public PreparedStatement toUpdateStatement(Stagiaire stagiaire, PreparedStatement statement) throws SQLException {
+		Date arrival = stagiaire.getArrival() == null ? null : Date.valueOf(stagiaire.getArrival());
+		Date formation_over = stagiaire.getFormation_over() == null ? null : Date.valueOf(stagiaire.getFormation_over());
+
+		statement.setString(1, stagiaire.getFirst_name());
+		statement.setString(2, stagiaire.getLast_name());
+		statement.setDate(3, arrival);
+		statement.setDate(4, formation_over);
+		statement.setInt(5, stagiaire.getPromotion().getId());
+		statement.setInt(6, stagiaire.getId());
+		return statement;
 	}
 }
