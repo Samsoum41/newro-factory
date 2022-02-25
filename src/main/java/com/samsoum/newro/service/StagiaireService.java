@@ -1,9 +1,9 @@
 package com.samsoum.newro.service;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import com.samsoum.newro.model.Stagiaire;
+import com.samsoum.newro.persistence.DatabaseException;
 import com.samsoum.newro.persistence.StagiaireDAO;
 
 public class StagiaireService {
@@ -24,39 +24,39 @@ public class StagiaireService {
 			StagiaireDAO.getInstance().getOne(id);
 			return true;
 		}
-		catch(SQLException e) {
+		catch(DatabaseException e) {
 			return false;
 		}
 	}
-	public List<Stagiaire> getAll() throws SQLException {
+	public List<Stagiaire> getAll() throws DatabaseException {
 		return StagiaireDAO.getInstance().getAll();
 	}
-	public void add(Stagiaire data) throws SQLException {
+	public void add(Stagiaire data) throws DatabaseException {
 		StagiaireDAO.getInstance().add(data);
 	}
-	public Stagiaire getOne(int id) throws SQLException {
+	public Stagiaire getOne(int id) throws DatabaseException {
 		return StagiaireDAO.getInstance().getOne(id);
 	}
-	public int getNumberOfStagiaires() throws SQLException {
+	public int getNumberOfStagiaires() throws DatabaseException {
 		return StagiaireDAO.getInstance().getNumberOfStagiaires();
 	}
-	public int getNumberOfPages() throws SQLException {
+	public int getNumberOfPages() throws DatabaseException {
 		int nbStagiaires =  StagiaireService.getInstance().getNumberOfStagiaires();
 		return (nbStagiaires/StagiaireDAO.getInstance().getRowsPerPage())+1;
 	}
-	public List<Stagiaire> getPaginated() throws SQLException {
+	public List<Stagiaire> getPaginated() throws DatabaseException {
 		return StagiaireDAO.getInstance().getPaginated();
 	}
-	public List<Stagiaire> getPaginated(int page) throws SQLException {
+	public List<Stagiaire> getPaginated(int page) throws DatabaseException {
 		return StagiaireDAO.getInstance().getPaginated(page);
 	}
-	public void delete(int id) throws SQLException{
+	public void delete(int id) throws DatabaseException{
 		StagiaireDAO.getInstance().delete(id);
 	}
-	public void update(Stagiaire promotion) throws SQLException{
+	public void update(Stagiaire promotion) throws DatabaseException{
 		StagiaireDAO.getInstance().update(promotion);
 	}
-	public boolean hasNextPage() throws SQLException {
+	public boolean hasNextPage() throws DatabaseException {
 		return StagiaireDAO.getInstance().hasNextPage();
 	}
 	public int getRowsPerPage() {
