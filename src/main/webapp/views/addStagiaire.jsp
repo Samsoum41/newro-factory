@@ -21,15 +21,15 @@
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
                     <h1>Add Computer</h1>
-                    <form action="addComputer" method="POST">
+                    <form action="addStagiaire" method="POST">
                         <fieldset>
                             <div class="form-group">
                                 <label for="lastName">Nom</label>
-                                <input type="text" class="form-control" name="lastName" id="lastName" placeholder="Nom du stagiaire" value="">
+                                <input type="text" class="form-control" name="last_name" id="lastName" placeholder="Nom du stagiaire" value="">
                             </div>
                             <div class="form-group">
                                 <label for="firstName">Prénom</label>
-                                <input type="text" class="form-control" name="firstName" id="firstName" placeholder="Prénom du stagiaire" value="">
+                                <input type="text" class="form-control" name="first_name" id="firstName" placeholder="Prénom du stagiaire" value="">
                             </div>
                             <div class="form-group">
                                 <label for="arrival">Date d'arrivée</label>
@@ -37,7 +37,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="finFormation">Date de fin de formation</label>
-                                <input type="date" class="form-control" name="finFormation" id="finFormation" placeholder="Date de fin de formation" value="">
+                                <input type="date" class="form-control" name="formation_over" id="finFormation" placeholder="Date de fin de formation" value="">
                             </div>
                             <div class="form-group">
                                 <label for="promotionId">Promotion</label>

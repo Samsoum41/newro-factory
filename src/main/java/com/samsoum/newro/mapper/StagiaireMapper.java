@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 
+import com.samsoum.newro.dto.StagiaireDTO;
 import com.samsoum.newro.model.Promotion;
 import com.samsoum.newro.model.Stagiaire;
 import com.samsoum.newro.service.PromotionService;
@@ -17,6 +18,23 @@ public class StagiaireMapper {
 	
 	private StagiaireMapper() {
 		
+	}
+	
+	public Stagiaire fromDTO(StagiaireDTO stagiaire) throws MapperException {
+		// Ici on suppose que le DTO est déjà validé
+		String first_name = stagiaire.getFirst_name();
+		String last_name = stagiaire.getLast_name();
+		LocalDate arrival = LocalDate.parse(stagiaire.getArrival());
+		LocalDate formation_over = LocalDate.parse(stagiaire.getFormation_over());
+		int promotion_id = Integer.parseInt(stagiaire.getPromotion_id());
+		Promotion promotion;
+		try {
+			promotion = PromotionService.getInstance().getOne(promotion_id);
+		}
+		catch (ServiceException e) {
+			throw new MapperException();
+		}
+		return new Stagiaire(first_name, last_name, arrival, formation_over, promotion);
 	}
 	
 	public Stagiaire toModel(ResultSet res) throws MapperException {

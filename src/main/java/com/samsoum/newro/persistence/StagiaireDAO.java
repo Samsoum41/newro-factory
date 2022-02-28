@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.samsoum.newro.mapper.MapperException;
 import com.samsoum.newro.mapper.StagiaireMapper;
 import com.samsoum.newro.model.Stagiaire;
 import com.samsoum.newro.ui.PageStagiaire;
@@ -50,6 +51,10 @@ public class StagiaireDAO {
 			// TODO : Logger
 			e.printStackTrace();
 			throw new DAOException("Problème dans la connexion à la base de donnée");
+		} catch (MapperException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			throw new DAOException();
 		}
 	}
 
@@ -81,9 +86,14 @@ public class StagiaireDAO {
 			try {
 				ResultSet res = st.executeQuery();
 				res.next();
-				return StagiaireMapper.getInstance().toModel(res);
+				if(res == null) {
+					return null;
+				}
+				else {
+					return StagiaireMapper.getInstance().toModel(res);
+				}
 			}
-			catch(SQLException e) {
+			catch(SQLException | MapperException e) {
 				e.printStackTrace();
 				throw new DAOException("Problème dans l'accès au stagiaire d'identifiant : " + id + " dans la base de donnée.");
 			}
@@ -129,7 +139,7 @@ public class StagiaireDAO {
 				}
 				return liste;
 			}
-			catch(SQLException e) {
+			catch(SQLException | MapperException e) {
 				e.printStackTrace();
 				throw new DAOException("Problème dans l'accès à l'ensemble des stagiaires en base de donnée.");
 			}
@@ -159,7 +169,7 @@ public class StagiaireDAO {
 				}
 				return new PageStagiaire(page, PageStagiaire.NOMBRES_DE_LIGNES_PAR_DEFAUT, liste);
 			}
-			catch(SQLException e) {
+			catch(SQLException | MapperException e) {
 				e.printStackTrace();
 				String messageErreur = "Problème dans l'accès à l'ensemble des stagiaires entre les identifiants "+ premiereLigne + " et " + (premiereLigne+ PageStagiaire.NOMBRES_DE_LIGNES_PAR_DEFAUT) + " en base de donnée.";
 				throw new DAOException(messageErreur);
@@ -186,7 +196,7 @@ public class StagiaireDAO {
 				}
 				return new PageStagiaire(page, rowsPerPage, liste);
 			}
-			catch(SQLException e) {
+			catch(SQLException | MapperException e) {
 				e.printStackTrace();
 				String messageErreur = "Problème dans l'accès à l'ensemble des stagiaires entre les identifiants "+ premierId + " et " + (premierId+ rowsPerPage) + " en base de donnée.";
 				throw new DAOException(messageErreur);
@@ -213,7 +223,7 @@ public class StagiaireDAO {
 				throw new DAOException(messageErreur);
 			}
 		}
-		catch(SQLException e) {
+		catch(SQLException | MapperException e) {
 			// TODO : Logger
 			e.printStackTrace();
 			throw new DAOException("Problème dans la connexion à la base de donnée");

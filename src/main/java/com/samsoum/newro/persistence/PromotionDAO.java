@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.samsoum.newro.mapper.MapperException;
 import com.samsoum.newro.mapper.PromotionMapper;
 import com.samsoum.newro.model.Promotion;
 
@@ -77,7 +78,7 @@ public class PromotionDAO{
 				res.next();
 				return PromotionMapper.getInstance().toModel(res);	
 			}
-			catch(SQLException e) {
+			catch(SQLException | MapperException e) {
 				e.printStackTrace();
 				throw new DAOException("Problème dans l'accès à la promotion d'identifiant : " + id + " dans la base de donnée.");
 			}
@@ -100,7 +101,7 @@ public class PromotionDAO{
 				}
 				return liste;
 			}
-			catch(SQLException e) {
+			catch(SQLException | MapperException e) {
 				e.printStackTrace();
 				throw new DAOException("Problème dans l'accès à l'ensemble des promotions en base de donnée.");
 			}
@@ -135,7 +136,7 @@ public class PromotionDAO{
 				st = PromotionMapper.getInstance().toUpdateStatement(data, st);
 				st.executeUpdate();
 			}
-			catch(SQLException e) {
+			catch(SQLException | MapperException e) {
 				e.printStackTrace();
 				String messageErreur = "Problème dans la mise à jour de la promotion " + data + " en base de donnée.";
 				throw new DAOException(messageErreur);
