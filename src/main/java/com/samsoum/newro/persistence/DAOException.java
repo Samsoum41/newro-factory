@@ -6,4 +6,8 @@ public class DAOException extends Exception {
 		super(string);
 	}
 
+	public DAOException() {
+		// TODO Auto-generated constructor stub
+	}
+
 }

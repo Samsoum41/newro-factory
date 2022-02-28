@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <head>
 <title>Newro Factory</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bootstrap -->
-<link href="../css/bootstrap.min.css" rel="stylesheet" media="screen">
-<link href="../css/font-awesome.css" rel="stylesheet" media="screen">
-<link href="../css/main.css" rel="stylesheet" media="screen">
+<link href="<%=request.getContextPath()%>/css/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="<%=request.getContextPath()%>/css/font-awesome.css" rel="stylesheet" media="screen">
+<link href="<%=request.getContextPath()%>/css/main.css" rel="stylesheet" media="screen">
 </head>
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
@@ -27,12 +28,12 @@
                                 <input type="text" class="form-control" name="lastName" id="lastName" placeholder="Nom du stagiaire" value="">
                             </div>
                             <div class="form-group">
-                                <label for="firstName">PrÃ©nom</label>
-                                <input type="text" class="form-control" name="firstName" id="firstName" placeholder="PrÃ©nom du stagiaire" value="">
+                                <label for="firstName">Prénom</label>
+                                <input type="text" class="form-control" name="firstName" id="firstName" placeholder="Prénom du stagiaire" value="">
                             </div>
                             <div class="form-group">
-                                <label for="arrival">Date d'arrivÃ©e</label>
-                                <input type="date" class="form-control" name="arrival" id="arrival" placeholder="Date d'arrivÃ©e" value="">
+                                <label for="arrival">Date d'arrivée</label>
+                                <input type="date" class="form-control" name="arrival" id="arrival" placeholder="Date d'arrivée" value="">
                             </div>
                             <div class="form-group">
                                 <label for="finFormation">Date de fin de formation</label>
@@ -40,14 +41,15 @@
                             </div>
                             <div class="form-group">
                                 <label for="promotionId">Promotion</label>
-                                <select class="form-control" name="promotionId" id="promotionId" >
-                                    <option value="0">--</option>
+                                <select class="form-control" name="promotionId" id="promotionId" ><%!  %>
+                                	<c:forEach items="${promotions}" var="promotion">
+										<option value="${promotion.id}">${promotion.name} </option>     	
+                                	</c:forEach>
                                 </select>
                             </div>                  
                         </fieldset>
                         <div class="actions pull-right">
                             <input type="submit" value="Add" class="btn btn-primary">
-                            or
                             <a href="dashboard.html" class="btn btn-default">Cancel</a>
                         </div>
                     </form>

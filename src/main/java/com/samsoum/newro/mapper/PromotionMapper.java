@@ -13,19 +13,38 @@ public class PromotionMapper {
 		
 	}
 	
-	public Promotion toModel(ResultSet res) throws SQLException {
+	public Promotion toModel(ResultSet res) throws MapperException {
 		// TODO : Remplacer les instructions ternaires par des Optionals
-		return new Promotion(res.getInt("id"), res.getString("name"));
+		try {
+			return new Promotion(res.getInt("id"), res.getString("name"));
+		}
+		catch(SQLException e) {
+			throw new MapperException();
+		}
 	}
 	
-	public PreparedStatement toStatement(Promotion promotion, PreparedStatement statement) throws SQLException {
-		statement.setString(1, promotion.getName());
-		return statement;
+	public PreparedStatement toStatement(Promotion promotion, PreparedStatement statement) throws MapperException {
+		try {
+			statement.setString(1, promotion.getName());
+			return statement;		}
+		catch(SQLException e) {
+			throw new MapperException();
+		}
 	}
 	public static PromotionMapper getInstance() {
 		if(instance == null) {
 			instance = new PromotionMapper();
 		}
 		return instance;
+	}
+	
+	public PreparedStatement toUpdateStatement(Promotion promotion, PreparedStatement statement) throws MapperException {
+		try {
+			statement.setString(1, promotion.getName());
+			statement.setInt(2, promotion.getId());
+			return statement;		}
+		catch(SQLException e) {
+			throw new MapperException();
+		}
 	}
 }

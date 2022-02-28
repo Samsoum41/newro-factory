@@ -63,13 +63,6 @@ public class StagiaireService {
 		}
 	}
 
-	// TODO : revoir cette méthode avec la manipulation des variables de pagination
-	// dans la DAO..
-	public int getNumberOfPages() throws ServiceException {
-		int nbStagiaires = StagiaireService.getInstance().getNumberOfStagiaires();
-		return (nbStagiaires / StagiaireDAO.getInstance().getRowsPerPage()) + 1;
-	}
-
 	public PageStagiaire getPaginated() throws ServiceException {
 		try {
 			return StagiaireDAO.getInstance().getPaginated();
@@ -108,17 +101,5 @@ public class StagiaireService {
 		} catch (DAOException e) {
 			throw new ServiceException();
 		}
-	}
-
-	// TODO : revoir cette méthode avec la manipulation des variables de pagination
-	// dans la DAO..
-	public int getRowsPerPage() {
-		return StagiaireDAO.getInstance().getRowsPerPage();
-	}
-
-	// TODO : revoir cette méthode avec la manipulation des variables de pagination
-	// dans la DAO..
-	public void setRowsPerPage(int numOfRows) {
-		StagiaireDAO.getInstance().setRowsPerPage(numOfRows);
 	}
 }

@@ -7,17 +7,17 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.samsoum.newro.mapper.PromotionMapper;
 import com.samsoum.newro.model.Promotion;
 
 public class PromotionDAO{
 	public static int page = 1;
-	private final static int ROWS_PER_PAGE = 10;
 	private static PromotionDAO instance;
 	private String insertQuery = "INSERT INTO promotion(name) VALUES(?);";
 	private String deleteQuery = "DELETE FROM promotion WHERE id=?;"; 
 	private String getOneQuery = "SELECT * FROM promotion WHERE id=?;"; 
 	private String getAllQuery = "SELECT * FROM promotion;";
-	private String getPaginatedQuery = "SELECT * FROM promotion ORDER BY id LIMIT ?, ?;";
+	//private String getPaginatedQuery = "SELECT * FROM promotion ORDER BY id LIMIT ?, ?;";
 	private String updateQuery = "UPDATE promotion SET name=? WHERE id=?;";
 	
 	private PromotionDAO() {
@@ -29,59 +29,91 @@ public class PromotionDAO{
 		}
 		return PromotionDAO.instance;
 	}
-	public int add(Promotion data) throws SQLException {
+	public void add(Promotion data) throws DAOException {
 		try(Connection con = DatabaseConnection.getConnection(); 
 			PreparedStatement st = 	con.prepareStatement(insertQuery);){
 			st.setString(1, data.getName());
 
 			try {
-				int n = st.executeUpdate();
+				st.executeUpdate();
 				System.out.println("L'enregistrement : " + data + " a bien été enregistré");
-				return n;
 			}
 			catch(SQLException e) {
 				System.out.println("L'enregistrement en base de donné a échoué");
-				System.out.println(e.getMessage());
-				return 0;
+				e.printStackTrace();
+				throw new DAOException();
 			}
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+			throw new DAOException("Problème dans la connexion à la base de donnée");
 		}
 	}
 
-	public void delete(int id) throws SQLException {
+	public void delete(int id) throws DAOException {
 		try(Connection con = DatabaseConnection.getConnection(); 
 			PreparedStatement st = con.prepareStatement(deleteQuery);){
 			st.setInt(1, id);
-			st.executeUpdate();	
+			try {
+				st.executeUpdate();	
+			}
+			catch(SQLException e) {
+				e.printStackTrace();
+				throw new DAOException("Problème dans la suppression de la promotion d'identifiant : " + id + " en base de donnée.");
+			}
 		}	
+		catch(SQLException e) {
+			e.printStackTrace();
+			throw new DAOException("Problème dans la connexion à la base de donnée");
+		}
 	}
 
-	public Promotion getOne(int id) throws SQLException {
+	public Promotion getOne(int id) throws DAOException {
 		try(Connection con = DatabaseConnection.getConnection(); 
 			PreparedStatement st = con.prepareStatement(getOneQuery); ) {
 			st.setInt(1, id);
-			ResultSet res = st.executeQuery();
-			if(res.next()) {
-				return new Promotion(res.getInt("id"), res.getString("name"));
+			try {
+				ResultSet res = st.executeQuery();
+				res.next();
+				return PromotionMapper.getInstance().toModel(res);	
 			}
-			else {
-				throw new SQLException("Il n'y a aucune promotion associée à cet id");
+			catch(SQLException e) {
+				e.printStackTrace();
+				throw new DAOException("Problème dans l'accès à la promotion d'identifiant : " + id + " dans la base de donnée.");
 			}
+		}
+		catch(SQLException e) {
+			// TODO : Logger
+			e.printStackTrace();
+			throw new DAOException("Problème dans la connexion à la base de donnée");
 		}
 	}
 
-	public List<Promotion> getAll() throws SQLException {
+	public List<Promotion> getAll() throws DAOException {
 		try(Connection con = DatabaseConnection.getConnection(); 
 			PreparedStatement st = con.prepareStatement(getAllQuery);){
-			ResultSet res = st.executeQuery();
-			ArrayList<Promotion> liste = new ArrayList<>();
-			while(res.next()) {
-				liste.add(new Promotion(res.getInt("id"), res.getString("name"))); 
+			try {
+				ResultSet res = st.executeQuery();
+				ArrayList<Promotion> liste = new ArrayList<>();
+				while(res.next()) {
+					liste.add(PromotionMapper.getInstance().toModel(res)); 
+				}
+				return liste;
 			}
-			return liste;
+			catch(SQLException e) {
+				e.printStackTrace();
+				throw new DAOException("Problème dans l'accès à l'ensemble des promotions en base de donnée.");
+			}
+		}
+		catch(SQLException e) {
+			// TODO : Logger
+			e.printStackTrace();
+			throw new DAOException("Problème dans la connexion à la base de donnée");
 		}
 	}
 	
-	public List<Promotion> getPaginated() throws SQLException{
+	/*
+	public List<Promotion> getPaginated() throws DAOException{
 		try(Connection con = DatabaseConnection.getConnection(); ){
 			PreparedStatement st = con.prepareStatement(getPaginatedQuery);
 			st.setInt(1, (PromotionDAO.page -1)*PromotionDAO.ROWS_PER_PAGE);
@@ -94,13 +126,25 @@ public class PromotionDAO{
 			return liste;
 		}
 	}
+	*/
 
-	public void update(Promotion data) throws SQLException {
-		try(Connection con = DatabaseConnection.getConnection(); 
-			PreparedStatement st = con.prepareStatement(updateQuery);){
-			st.setString(1, data.getName());
-			st.setInt(2, data.getId());
-			st.executeUpdate();
+	public void update(Promotion data) throws DAOException {
+		try(Connection con = DatabaseConnection.getConnection(); ){
+			PreparedStatement st = con.prepareStatement(updateQuery);
+			try {
+				st = PromotionMapper.getInstance().toUpdateStatement(data, st);
+				st.executeUpdate();
+			}
+			catch(SQLException e) {
+				e.printStackTrace();
+				String messageErreur = "Problème dans la mise à jour de la promotion " + data + " en base de donnée.";
+				throw new DAOException(messageErreur);
+			}
+		}
+		catch(SQLException e) {
+			// TODO : Logger
+			e.printStackTrace();
+			throw new DAOException("Problème dans la connexion à la base de donnée");
 		}
 	}
 

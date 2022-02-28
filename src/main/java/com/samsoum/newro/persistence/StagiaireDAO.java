@@ -13,8 +13,6 @@ import com.samsoum.newro.ui.PageStagiaire;
 
 
 public class StagiaireDAO {
-	public static int page = 1;
-	private static int rowsPerPage = 40;
 	private static StagiaireDAO instance;
 	private String INSERT_QUERY = "INSERT INTO stagiaire(first_name, last_name, arrival, formation_over, promotion_id) VALUES(?,?,?,?,?);";
 	private String COUNT_QUERY = "SELECT COUNT(*) AS rowcount FROM stagiaire;";
@@ -118,9 +116,7 @@ public class StagiaireDAO {
 			throw new DAOException("Problème dans la connexion à la base de donnée");
 		}
 	}
-	public int getRowsPerPage() {
-		return rowsPerPage;
-	}
+
 	public List<Stagiaire> getAll() throws DAOException {
 		try(Connection con = DatabaseConnection.getConnection(); ) {
 			PreparedStatement st = con.prepareStatement(GET_ALL_QUERY);
@@ -146,7 +142,7 @@ public class StagiaireDAO {
 	}
 	
 	public PageStagiaire getPaginated() throws DAOException{
-		return this.getPaginated(StagiaireDAO.page);
+		return this.getPaginated(PageStagiaire.STARTING_PAGE);
 	}
 	
 	public PageStagiaire getPaginated(int page) throws DAOException{
@@ -165,7 +161,7 @@ public class StagiaireDAO {
 			}
 			catch(SQLException e) {
 				e.printStackTrace();
-				String messageErreur = "Problème dans l'accès à l'ensemble des stagiaires entre les identifiants "+ premiereLigne + " et " + (premiereLigne+StagiaireDAO.rowsPerPage) + " en base de donnée.";
+				String messageErreur = "Problème dans l'accès à l'ensemble des stagiaires entre les identifiants "+ premiereLigne + " et " + (premiereLigne+ PageStagiaire.NOMBRES_DE_LIGNES_PAR_DEFAUT) + " en base de donnée.";
 				throw new DAOException(messageErreur);
 			}
 		}
@@ -192,7 +188,7 @@ public class StagiaireDAO {
 			}
 			catch(SQLException e) {
 				e.printStackTrace();
-				String messageErreur = "Problème dans l'accès à l'ensemble des stagiaires entre les identifiants "+ premierId + " et " + (premierId+StagiaireDAO.rowsPerPage) + " en base de donnée.";
+				String messageErreur = "Problème dans l'accès à l'ensemble des stagiaires entre les identifiants "+ premierId + " et " + (premierId+ rowsPerPage) + " en base de donnée.";
 				throw new DAOException(messageErreur);
 			}
 		}
@@ -223,8 +219,4 @@ public class StagiaireDAO {
 			throw new DAOException("Problème dans la connexion à la base de donnée");
 		}
 	}
-	public void setRowsPerPage(int numOfRows) {
-		rowsPerPage = numOfRows;
-	}
-	
 }
