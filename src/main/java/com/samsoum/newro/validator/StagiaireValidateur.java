@@ -21,7 +21,6 @@ public class StagiaireValidateur {
 	private LocalDate LIMIT_UP_MYSQL_TIMESTAMP = LocalDate.of(2038, Month.JANUARY, 19);
 
 	private StagiaireValidateur() {
-
 	}
 
 	public static StagiaireValidateur getInstance() {
