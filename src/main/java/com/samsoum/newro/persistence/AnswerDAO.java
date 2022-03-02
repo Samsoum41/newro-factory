@@ -35,8 +35,8 @@ public class AnswerDAO {
 		return AnswerDAO.instance;
 	}
 	
-	public int add(Answer data) throws SQLException {
-		try(Connection con = DatabaseConnection.getConnection(); 
+	public int add(Answer data) throws SQLException, DAOException {
+		try(Connection con = DataSource.getInstance().getConnection(); 
 			PreparedStatement st = 	con.prepareStatement(insertQuery);){
 			st.setString(1, data.getLabel());
 			st.setString(2, data.getText());
@@ -55,16 +55,16 @@ public class AnswerDAO {
 		}
 	}
 
-	public void delete(int id) throws SQLException {
-		try(Connection con = DatabaseConnection.getConnection(); 
+	public void delete(int id) throws SQLException, DAOException {
+		try(Connection con = DataSource.getInstance().getConnection(); 
 			PreparedStatement st = con.prepareStatement(deleteQuery);){
 			st.setInt(1, id);
 			st.executeUpdate();
 		}
 	}
 
-	public Answer getOne(int id) throws SQLException {
-		try(Connection con = DatabaseConnection.getConnection(); 
+	public Answer getOne(int id) throws SQLException, DAOException {
+		try(Connection con = DataSource.getInstance().getConnection(); 
 			PreparedStatement st = con.prepareStatement(getOneQuery);){
 			st.setInt(1, id);
 			ResultSet res = st.executeQuery();
@@ -73,8 +73,8 @@ public class AnswerDAO {
 		}
 	}
 
-	public List<Answer> getAll() throws SQLException {
-		try(Connection con = DatabaseConnection.getConnection(); 
+	public List<Answer> getAll() throws SQLException, DAOException {
+		try(Connection con = DataSource.getInstance().getConnection(); 
 			PreparedStatement st = con.prepareStatement(getAllQuery);){
 			ResultSet res = st.executeQuery();
 			ArrayList<Answer> liste = new ArrayList<>();
@@ -85,8 +85,8 @@ public class AnswerDAO {
 		}
 	}
 	
-	public List<Answer> getPaginated() throws SQLException{
-		try(Connection con = DatabaseConnection.getConnection(); 
+	public List<Answer> getPaginated() throws SQLException, DAOException {
+		try(Connection con = DataSource.getInstance().getConnection(); 
 			PreparedStatement st = con.prepareStatement(getPaginatedQuery);){
 			st.setInt(1, (AnswerDAO.page -1)*AnswerDAO.ROWS_PER_PAGE);
 			st.setInt(2, AnswerDAO.ROWS_PER_PAGE);
@@ -99,8 +99,8 @@ public class AnswerDAO {
 		}
 	}
 	
-	public void update(Answer data) throws SQLException {
-		try(Connection con = DatabaseConnection.getConnection(); 
+	public void update(Answer data) throws SQLException, DAOException {
+		try(Connection con = DataSource.getInstance().getConnection(); 
 			PreparedStatement st = con.prepareStatement(updateQuery);){
 			st.setString(1, data.getLabel());
 			st.setString(2, data.getText());

@@ -1,6 +1,6 @@
 DROP ALL OBJECTS;
-  create schema if not exists `newro-factory-db`;
-  use `newro-factory-db`;
+  create schema if not exists `newrofactorydb`;
+  use `newrofactorydb`;
 
   drop table if exists stagiaire;
   drop table if exists promotion;

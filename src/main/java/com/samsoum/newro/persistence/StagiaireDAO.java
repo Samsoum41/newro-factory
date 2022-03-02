@@ -36,7 +36,7 @@ public class StagiaireDAO {
 		return StagiaireDAO.instance;
 	}
 	public Optional<Stagiaire> getByNames(String first_name, String last_name) throws DAOException {
-		try(Connection con = DatabaseConnection.getConnection(); ){
+		try(Connection con = DataSource.getInstance().getConnection(); ){
 			PreparedStatement st = con.prepareStatement(GET_BY_NAMES_QUERY);
 			st.setString(1, first_name);
 			st.setString(2, last_name);
@@ -66,7 +66,7 @@ public class StagiaireDAO {
 
 	
 	public void add(Stagiaire data) throws DAOException {
-		try(Connection con = DatabaseConnection.getConnection(); ){
+		try(Connection con = DataSource.getInstance().getConnection(); ){
 			PreparedStatement st = 	con.prepareStatement(INSERT_QUERY);
 			st = StagiaireMapper.getInstance().toStatement(data, st);
 			try {
@@ -92,7 +92,7 @@ public class StagiaireDAO {
 
 
 	public void delete(int id) throws DAOException {
-		try(Connection con = DatabaseConnection.getConnection(); ){
+		try(Connection con = DataSource.getInstance().getConnection(); ){
 			PreparedStatement st = con.prepareStatement(DELETE_QUERY);
 			st.setInt(1, id);
 			try {
@@ -112,7 +112,7 @@ public class StagiaireDAO {
 	}
 
 	public Optional<Stagiaire> getOne(int id) throws DAOException {
-		try(Connection con = DatabaseConnection.getConnection(); 
+		try(Connection con = DataSource.getInstance().getConnection(); 
 			PreparedStatement st = con.prepareStatement(GET_ONE_QUERY);){
 			st.setInt(1, id);
 			try {
@@ -140,7 +140,7 @@ public class StagiaireDAO {
 	}
 
 	public int getNumberOfStagiaires() throws DAOException {
-		try(Connection con = DatabaseConnection.getConnection(); ) {
+		try(Connection con = DataSource.getInstance().getConnection(); ) {
 				PreparedStatement st = con.prepareStatement(COUNT_QUERY);
 				try {
 					ResultSet res = st.executeQuery();
@@ -162,7 +162,7 @@ public class StagiaireDAO {
 	}
 
 	public List<Stagiaire> getAll() throws DAOException {
-		try(Connection con = DatabaseConnection.getConnection(); ) {
+		try(Connection con = DataSource.getInstance().getConnection(); ) {
 			PreparedStatement st = con.prepareStatement(GET_ALL_QUERY);
 			try {
 				ResultSet res = st.executeQuery();
@@ -190,7 +190,7 @@ public class StagiaireDAO {
 	}
 	
 	public PageStagiaire getPaginated(int page) throws DAOException{
-		try(Connection con = DatabaseConnection.getConnection(); ){
+		try(Connection con = DataSource.getInstance().getConnection(); ){
 			PreparedStatement st = con.prepareStatement(GET_PAGINATED_QUERY);
 			int premiereLigne = (page -1)*PageStagiaire.NOMBRES_DE_LIGNES_PAR_DEFAUT;
 			st.setInt(1, premiereLigne);
@@ -217,7 +217,7 @@ public class StagiaireDAO {
 	}
 	
 	public PageStagiaire getPaginated( int page, int rowsPerPage) throws DAOException{
-		try(Connection con = DatabaseConnection.getConnection(); ){
+		try(Connection con = DataSource.getInstance().getConnection(); ){
 			PreparedStatement st = con.prepareStatement(GET_PAGINATED_QUERY);
 			int premierId = (page -1)*rowsPerPage;
 			st.setInt(1, premierId);
@@ -244,7 +244,7 @@ public class StagiaireDAO {
 	}
 
 	public void update(Stagiaire stagiaire) throws DAOException {
-		try(Connection con = DatabaseConnection.getConnection();){
+		try(Connection con = DataSource.getInstance().getConnection();){
 			PreparedStatement statement = con.prepareStatement(UPDATE_QUERY);
 			statement = StagiaireMapper.getInstance().toUpdateStatement(stagiaire, statement);
 			try {

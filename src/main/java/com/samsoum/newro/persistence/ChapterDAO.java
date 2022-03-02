@@ -32,8 +32,8 @@ public class ChapterDAO {
 		return ChapterDAO.instance;
 	}
 	
-	public int add(Chapter data) throws SQLException {
-		try(Connection con = DatabaseConnection.getConnection(); 
+	public int add(Chapter data) throws SQLException, DAOException {
+		try(Connection con = DataSource.getInstance().getConnection(); 
 			PreparedStatement st = 	con.prepareStatement(insertQuery);){
 			st.setString(1, data.getName());
 			st.setString(2, data.getParent_path());
@@ -50,16 +50,16 @@ public class ChapterDAO {
 		}
 	}
 
-	public void delete(int id) throws SQLException {
-		try(Connection con = DatabaseConnection.getConnection(); 
+	public void delete(int id) throws SQLException, DAOException {
+		try(Connection con = DataSource.getInstance().getConnection(); 
 			PreparedStatement st = con.prepareStatement(deleteQuery);){
 			st.setInt(1, id);
 			st.executeUpdate();	
 		}	
 	}
 
-	public Chapter getOne(int id) throws SQLException {
-		try(Connection con = DatabaseConnection.getConnection(); 
+	public Chapter getOne(int id) throws SQLException, DAOException {
+		try(Connection con = DataSource.getInstance().getConnection(); 
 			PreparedStatement st = con.prepareStatement(getOneQuery);){
 			st.setInt(1, id);
 			ResultSet res = st.executeQuery();
@@ -68,8 +68,8 @@ public class ChapterDAO {
 		}
 	}
 
-	public List<Chapter> getAll() throws SQLException {
-		try(Connection con = DatabaseConnection.getConnection(); 
+	public List<Chapter> getAll() throws SQLException, DAOException {
+		try(Connection con = DataSource.getInstance().getConnection(); 
 			PreparedStatement st = con.prepareStatement(getAllQuery);){
 			ResultSet res = st.executeQuery();
 			ArrayList<Chapter> liste = new ArrayList<>();
@@ -80,8 +80,8 @@ public class ChapterDAO {
 		}
 	}
 	
-	public List<Chapter> getPaginated() throws SQLException{
-		try(Connection con = DatabaseConnection.getConnection(); 
+	public List<Chapter> getPaginated() throws SQLException, DAOException {
+		try(Connection con = DataSource.getInstance().getConnection(); 
 			PreparedStatement st = con.prepareStatement(getPaginatedQuery);){
 			st.setInt(1, (ChapterDAO.page -1)*ChapterDAO.ROWS_PER_PAGE);
 			st.setInt(2, ChapterDAO.ROWS_PER_PAGE);
@@ -94,8 +94,8 @@ public class ChapterDAO {
 		}
 	}
 
-	public void update(Chapter data) throws SQLException {
-		try(Connection con = DatabaseConnection.getConnection(); 
+	public void update(Chapter data) throws SQLException, DAOException {
+		try(Connection con = DataSource.getInstance().getConnection(); 
 			PreparedStatement st = con.prepareStatement(updateQuery);){
 			st.setString(1, data.getName());
 			st.setString(2, data.getParent_path());

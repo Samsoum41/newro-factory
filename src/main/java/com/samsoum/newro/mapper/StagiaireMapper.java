@@ -41,7 +41,7 @@ public class StagiaireMapper {
 		// TODO : Remplacer les instructions ternaires par des Optionals
 		try {
 			LocalDate arrival = res.getDate("arrival") == null  ? null : res.getDate("arrival").toLocalDate();
-			LocalDate formation_over = res.getDate("formation_over") == null ? null : res.getDate("arrival").toLocalDate();
+			LocalDate formation_over = res.getDate("formation_over") == null ? null : res.getDate("formation_over").toLocalDate();
 			Promotion stagiairePromotion = PromotionService.getInstance().getOne(res.getInt("promotion_id")).orElseThrow(()-> new MapperException("Pas de promotion de ce id"));
 			return new Stagiaire(res.getInt("id"), res.getString("first_name"), res.getString("last_name"), arrival, formation_over, stagiairePromotion);
 		}

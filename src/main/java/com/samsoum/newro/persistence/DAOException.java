@@ -1,5 +1,6 @@
 package com.samsoum.newro.persistence;
 
+@SuppressWarnings("serial")
 public class DAOException extends Exception {
 
 	public DAOException(String string) {
