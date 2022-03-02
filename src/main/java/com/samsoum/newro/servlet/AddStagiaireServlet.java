@@ -3,7 +3,7 @@ package com.samsoum.newro.servlet;
 import java.io.IOException;
 import java.util.List;
 
-import com.samsoum.newro.dto.StagiaireDTO;
+import com.samsoum.newro.dto.StagiaireDTOWithoutId;
 import com.samsoum.newro.mapper.MapperException;
 import com.samsoum.newro.mapper.StagiaireMapper;
 import com.samsoum.newro.model.Promotion;
@@ -69,7 +69,7 @@ public class AddStagiaireServlet extends HttpServlet {
 		String promotionId = request.getParameter("promotionId");
 		System.out.println(promotionId);
 
-		StagiaireDTO nouveauStagiaire = new StagiaireDTO(first_name, last_name, arrival, formation_over, promotionId);
+		StagiaireDTOWithoutId nouveauStagiaire = new StagiaireDTOWithoutId(first_name, last_name, arrival, formation_over, promotionId);
 		// Validation du DTO
 		try {
 			StagiaireValidateur.getInstance().check(nouveauStagiaire);

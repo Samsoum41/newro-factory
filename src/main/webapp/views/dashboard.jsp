@@ -77,7 +77,7 @@
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"
 								class="cb" value="0"></td>
-							<td><a href="editStagiaire.html" onclick="">${stagiaire.first_name }
+							<td><a href="editStagiaire?id=${stagiaire.id}" onclick="">${stagiaire.first_name }
 									${ stagiaire.last_name }</a></td>
 							<td>${stagiaire.arrival }</td>
 							<td>${stagiaire.formation_over }</td>

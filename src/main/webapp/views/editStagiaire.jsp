@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <head>
 <title>Newro Factory</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bootstrap -->
-<link href="../css/bootstrap.min.css" rel="stylesheet" media="screen">
-<link href="../css/font-awesome.css" rel="stylesheet" media="screen">
-<link href="../css/main.css" rel="stylesheet" media="screen">
+<link href="<%=request.getContextPath()%>/css/bootstrap.min.css"
+	rel="stylesheet" media="screen">
+<link href="<%=request.getContextPath()%>/css/font-awesome.css"
+	rel="stylesheet" media="screen">
+<link href="<%=request.getContextPath()%>/css/main.css"
+	rel="stylesheet" media="screen">
 </head>
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
@@ -19,20 +23,20 @@
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
                     <div class="label label-default pull-right">
-                        id: 0
+                        id: ${id}
                     </div>
                     <h1>Modification stagiaire</h1>
 
                     <form action="editStagiaire" method="POST">
-                        <input type="hidden" value="0" id="id"/> <!-- TODO: Change this value with the computer id -->
+                        <input type="hidden" name="id" value="${id}" id="id"/> <!-- TODO: Change this value with the computer id -->
                         <fieldset>
                             <div class="form-group">
                                 <label for="lastName">Nom</label>
-                                <input type="text" class="form-control" name="lastName" id="lastName" placeholder="Nom du stagiaire" value="">
+                                <input type="text" class="form-control" name="last_name" id="lastName" placeholder="Nom du stagiaire" value="">
                             </div>
                             <div class="form-group">
-                                <label for="firstName">Prénom</label>
-                                <input type="text" class="form-control" name="firstName" id="firstName" placeholder="Prénom du stagiaire" value="">
+                                <label for="firstName">Pr�nom</label>
+                                <input type="text" class="form-control" name="first_name" id="firstName" placeholder="Prénom du stagiaire" value="">
                             </div>
                             <div class="form-group">
                                 <label for="arrival">Date d'arrivée</label>
@@ -40,14 +44,16 @@
                             </div>
                             <div class="form-group">
                                 <label for="finFormation">Date de fin de formation</label>
-                                <input type="date" class="form-control" name="finFormation" id="finFormation" placeholder="Date de fin de formation" value="">
+                                <input type="date" class="form-control" name="formation_over" id="formation_over" placeholder="Date de fin de formation" value="">
                             </div>
                             <div class="form-group">
                                 <label for="promotionId">Promotion</label>
                                 <select class="form-control" name="promotionId" id="promotionId" >
-                                    <option value="0">--</option>
+                                	<c:forEach items="${promotions}" var="promotion">
+										<option value="${promotion.id}">${promotion.name} </option>     	
+                                	</c:forEach>
                                 </select>
-                            </div>                           
+                            </div>                            
                         </fieldset>
                         <div class="actions pull-right">
                             <input type="submit" value="Edit" class="btn btn-primary">

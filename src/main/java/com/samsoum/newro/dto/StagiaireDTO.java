@@ -20,12 +20,6 @@ public class StagiaireDTO {
 	}
 
 	@Override
-	public String toString() {
-		return "[" + first_name + " \\t  " + last_name + " \\t  " + arrival + " \\t  " + formation_over + " \\t  "
-				+ promotion_id + "]";
-	}
-
-	@Override
 	public int hashCode() {
 		return Objects.hash(arrival, first_name, formation_over, last_name, promotion_id);
 	}
@@ -42,6 +36,12 @@ public class StagiaireDTO {
 		return Objects.equals(arrival, other.arrival) && Objects.equals(first_name, other.first_name)
 				&& Objects.equals(formation_over, other.formation_over) && Objects.equals(last_name, other.last_name)
 				&& Objects.equals(promotion_id, other.promotion_id);
+	}
+
+	@Override
+	public String toString() {
+		return "[" + first_name + " \\t  " + last_name + " \\t  " + arrival + " \\t  " + formation_over + " \\t  "
+				+ promotion_id + "]";
 	}
 
 	public String getFirst_name() {

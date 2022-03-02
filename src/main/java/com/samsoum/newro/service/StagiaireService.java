@@ -96,9 +96,9 @@ public class StagiaireService {
 		}
 	}
 
-	public void update(Stagiaire promotion) throws ServiceException {
+	public void update(Stagiaire stagiaire) throws ServiceException {
 		try {
-			StagiaireDAO.getInstance().update(promotion);
+			StagiaireDAO.getInstance().update(stagiaire);
 		} catch (DAOException e) {
 			throw new ServiceException();
 		}
