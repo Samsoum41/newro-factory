@@ -1,6 +1,7 @@
 package com.samsoum.newro.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.samsoum.newro.model.Stagiaire;
 import com.samsoum.newro.persistence.DAOException;
@@ -47,7 +48,7 @@ public class StagiaireService {
 		}
 	}
 
-	public Stagiaire getOne(int id) throws ServiceException {
+	public Optional<Stagiaire> getOne(int id) throws ServiceException {
 		try {
 			return StagiaireDAO.getInstance().getOne(id);
 		} catch (DAOException e) {

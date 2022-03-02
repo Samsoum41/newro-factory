@@ -1,5 +1,6 @@
 package com.samsoum.newro.persistence;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -9,8 +10,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
-import com.samsoum.newro.util.UtilitaireProgram;
-
 public class DatabaseConnection {
     private Connection con;
     String URL;
@@ -19,13 +18,15 @@ public class DatabaseConnection {
     
     private DatabaseConnection()
     {
-    	try(InputStream propertiesFile = new FileInputStream(UtilitaireProgram.WORKING_PATH + "src/main/resources/config.properties")) {
+    	ClassLoader classLoader = getClass().getClassLoader();
+    	File file = new File(classLoader.getResource("config.properties").getFile());
+    	try(InputStream propertiesFile = new FileInputStream(file.getAbsoluteFile())) {
         	Properties prop = new Properties();
         	prop.load(propertiesFile);
         	URL = prop.getProperty("db.url");
         	USERNAME = prop.getProperty("db.username");
         	PASSWORD = prop.getProperty("db.password");
-            Class.forName("com.mysql.cj.jdbc.Driver");
+            Class.forName(prop.getProperty("db.driverClassName"));
             con = DriverManager.getConnection(URL, USERNAME, PASSWORD);
         }
         catch (ClassNotFoundException | SQLException e) {

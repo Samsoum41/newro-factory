@@ -48,7 +48,7 @@ public class StagiaireValidateur {
 	}
 
 	private void checkLastName(String last_name) throws EmptyInputException {
-		checkEmptyString(last_name);
+		checkEmptyString(last_name); 
 	}
 
 	private void checkEmptyString(String str) throws EmptyInputException {
@@ -62,7 +62,7 @@ public class StagiaireValidateur {
 		try {
 			int id = Integer.parseInt(promotion_id);
 			try {
-				if (PromotionService.getInstance().getOne(id) == null) {
+				if (!PromotionService.getInstance().getOne(id).isPresent()) {
 					throw new PromotionNotFoundInputException();
 				}
 			} catch (ServiceException e) {

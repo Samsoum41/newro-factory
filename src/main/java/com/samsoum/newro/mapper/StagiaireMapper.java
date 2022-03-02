@@ -29,7 +29,7 @@ public class StagiaireMapper {
 		int promotion_id = Integer.parseInt(stagiaire.getPromotion_id());
 		Promotion promotion;
 		try {
-			promotion = PromotionService.getInstance().getOne(promotion_id);
+			promotion = PromotionService.getInstance().getOne(promotion_id).orElseThrow(()-> new MapperException("Pas de promotion de ce id"));
 		}
 		catch (ServiceException e) {
 			throw new MapperException();
@@ -42,7 +42,7 @@ public class StagiaireMapper {
 		try {
 			LocalDate arrival = res.getDate("arrival") == null  ? null : res.getDate("arrival").toLocalDate();
 			LocalDate formation_over = res.getDate("formation_over") == null ? null : res.getDate("arrival").toLocalDate();
-			Promotion stagiairePromotion = PromotionService.getInstance().getOne(res.getInt("promotion_id"));
+			Promotion stagiairePromotion = PromotionService.getInstance().getOne(res.getInt("promotion_id")).orElseThrow(()-> new MapperException("Pas de promotion de ce id"));
 			return new Stagiaire(res.getInt("id"), res.getString("first_name"), res.getString("last_name"), arrival, formation_over, stagiairePromotion);
 		}
 		catch (SQLException | ServiceException e) {

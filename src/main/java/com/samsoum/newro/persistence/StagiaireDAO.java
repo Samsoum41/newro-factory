@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.samsoum.newro.mapper.MapperException;
 import com.samsoum.newro.mapper.StagiaireMapper;
@@ -19,6 +20,8 @@ public class StagiaireDAO {
 	private String COUNT_QUERY = "SELECT COUNT(*) AS rowcount FROM stagiaire;";
 	private String DELETE_QUERY = "DELETE FROM stagiaire WHERE id=?;"; 
 	private String GET_ONE_QUERY = "SELECT * FROM stagiaire WHERE id=?;";
+	private String GET_BY_NAMES_QUERY = "SELECT * FROM stagiaire WHERE first_name = ? AND last_name=?;";
+
 	private String GET_ALL_QUERY = "SELECT * FROM stagiaire;";
 	private String GET_PAGINATED_QUERY = "SELECT * FROM stagiaire ORDER BY id LIMIT ?, ?;";
 	private String UPDATE_QUERY = "UPDATE stagiaire SET first_name=?, last_name=?, arrival=?, formation_over=?, promotion_id=? WHERE id=?;";
@@ -32,6 +35,35 @@ public class StagiaireDAO {
 		}
 		return StagiaireDAO.instance;
 	}
+	public Optional<Stagiaire> getByNames(String first_name, String last_name) throws DAOException {
+		try(Connection con = DatabaseConnection.getConnection(); ){
+			PreparedStatement st = con.prepareStatement(GET_BY_NAMES_QUERY);
+			st.setString(1, first_name);
+			st.setString(2, last_name);
+			try {
+				ResultSet res = st.executeQuery();
+				if(res.isBeforeFirst()) {
+					res.next();
+					Optional<Stagiaire> opt = Optional.of(StagiaireMapper.getInstance().toModel(res));
+					return opt;
+				}
+				else {
+					// TODO : changer ce return null
+					return Optional.empty() ;
+				}
+			}
+			catch(SQLException | MapperException e) {
+				e.printStackTrace();
+				throw new DAOException("Problème dans l'accès au stagiaire d'identifiant : " + first_name + " dans la base de donnée.");
+			}
+		} 
+		catch(SQLException e) {
+			// TODO : Logger
+			e.printStackTrace();
+			throw new DAOException("Problème dans la connexion à la base de donnée");
+		}
+	}
+
 	
 	public void add(Stagiaire data) throws DAOException {
 		try(Connection con = DatabaseConnection.getConnection(); ){
@@ -79,18 +111,20 @@ public class StagiaireDAO {
 		}
 	}
 
-	public Stagiaire getOne(int id) throws DAOException {
+	public Optional<Stagiaire> getOne(int id) throws DAOException {
 		try(Connection con = DatabaseConnection.getConnection(); 
 			PreparedStatement st = con.prepareStatement(GET_ONE_QUERY);){
 			st.setInt(1, id);
 			try {
 				ResultSet res = st.executeQuery();
-				res.next();
-				if(res == null) {
-					return null;
+				if(res.isBeforeFirst()) {
+					res.next();
+					Optional<Stagiaire> opt = Optional.of(StagiaireMapper.getInstance().toModel(res));
+					return opt;
 				}
 				else {
-					return StagiaireMapper.getInstance().toModel(res);
+					// TODO : changer ce return null
+					return Optional.empty() ;
 				}
 			}
 			catch(SQLException | MapperException e) {

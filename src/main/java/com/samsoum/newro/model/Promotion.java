@@ -50,4 +50,8 @@ public class Promotion {
 		this.name = name;
 	}
 
+	public Promotion(String name) {
+		this.name = name;
+	}
+
 }

@@ -85,6 +85,8 @@ public class AddStagiaireServlet extends HttpServlet {
 		} catch (ServiceException e) {
 			e.printStackTrace();
 		}
+		
+		doGet(request, response);
 	}
 
 }

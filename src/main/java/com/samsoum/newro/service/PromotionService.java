@@ -1,6 +1,7 @@
 package com.samsoum.newro.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.samsoum.newro.model.Promotion;
 import com.samsoum.newro.persistence.DAOException;
@@ -43,7 +44,7 @@ public class PromotionService {
 			throw new ServiceException();
 		}
 	}
-	public Promotion getOne(int id) throws ServiceException {
+	public Optional<Promotion> getOne(int id) throws ServiceException {
 		try {
 			return PromotionDAO.getInstance().getOne(id);
 		} catch (DAOException e) {

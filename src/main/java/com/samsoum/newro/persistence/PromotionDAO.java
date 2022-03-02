@@ -6,10 +6,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.samsoum.newro.mapper.MapperException;
 import com.samsoum.newro.mapper.PromotionMapper;
 import com.samsoum.newro.model.Promotion;
+import com.samsoum.newro.model.Stagiaire;
 
 public class PromotionDAO{
 	public static int page = 1;
@@ -31,8 +33,8 @@ public class PromotionDAO{
 		return PromotionDAO.instance;
 	}
 	public void add(Promotion data) throws DAOException {
-		try(Connection con = DatabaseConnection.getConnection(); 
-			PreparedStatement st = 	con.prepareStatement(insertQuery);){
+		try(Connection con = DatabaseConnection.getConnection(); ){
+			PreparedStatement st =	con.prepareStatement(insertQuery);
 			st.setString(1, data.getName());
 
 			try {
@@ -69,14 +71,20 @@ public class PromotionDAO{
 		}
 	}
 
-	public Promotion getOne(int id) throws DAOException {
+	public Optional<Promotion> getOne(int id) throws DAOException {
 		try(Connection con = DatabaseConnection.getConnection(); 
 			PreparedStatement st = con.prepareStatement(getOneQuery); ) {
 			st.setInt(1, id);
 			try {
 				ResultSet res = st.executeQuery();
-				res.next();
-				return PromotionMapper.getInstance().toModel(res);	
+				if(res.isBeforeFirst()) {
+					res.next();
+					Optional<Promotion> opt = Optional.of(PromotionMapper.getInstance().toModel(res));
+					return opt;	
+				}
+				else {
+					return Optional.empty();
+				}
 			}
 			catch(SQLException | MapperException e) {
 				e.printStackTrace();
