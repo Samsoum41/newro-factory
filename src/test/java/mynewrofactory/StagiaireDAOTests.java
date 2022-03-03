@@ -75,6 +75,7 @@ class StagiaireDAOTests {
 			System.out.println(testAdrienne);
 			assertEquals(testAdrienne, realAdrienne);
 		} catch (DAOException e) {
+			e.printStackTrace();
 			fail();
 		}
 	}

@@ -16,15 +16,16 @@ import com.samsoum.newro.ui.PageStagiaire;
 
 public class StagiaireDAO {
 	private static StagiaireDAO instance;
+	private String SELECT_QUERY= "SELECT stagiaire.id, first_name, last_name, arrival, formation_over, promotion_id, name FROM stagiaire INNER JOIN promotion ON promotion_id=promotion.id ";
 	private String INSERT_QUERY = "INSERT INTO stagiaire(first_name, last_name, arrival, formation_over, promotion_id) VALUES(?,?,?,?,?);";
 	private String COUNT_QUERY = "SELECT COUNT(*) AS rowcount FROM stagiaire;";
-	private String DELETE_QUERY = "DELETE FROM stagiaire WHERE id=?;"; 
-	private String GET_ONE_QUERY = "SELECT * FROM stagiaire WHERE id=?;";
-	private String GET_BY_NAMES_QUERY = "SELECT * FROM stagiaire WHERE first_name = ? AND last_name=?;";
-	private String GET_ALL_QUERY = "SELECT * FROM stagiaire;";
-	private String GET_PAGINATED_QUERY = "SELECT * FROM stagiaire ORDER BY id LIMIT ?, ?;";
-	private String GET_ORDERED_PAGINATED_QUERY = "SELECT * FROM stagiaire ORDER BY %s ASC LIMIT ?, ?;";
-	private String UPDATE_QUERY = "UPDATE stagiaire SET first_name=?, last_name=?, arrival=?, formation_over=?, promotion_id=? WHERE id=?;";
+	private String DELETE_QUERY = "DELETE FROM stagiaire WHERE stagiaire.id=?;"; 
+	private String GET_ONE_QUERY = SELECT_QUERY + "WHERE stagiaire.id=?;";
+	private String GET_BY_NAMES_QUERY = SELECT_QUERY + "WHERE first_name = ? AND last_name=?;";
+	private String GET_ALL_QUERY = SELECT_QUERY + ";";
+	private String GET_PAGINATED_QUERY = SELECT_QUERY + "ORDER BY stagiaire.id LIMIT ?, ?;";
+	private String GET_ORDERED_PAGINATED_QUERY = SELECT_QUERY + "ORDER BY %s ASC LIMIT ?, ?;";
+	private String UPDATE_QUERY = SELECT_QUERY + "UPDATE stagiaire SET first_name=?, last_name=?, arrival=?, formation_over=?, promotion_id=? WHERE stagiaire.id=?;";
 
 	private StagiaireDAO() {
 		
