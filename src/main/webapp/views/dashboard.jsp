@@ -63,7 +63,9 @@
 								</a>
 							</span>
 						</th>
-						<th>Stagiaire</th>
+						<th>Nom du stagiaire</th>
+						<th>Prénom du stagiaire</th>
+						
 						<th>Date d'arrivée</th>
 						<!-- Table header for Discontinued Date -->
 						<th>Date de fin de formation</th>
@@ -79,8 +81,16 @@
 							<td class="editMode">
 								<input type="checkbox" name="cb" class="cb" value="${stagiaire.id}">
 							</td>
-							<td><a href="editStagiaire?id=${stagiaire.id}" onclick="">${stagiaire.first_name }
-									${ stagiaire.last_name }</a></td>
+							<td>
+								<a href="editStagiaire?id=${stagiaire.id}" onclick="">
+									${stagiaire.first_name }
+								</a>
+							</td>
+							<td>
+								<a href="editStagiaire?id=${stagiaire.id}" onclick="">
+									${stagiaire.last_name}
+								</a>
+							</td>
 							<td>${stagiaire.arrival }</td>
 							<td>${stagiaire.formation_over }</td>
 							<td>${stagiaire.promotion.name }</td>
