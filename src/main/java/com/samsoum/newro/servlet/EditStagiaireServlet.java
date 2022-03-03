@@ -45,8 +45,9 @@ public class EditStagiaireServlet extends HttpServlet {
 		request.setAttribute("id", id);
 		try {
 			List<Promotion> allPromotions = PromotionService.getInstance().getAll();
+			Stagiaire stagiaireAModifier = StagiaireService.getInstance().getOne(id).get(); 
+			request.setAttribute("stagiaire", stagiaireAModifier);
 			request.setAttribute("promotions", allPromotions);
-			System.out.println("On passsse");
 			request.getRequestDispatcher("/views/editStagiaire.jsp").forward(request, response);
 		} catch (ServiceException e) {
 			request.getRequestDispatcher("/views/500.jsp").forward(request, response);
