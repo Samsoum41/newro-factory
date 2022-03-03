@@ -91,13 +91,19 @@ public class StagiaireDAO {
 	}
 
 
-	public void delete(int id) throws DAOException {
+	public int delete(int id) throws DAOException {
 		try(Connection con = DataSource.getInstance().getConnection(); ){
 			PreparedStatement st = con.prepareStatement(DELETE_QUERY);
 			st.setInt(1, id);
 			try {
-				st.executeUpdate();		
-				System.out.println("Le stagiaire d'id " + id + " a bien été supprimé"); 
+				int res =  st.executeUpdate();		
+				if (res>0) {
+					System.out.println("Le stagiaire d'id " + id + " a bien été supprimé"); 
+				}
+				else {
+					System.out.println("Pas de stagiaire avec cet id");
+				}
+				return res;
 			}
 			catch(SQLException e) {
 				e.printStackTrace();

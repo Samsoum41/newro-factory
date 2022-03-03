@@ -1,6 +1,7 @@
 package mynewrofactory;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -88,13 +89,52 @@ class StagiaireDAOTests {
 		}
 	}
 	
+	@Test
+	public void shouldDeleteStagiaireThatExists() {
+		int deletAdrienneResult;
+		int deleteAngeleResult;
+		try {
+			deletAdrienneResult = StagiaireDAO.getInstance().delete(1);
+			deleteAngeleResult = StagiaireDAO.getInstance().delete(2);
+			assertTrue(deletAdrienneResult>0);
+			assertTrue(deleteAngeleResult>0);
+		}
+		catch(DAOException e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	@Test
+	public void shouldNotDeleteStagiaireThatDoesNotExist() {
+		// Il n'y a aucun stagiaire d'id 1000
+		try {
+			int i = StagiaireDAO.getInstance().delete(1000);
+			assertEquals(0, i);
+		}
+		catch(DAOException e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
 	
 	@BeforeEach
 	public void setupDatabase() throws FileNotFoundException, DAOException, SQLException {
 		try (Connection con = DataSource.getInstance().getConnection()) {
 			/**
-			 * Création des tables et de 3 enregistrements dans la table promotion : id |
-			 * name 1 Février 2022 2 Mars 2023 3 Janvier 2021
+			 * Création des tables et de 3 enregistrements dans la table promotion : 
+			 * id	|	name 
+			 * _________________________
+			 * 1	|	Février 2022 
+			 * 2	|	Mars 2023 
+			 * 3	|	Janvier 2021
+			 * 
+			 * Pour la table Stagiaire, on créé deux enregistrements : 
+			 * id	|	first_name	|	last_name	
+			 * _________________________________________
+			 * 1	|	Adrienne	|	Mazet
+			 * 2	|	Angèle		|	Cochet
+			 * 
 			 */
 			String path = "/home/oxyl/1-SCHEMA-StagiaireDAOTest.sql";
 			RunScript.execute(con, new FileReader(path));
