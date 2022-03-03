@@ -12,6 +12,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.List;
 
 import org.h2.tools.RunScript;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,6 +27,8 @@ import com.samsoum.newro.model.Stagiaire;
 import com.samsoum.newro.persistence.DAOException;
 import com.samsoum.newro.persistence.DataSource;
 import com.samsoum.newro.persistence.StagiaireDAO;
+import com.samsoum.newro.persistence.StagiaireField;
+import com.samsoum.newro.ui.PageStagiaire;
 
 class StagiaireDAOTests {
 	@Mock
@@ -113,6 +116,54 @@ class StagiaireDAOTests {
 			assertEquals(0, i);
 		}
 		catch(DAOException e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	@Test
+	public void shouldReturnOrderedByFirstNamePage() {
+		try {
+			PageStagiaire page = StagiaireDAO.getInstance().getOrderdAndPaginated(StagiaireField.FIRST_NAME, 1, 10);
+			List<Stagiaire> stagiaires = page.getContenu();
+			assertEquals("Adrienne", stagiaires.get(0).getFirst_name());
+		} catch (DAOException e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	@Test
+	public void shouldReturnOrderedByLastNamePage() {
+		try {
+			PageStagiaire page = StagiaireDAO.getInstance().getOrderdAndPaginated(StagiaireField.LAST_NAME, 1, 10);
+			List<Stagiaire> stagiaires = page.getContenu();
+			assertEquals("Angèle", stagiaires.get(0).getFirst_name());
+		} catch (DAOException e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	@Test
+	public void shouldReturnOrderedByArrivalPage() {
+		try {
+			PageStagiaire page = StagiaireDAO.getInstance().getOrderdAndPaginated(StagiaireField.ARRIVAL, 1, 10);
+			List<Stagiaire> stagiaires = page.getContenu();
+			assertEquals("Adrienne", stagiaires.get(0).getFirst_name());
+		} catch (DAOException e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	@Test
+	public void shouldReturnOrderedByFormationOverPage() {
+		try {
+			PageStagiaire page = StagiaireDAO.getInstance().getOrderdAndPaginated(StagiaireField.FORMATION_OVER, 1, 10);
+			List<Stagiaire> stagiaires = page.getContenu();
+			assertEquals("Angèle", stagiaires.get(0).getFirst_name());
+		} catch (DAOException e) {
 			e.printStackTrace();
 			fail();
 		}

@@ -21,9 +21,9 @@ public class StagiaireDAO {
 	private String DELETE_QUERY = "DELETE FROM stagiaire WHERE id=?;"; 
 	private String GET_ONE_QUERY = "SELECT * FROM stagiaire WHERE id=?;";
 	private String GET_BY_NAMES_QUERY = "SELECT * FROM stagiaire WHERE first_name = ? AND last_name=?;";
-
 	private String GET_ALL_QUERY = "SELECT * FROM stagiaire;";
 	private String GET_PAGINATED_QUERY = "SELECT * FROM stagiaire ORDER BY id LIMIT ?, ?;";
+	private String GET_ORDERED_PAGINATED_QUERY = "SELECT * FROM stagiaire ORDER BY %s ASC LIMIT ?, ?;";
 	private String UPDATE_QUERY = "UPDATE stagiaire SET first_name=?, last_name=?, arrival=?, formation_over=?, promotion_id=? WHERE id=?;";
 
 	private StagiaireDAO() {
@@ -225,6 +225,34 @@ public class StagiaireDAO {
 	public PageStagiaire getPaginated( int page, int rowsPerPage) throws DAOException{
 		try(Connection con = DataSource.getInstance().getConnection(); ){
 			PreparedStatement st = con.prepareStatement(GET_PAGINATED_QUERY);
+			int premierId = (page -1)*rowsPerPage;
+			st.setInt(1, premierId);
+			st.setInt(2, rowsPerPage);
+			try {
+				ResultSet res = st.executeQuery();
+				ArrayList<Stagiaire> liste = new ArrayList<>();
+				while(res.next()) {
+					liste.add(StagiaireMapper.getInstance().toModel(res)); 
+				}
+				return new PageStagiaire(page, rowsPerPage, liste);
+			}
+			catch(SQLException | MapperException e) {
+				e.printStackTrace();
+				String messageErreur = "Problème dans l'accès à l'ensemble des stagiaires entre les identifiants "+ premierId + " et " + (premierId+ rowsPerPage) + " en base de donnée.";
+				throw new DAOException(messageErreur);
+			}
+		}
+		catch(SQLException e) {
+			// TODO : Logger
+			e.printStackTrace();
+			throw new DAOException("Problème dans la connexion à la base de donnée");
+		}
+	}
+	
+	public PageStagiaire getOrderdAndPaginated(StagiaireField field, int page, int rowsPerPage) throws DAOException{
+		try(Connection con = DataSource.getInstance().getConnection(); ){
+			String query = String.format(GET_ORDERED_PAGINATED_QUERY, field.getValue());
+			PreparedStatement st = con.prepareStatement(query);
 			int premierId = (page -1)*rowsPerPage;
 			st.setInt(1, premierId);
 			st.setInt(2, rowsPerPage);

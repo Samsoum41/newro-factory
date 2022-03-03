@@ -6,6 +6,7 @@ import java.util.Optional;
 import com.samsoum.newro.model.Stagiaire;
 import com.samsoum.newro.persistence.DAOException;
 import com.samsoum.newro.persistence.StagiaireDAO;
+import com.samsoum.newro.persistence.StagiaireField;
 import com.samsoum.newro.ui.PageStagiaire;
 
 public class StagiaireService {
@@ -83,6 +84,14 @@ public class StagiaireService {
 	public PageStagiaire getPaginated(int page) throws ServiceException {
 		try {
 			return StagiaireDAO.getInstance().getPaginated(page);
+		} catch (DAOException e) {
+			throw new ServiceException();
+		}
+	}
+	
+	public PageStagiaire getOrderdAndPaginated(StagiaireField field, int page, int rowsPerPage) throws ServiceException{
+		try {
+			return StagiaireDAO.getInstance().getOrderdAndPaginated(field, page, rowsPerPage);
 		} catch (DAOException e) {
 			throw new ServiceException();
 		}

@@ -16,11 +16,18 @@ import com.samsoum.newro.service.ServiceException;
 
 public class StagiaireMapper {
 	private static StagiaireMapper instance;
-	
+
 	private StagiaireMapper() {
-		
+
 	}
-	
+
+	public static StagiaireMapper getInstance() {
+		if (instance == null) {
+			instance = new StagiaireMapper();
+		}
+		return instance;
+	}
+
 	public Stagiaire fromDTO(StagiaireDTOWithoutId stagiaire) throws MapperException {
 		// Ici on suppose que le DTO est déjà validé
 		String first_name = stagiaire.getFirst_name();
@@ -30,13 +37,14 @@ public class StagiaireMapper {
 		int promotion_id = Integer.parseInt(stagiaire.getPromotion_id());
 		Promotion promotion;
 		try {
-			promotion = PromotionService.getInstance().getOne(promotion_id).orElseThrow(()-> new MapperException("Pas de promotion de ce id"));
-		}
-		catch (ServiceException e) {
+			promotion = PromotionService.getInstance().getOne(promotion_id)
+					.orElseThrow(() -> new MapperException("Pas de promotion de ce id"));
+		} catch (ServiceException e) {
 			throw new MapperException();
 		}
 		return new Stagiaire(first_name, last_name, arrival, formation_over, promotion);
 	}
+
 	public Stagiaire fromDTO(StagiaireDTOWithId stagiaire) throws MapperException {
 		// Ici on suppose que le DTO est déjà validé et qu'il contient l'ID
 		int id = stagiaire.getId();
@@ -47,31 +55,34 @@ public class StagiaireMapper {
 		int promotion_id = Integer.parseInt(stagiaire.getPromotion_id());
 		Promotion promotion;
 		try {
-			promotion = PromotionService.getInstance().getOne(promotion_id).orElseThrow(()-> new MapperException("Pas de promotion de ce id"));
-		}
-		catch (ServiceException e) {
+			promotion = PromotionService.getInstance().getOne(promotion_id)
+					.orElseThrow(() -> new MapperException("Pas de promotion de ce id"));
+		} catch (ServiceException e) {
 			throw new MapperException();
 		}
-		return new Stagiaire(id,first_name, last_name, arrival, formation_over, promotion);
+		return new Stagiaire(id, first_name, last_name, arrival, formation_over, promotion);
 	}
-	
-	
+
 	public Stagiaire toModel(ResultSet res) throws MapperException {
 		// TODO : Remplacer les instructions ternaires par des Optionals
 		try {
-			LocalDate arrival = res.getDate("arrival") == null  ? null : res.getDate("arrival").toLocalDate();
-			LocalDate formation_over = res.getDate("formation_over") == null ? null : res.getDate("formation_over").toLocalDate();
-			Promotion stagiairePromotion = PromotionService.getInstance().getOne(res.getInt("promotion_id")).orElseThrow(()-> new MapperException("Pas de promotion de ce id"));
-			return new Stagiaire(res.getInt("id"), res.getString("first_name"), res.getString("last_name"), arrival, formation_over, stagiairePromotion);
-		}
-		catch (SQLException | ServiceException e) {
+			LocalDate arrival = res.getDate("arrival") == null ? null : res.getDate("arrival").toLocalDate();
+			LocalDate formation_over = res.getDate("formation_over") == null ? null
+					: res.getDate("formation_over").toLocalDate();
+			Promotion stagiairePromotion = PromotionService.getInstance().getOne(res.getInt("promotion_id"))
+					.orElseThrow(() -> new MapperException("Pas de promotion de ce id"));
+			return new Stagiaire(res.getInt("id"), res.getString("first_name"), res.getString("last_name"), arrival,
+					formation_over, stagiairePromotion);
+		} catch (SQLException | ServiceException e) {
 			throw new MapperException();
 		}
 	}
-	
+
 	public PreparedStatement toStatement(Stagiaire stagiaire, PreparedStatement statement) throws MapperException {
-		Timestamp arrival = stagiaire.getArrival() == null  ? null : Timestamp.valueOf(stagiaire.getArrival().atStartOfDay());
-		Timestamp formation_over = stagiaire.getFormation_over() == null ? null : Timestamp.valueOf(stagiaire.getFormation_over().atStartOfDay());
+		Timestamp arrival = stagiaire.getArrival() == null ? null
+				: Timestamp.valueOf(stagiaire.getArrival().atStartOfDay());
+		Timestamp formation_over = stagiaire.getFormation_over() == null ? null
+				: Timestamp.valueOf(stagiaire.getFormation_over().atStartOfDay());
 		try {
 			statement.setString(1, stagiaire.getFirst_name());
 			statement.setString(2, stagiaire.getLast_name());
@@ -79,21 +90,17 @@ public class StagiaireMapper {
 			statement.setTimestamp(4, formation_over);
 			statement.setInt(5, stagiaire.getPromotion().getId());
 			return statement;
-		}
-		catch (SQLException  e) {
+		} catch (SQLException e) {
 			throw new MapperException();
 		}
 
 	}
-	public static StagiaireMapper getInstance() {
-		if(instance == null) {
-			instance = new StagiaireMapper();
-		}
-		return instance;
-	}
-	public PreparedStatement toUpdateStatement(Stagiaire stagiaire, PreparedStatement statement) throws MapperException {
+
+	public PreparedStatement toUpdateStatement(Stagiaire stagiaire, PreparedStatement statement)
+			throws MapperException {
 		Date arrival = stagiaire.getArrival() == null ? null : Date.valueOf(stagiaire.getArrival());
-		Date formation_over = stagiaire.getFormation_over() == null ? null : Date.valueOf(stagiaire.getFormation_over());
+		Date formation_over = stagiaire.getFormation_over() == null ? null
+				: Date.valueOf(stagiaire.getFormation_over());
 		try {
 			statement.setString(1, stagiaire.getFirst_name());
 			statement.setString(2, stagiaire.getLast_name());
@@ -102,8 +109,7 @@ public class StagiaireMapper {
 			statement.setInt(5, stagiaire.getPromotion().getId());
 			statement.setInt(6, stagiaire.getId());
 			return statement;
-		}
-		catch (SQLException  e) {
+		} catch (SQLException e) {
 			throw new MapperException();
 		}
 	}

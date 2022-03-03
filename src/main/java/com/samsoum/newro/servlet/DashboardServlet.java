@@ -3,6 +3,7 @@ package com.samsoum.newro.servlet;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import com.samsoum.newro.persistence.StagiaireField;
 import com.samsoum.newro.service.ServiceException;
 import com.samsoum.newro.service.StagiaireService;
 import com.samsoum.newro.ui.PageStagiaire;
@@ -33,12 +34,18 @@ public class DashboardServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// Order by a field if requested
+		String orderField = request.getParameter("order");
+		if (orderField == null) {
+			orderField = "";
+		}
+		
 		// Getting and setting rows per page and index of page
 		String rowsParameter = request.getParameter("rows");
 		String pageIndexParameter = request.getParameter("page");
 		try {
 			int nbRows = convertRows(rowsParameter);
-			PageStagiaire page = getPageFromParameter(pageIndexParameter, nbRows);
+			PageStagiaire page = getPageFromParameter(pageIndexParameter, nbRows, orderField);
 			int nb_stagiaires = StagiaireService.getInstance().getNumberOfStagiaires();
 			int numOfPages = page.getNumberOfPages();
 			request.setAttribute("nb_stagiaires", nb_stagiaires);
@@ -77,16 +84,38 @@ public class DashboardServlet extends HttpServlet {
 		doGet(request, response);
 	}
 	
-	private PageStagiaire getPageFromParameter(String pageIndexParameter, int nbRows) throws ServiceException {
+	private PageStagiaire getPageFromParameter(String pageIndexParameter, int nbRows, String field) throws ServiceException {
+		// D'abord on fixe le numéro de la page à afficher
 		PageStagiaire page;
-		if (pageIndexParameter==null) {
-			page = StagiaireService.getInstance().getPaginated(PageStagiaire.STARTING_PAGE, nbRows);
-		}
-		else {
-			int askedPage = Integer.parseInt(pageIndexParameter);
-			page = StagiaireService.getInstance().getPaginated(askedPage, nbRows);
+		int numPage = mapPageIndex(pageIndexParameter);
+		// Puis on choisit l'ordre à mettre sur la page
+		switch(field) {
+			case "first_name":
+				page = StagiaireService.getInstance().getOrderdAndPaginated(StagiaireField.FIRST_NAME, numPage, nbRows);
+				break;
+			case "last_name":
+				page = StagiaireService.getInstance().getOrderdAndPaginated(StagiaireField.LAST_NAME, numPage, nbRows);
+				break;
+			case "arrival":
+				page = StagiaireService.getInstance().getOrderdAndPaginated(StagiaireField.ARRIVAL , numPage, nbRows);
+				break;
+			case "formation_over":
+				page = StagiaireService.getInstance().getOrderdAndPaginated(StagiaireField.FORMATION_OVER, numPage, nbRows);
+				break;
+			default:
+				page = StagiaireService.getInstance().getPaginated(numPage, nbRows);
+				break;
 		}
 		return page;
+	}
+	
+	private int mapPageIndex(String pageString) {
+		if (pageString==null) {
+			return PageStagiaire.STARTING_PAGE;
+		}
+		else {
+			return Integer.parseInt(pageString);
+		}	
 	}
 	
 	private int convertRows(String rowsString) {

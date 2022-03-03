@@ -13,44 +13,45 @@ public class PageStagiaire {
 	private int numero;
 	private int nbLignes = NOMBRES_DE_LIGNES_PAR_DEFAUT;
 	private ArrayList<Stagiaire> contenu;
-	
+
 	public PageStagiaire(int numero, int nbLignes, ArrayList<Stagiaire> contenu) {
 		super();
 		this.numero = numero;
 		this.setNbLignes(nbLignes);
 		this.contenu = contenu;
 	}
+
 	public int getNumberOfPages() throws PaginationException {
 		try {
 			int nbStagiaires = StagiaireService.getInstance().getNumberOfStagiaires();
-			return (nbStagiaires/nbLignes)+1;
-		}
-		catch(ServiceException e ) {
+			return (nbStagiaires / nbLignes) + 1;
+		} catch (ServiceException e) {
 			throw new PaginationException();
 		}
 	}
-	private static boolean hasNext(PageStagiaire page) throws PaginationException{
+
+	private static boolean hasNext(PageStagiaire page) throws PaginationException {
 		int nbPages = page.getNumberOfPages();
-		return nbPages>page.getNumero();
+		return nbPages > page.getNumero();
 	}
+
 	private static boolean hasPrevious(PageStagiaire page) {
-		return page.getNumero()>1;
+		return page.getNumero() > 1;
 	}
-	
-	public static int next(PageStagiaire page) throws PaginationException, ServiceException{
-		// TODO : gérer les fuckings exceptions 
+
+	public static int next(PageStagiaire page) throws PaginationException, ServiceException {
+		// TODO : gérer les fuckings exceptions
 		if (PageStagiaire.hasNext(page)) {
-			return page.getNumero()+1;
-		}
-		else {
+			return page.getNumero() + 1;
+		} else {
 			return page.getNumero();
 		}
 	}
-	public static int previous(PageStagiaire page) throws ServiceException{
+
+	public static int previous(PageStagiaire page) throws ServiceException {
 		if (PageStagiaire.hasPrevious(page)) {
-			return page.getNumero()-1;
-		}
-		else {
+			return page.getNumero() - 1;
+		} else {
 			return page.getNumero();
 		}
 	}
@@ -62,17 +63,20 @@ public class PageStagiaire {
 	public ArrayList<Stagiaire> getContenu() {
 		return contenu;
 	}
+
 	public int getNbLignes() {
 		return nbLignes;
 	}
+
 	public void setNbLignes(int nbLignes) {
 		this.nbLignes = nbLignes;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(contenu, nbLignes, numero);
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -84,11 +88,10 @@ public class PageStagiaire {
 		PageStagiaire other = (PageStagiaire) obj;
 		return Objects.equals(contenu, other.contenu) && nbLignes == other.nbLignes && numero == other.numero;
 	}
+
 	@Override
 	public String toString() {
 		return "Page numéro : " + numero;
 	}
-
-
 
 }

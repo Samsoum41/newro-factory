@@ -63,14 +63,13 @@
 								</a>
 							</span>
 						</th>
-						<th>Nom du stagiaire</th>
-						<th>Prénom du stagiaire</th>
-						
-						<th>Date d'arrivée</th>
+						<th><a href="dashboard?order=first_name">Prénom du stagiaire</a></th>
+						<th><a href="dashboard?order=last_name">Nom du stagiaire</a></th>
+						<th><a href="dashboard?order=arrival">Date d'arrivée</a></th>
 						<!-- Table header for Discontinued Date -->
-						<th>Date de fin de formation</th>
+						<th><a href="dashboard?order=formation_over">Date de fin de formation</a></th>
 						<!-- Table header for Company -->
-						<th>Promotion</th>
+						<th><a href="dashboard?order=promotion">Promotion</a></th>
 
 					</tr>
 				</thead>
