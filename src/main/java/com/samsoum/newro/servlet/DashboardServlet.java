@@ -63,6 +63,17 @@ public class DashboardServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		String[] selection = request.getParameter("selection").split(",");
+		for(String stringId : selection) {
+			int id = Integer.parseInt(stringId);
+			try {
+				StagiaireService.getInstance().delete(id);
+			} catch (ServiceException e) {
+				e.printStackTrace();
+				request.getRequestDispatcher("/views/500.jsp").forward(request, response);
+				return;
+			}
+		}
 		doGet(request, response);
 	}
 	

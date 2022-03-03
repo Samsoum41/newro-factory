@@ -32,7 +32,7 @@ $(function() {
 
         var str = $('.' + checkboxFieldName + ':checked').map(function() {
             return this.value;
-        }).get().join();
+        }).get();
         
         $(this).attr('value',str);
         

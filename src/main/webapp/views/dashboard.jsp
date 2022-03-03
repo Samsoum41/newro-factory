@@ -11,8 +11,8 @@
 	rel="stylesheet" media="screen">
 <link href="<%=request.getContextPath()%>/css/font-awesome.css"
 	rel="stylesheet" media="screen">
-<link href="<%=request.getContextPath()%>/css/main.css"
-	rel="stylesheet" media="screen">
+<link href="<%=request.getContextPath()%>/css/main.css" rel="stylesheet"
+	media="screen">
 </head>
 
 
@@ -25,7 +25,7 @@
 
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle">4 Stagiaires found</h1>
+			<h1 id="homeTitle"><span>${nb_stagiaires}</span> Stagiaires found</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
@@ -44,7 +44,7 @@
 			</div>
 		</div>
 
-		<form id="deleteForm" action="#" method="POST">
+		<form id="deleteForm" action="dashboard" method="POST">
 			<input type="hidden" name="selection" value="">
 		</form>
 
@@ -55,13 +55,14 @@
 						<!-- Variable declarations for passing labels as parameters -->
 						<!-- Table header for Computer Name -->
 
-						<th class="editMode" style="width: 60px; height: 22px;"><input
-							type="checkbox" id="selectall" /> <span
-							style="vertical-align: top;"> - <a href="#"
-								id="deleteSelected" onclick="$.fn.deleteSelected();"> <i
-									class="fa fa-trash-o fa-lg"></i>
-							</a>
-						</span></th>
+						<th class="editMode" style="width: 60px; height: 22px;">
+							<input type="checkbox" id="selectall" /> 
+							<span style="vertical-align: top;"> - 
+								<a href="#" id="deleteSelected" onclick="$.fn.deleteSelected();"> 
+									<i class="fa fa-trash-o fa-lg"></i>
+								</a>
+							</span>
+						</th>
 						<th>Stagiaire</th>
 						<th>Date d'arrivée</th>
 						<!-- Table header for Discontinued Date -->
@@ -75,8 +76,9 @@
 				<tbody id="results">
 					<c:forEach items="${page_stagiaires.contenu}" var="stagiaire">
 						<tr>
-							<td class="editMode"><input type="checkbox" name="cb"
-								class="cb" value="0"></td>
+							<td class="editMode">
+								<input type="checkbox" name="cb" class="cb" value="${stagiaire.id}">
+							</td>
 							<td><a href="editStagiaire?id=${stagiaire.id}" onclick="">${stagiaire.first_name }
 									${ stagiaire.last_name }</a></td>
 							<td>${stagiaire.arrival }</td>
@@ -92,40 +94,35 @@
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center flex-center">
 			<ul class="pagination">
-				<li>
-					<a href="dashboard?page=${ previousPage }&rows=${rows}" aria-label="Previous"> 
-						<span aria-hidden="true">&laquo;</span>
-					</a>
-				</li>
+				<li><a href="dashboard?page=${ previousPage }&rows=${rows}"
+					aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
+				</a></li>
 				<c:forEach items="${navigationPages}" var="page">
-					<li>
-					<c:choose>
-						<c:when test="${ page==page_stagiaire.numero }">
-							<a href="dashboard?page=${page}&rows=${rows}" id ="highlighted-li">${page}</a>
-						</c:when>
-						<c:otherwise>
-							<a href="dashboard?page=${page}&rows=${rows}">${page}</a>
-						</c:otherwise>
-					</c:choose>
-					</li>
+					<li><c:choose>
+							<c:when test="${ page==page_stagiaire.numero }">
+								<a href="dashboard?page=${page}&rows=${rows}"
+									id="highlighted-li">${page}</a>
+							</c:when>
+							<c:otherwise>
+								<a href="dashboard?page=${page}&rows=${rows}">${page}</a>
+							</c:otherwise>
+						</c:choose></li>
 				</c:forEach>
-				<li>
-					<a href="dashboard?page=${ nextPage }&rows=${rows}" aria-label="Next"> 
-						<span aria-hidden="true">&raquo;</span>
-					</a>
-				</li>
+				<li><a href="dashboard?page=${ nextPage }&rows=${rows}"
+					aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+				</a></li>
 			</ul>
 
 			<div class="btn-group btn-group-sm pull-right" role="group">
-				<a href="dashboard?rows=10" class="btn btn-default">10</a> 
-				<a href="dashboard?rows=50" class="btn btn-default">50</a> 
-				<a href="dashboard?rows=100" class="btn btn-default">100</a> 
+				<a href="dashboard?rows=10" class="btn btn-default">10</a> <a
+					href="dashboard?rows=50" class="btn btn-default">50</a> <a
+					href="dashboard?rows=100" class="btn btn-default">100</a>
 			</div>
 		</div>
 	</footer>
-	<script src="../js/jquery.min.js"></script>
-	<script src="../js/bootstrap.min.js"></script>
-	<script src="../js/dashboard.js"></script>
+	<script src="././js/jquery.min.js"></script>
+	<script src="././js/bootstrap.min.js"></script>
+	<script src="././js/dashboard.js"></script>
 
 </body>
 </html>
