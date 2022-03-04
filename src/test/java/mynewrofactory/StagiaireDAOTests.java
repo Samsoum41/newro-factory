@@ -62,7 +62,7 @@ class StagiaireDAOTests {
 			e.printStackTrace();
 			fail();
 		}
-		// Si on est là, c'est que c'est bon
+		// Si on est là, c'est que c'eLes getters sont bonsst bon
 	}
 
 	@Test
@@ -123,7 +123,7 @@ class StagiaireDAOTests {
 	}
 	
 	@Test
-	public void shouldReturnOrderedByFirstNamePage() {
+	public void shouldReturnStagiairesOrderedByFirstNamePage() {
 		try {
 			PageStagiaire page = StagiaireDAO.getInstance().getOrderdAndPaginated(StagiaireField.FIRST_NAME, 1, 10);
 			List<Stagiaire> stagiaires = page.getContenu();
@@ -135,7 +135,7 @@ class StagiaireDAOTests {
 	}
 	
 	@Test
-	public void shouldReturnOrderedByLastNamePage() {
+	public void shouldReturnStagiairesOrderedByLastNamePage() {
 		try {
 			PageStagiaire page = StagiaireDAO.getInstance().getOrderdAndPaginated(StagiaireField.LAST_NAME, 1, 10);
 			List<Stagiaire> stagiaires = page.getContenu();
@@ -147,7 +147,7 @@ class StagiaireDAOTests {
 	}
 	
 	@Test
-	public void shouldReturnOrderedByArrivalPage() {
+	public void shouldReturnStagiairesOrderedByArrivalPage() {
 		try {
 			PageStagiaire page = StagiaireDAO.getInstance().getOrderdAndPaginated(StagiaireField.ARRIVAL, 1, 10);
 			List<Stagiaire> stagiaires = page.getContenu();
@@ -159,7 +159,7 @@ class StagiaireDAOTests {
 	}
 	
 	@Test
-	public void shouldReturnOrderedByFormationOverPage() {
+	public void shouldReturnStagiairesOrderedByFormationOverPage() {
 		try {
 			PageStagiaire page = StagiaireDAO.getInstance().getOrderdAndPaginated(StagiaireField.FORMATION_OVER, 1, 10);
 			List<Stagiaire> stagiaires = page.getContenu();

@@ -14,6 +14,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 /**
  * Servlet implementation class DashboardServlet
@@ -35,11 +36,17 @@ public class DashboardServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// Order by a field if requested
-		String orderField = request.getParameter("order");
-		if (orderField == null) {
-			orderField = "";
+		HttpSession session = request.getSession(true);
+		String orderField = "";
+		String newOrder = request.getParameter("order");
+		if (newOrder == null && session.getAttribute("order") != null) {
+			orderField = session.getAttribute("order").toString();
 		}
-		
+		else if (newOrder !=null){
+			// Ici on enregistre le nouveau critère d'ordre dans la session
+			session.setAttribute("order", newOrder);
+			orderField = newOrder;
+		}
 		// Getting and setting rows per page and index of page
 		String rowsParameter = request.getParameter("rows");
 		String pageIndexParameter = request.getParameter("page");
