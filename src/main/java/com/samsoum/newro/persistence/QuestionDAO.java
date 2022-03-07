@@ -63,18 +63,17 @@ public class QuestionDAO {
 				if (answerRes > 0) {
 					System.out.println("Les réponses de la questinon d'id " + id + " a bien été supprimé");
 				} else {
-					con.rollback();
 					System.out.println("Pas de réponse avec cet id");
+					throw new DAOException();
 				}
 				int questionRes = deleteQuestionStatement.executeUpdate();
 				if (questionRes > 0) {
 					System.out.println("La question d'id " + id + " a bien été supprimé");
 				} else {
-					con.rollback();
 					System.out.println("Pas de question avec cet id");
+					throw new DAOException();
 				}
 				con.commit();
-				con.setAutoCommit(true);
 				return questionRes;
 			} catch (SQLException e) {
 				con.rollback();
