@@ -30,14 +30,15 @@ public class DashboardServlet extends HttpServlet {
         super();
         // TODO Auto-generated constructor stub
     }
-
+    
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// Order by a field if requested
 		HttpSession session = request.getSession(true);
-		String orderField = "";
+		String search = getSearchAttribute(request);
+		String orderField = getOrderFieldAttribute(request);
 		String newOrder = request.getParameter("order");
 		if (newOrder == null && session.getAttribute("order") != null) {
 			orderField = session.getAttribute("order").toString();
@@ -52,7 +53,7 @@ public class DashboardServlet extends HttpServlet {
 		String pageIndexParameter = request.getParameter("page");
 		try {
 			int nbRows = convertRows(rowsParameter);
-			PageStagiaire page = getPageFromParameter(pageIndexParameter, nbRows, orderField);
+			PageStagiaire page = getPageFromParameter(pageIndexParameter, nbRows, orderField, search);
 			int nb_stagiaires = StagiaireService.getInstance().getNumberOfStagiaires();
 			int numOfPages = page.getNumberOfPages();
 			request.setAttribute("nb_stagiaires", nb_stagiaires);
@@ -91,26 +92,26 @@ public class DashboardServlet extends HttpServlet {
 		doGet(request, response);
 	}
 	
-	private PageStagiaire getPageFromParameter(String pageIndexParameter, int nbRows, String field) throws ServiceException {
+	private PageStagiaire getPageFromParameter(String pageIndexParameter, int nbRows, String orderField, String search) throws ServiceException {
 		// D'abord on fixe le numéro de la page à afficher
 		PageStagiaire page;
 		int numPage = mapPageIndex(pageIndexParameter);
 		// Puis on choisit l'ordre à mettre sur la page
-		switch(field) {
+		switch(orderField) {
 			case "first_name":
-				page = StagiaireService.getInstance().getOrderdAndPaginated(StagiaireField.FIRST_NAME, numPage, nbRows);
+				page = StagiaireService.getInstance().getOrderdAndPaginatedAndFiltered(StagiaireField.FIRST_NAME, StagiaireField.FIRST_NAME, search, numPage, nbRows);
 				break;
 			case "last_name":
-				page = StagiaireService.getInstance().getOrderdAndPaginated(StagiaireField.LAST_NAME, numPage, nbRows);
+				page = StagiaireService.getInstance().getOrderdAndPaginatedAndFiltered(StagiaireField.LAST_NAME, StagiaireField.FIRST_NAME, search, numPage, nbRows);
 				break;
 			case "arrival":
-				page = StagiaireService.getInstance().getOrderdAndPaginated(StagiaireField.ARRIVAL , numPage, nbRows);
+				page = StagiaireService.getInstance().getOrderdAndPaginatedAndFiltered(StagiaireField.ARRIVAL, StagiaireField.FIRST_NAME, search, numPage, nbRows);
 				break;
 			case "formation_over":
-				page = StagiaireService.getInstance().getOrderdAndPaginated(StagiaireField.FORMATION_OVER, numPage, nbRows);
+				page = StagiaireService.getInstance().getOrderdAndPaginatedAndFiltered(StagiaireField.FORMATION_OVER, StagiaireField.FIRST_NAME, search, numPage, nbRows);
 				break;
 			default:
-				page = StagiaireService.getInstance().getPaginated(numPage, nbRows);
+				page = StagiaireService.getInstance().getOrderdAndPaginatedAndFiltered(StagiaireField.FIRST_NAME, StagiaireField.FIRST_NAME, search, numPage, nbRows);
 				break;
 		}
 		return page;
@@ -139,6 +140,38 @@ public class DashboardServlet extends HttpServlet {
 			return PageStagiaire.NOMBRES_DE_LIGNES_PAR_DEFAUT;
 		}
 	}
+    private String getSearchAttribute(HttpServletRequest request) {
+		HttpSession session = request.getSession(true);
+		String search = request.getParameter("search");
+		if (search == null && session.getAttribute("search") != null) {
+			search = session.getAttribute("search").toString();
+			request.setAttribute("search", search);
+		}
+		else if (search !=null){
+			// Ici on enregistre le nouveau critère d'ordre dans la session
+			session.setAttribute("search", search);
+		}
+		else {
+			search = "";
+		}
+		return search;
+    }
+    
+    private String getOrderFieldAttribute(HttpServletRequest request) {
+		HttpSession session = request.getSession(true);
+    	String orderField = "";
+		String newOrder = request.getParameter("order");
+		if (newOrder == null && session.getAttribute("order") != null) {
+			orderField = session.getAttribute("order").toString();
+		}
+		else if (newOrder !=null){
+			// Ici on enregistre le nouveau critère d'ordre dans la session
+			session.setAttribute("order", newOrder);
+			orderField = newOrder;
+		}
+		return orderField;
+    }
+
 	
 	/**
 	 * Méthode qui renvoie le triplet de nombres qui représentent les pages disponible dans la navigation pour une page donnée

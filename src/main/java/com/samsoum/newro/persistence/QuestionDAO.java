@@ -16,6 +16,7 @@ public class QuestionDAO {
 	private static QuestionDAO instance;
 	private String insertQuery = "INSERT INTO question(title, statement, chapter_id) VALUES(?,?,?);";
 	private String deleteQuery = "DELETE FROM question WHERE id=?;"; 
+	private String DELETE_UNDERLYING_ANSWERS = "DELETE FROM answer WHERE question_id=?;";
 	private String getOneQuery = "SELECT * FROM question WHERE id=?;";
 	private String getAllQuery = "SELECT * FROM question;";
 	private String getPaginated = "SELECT * FROM question ORDER BY id LIMIT ?, ?;";
@@ -49,12 +50,43 @@ public class QuestionDAO {
 		}
 	}
 
-	public void delete(int id) throws SQLException, DAOException {
-		try(Connection con = DataSource.getInstance().getConnection(); 
-			PreparedStatement st = con.prepareStatement(deleteQuery);){
-			st.setInt(1, id);
-			st.executeUpdate();	
-		}	
+	public int delete(int id) throws DAOException {
+		try (Connection con = DataSource.getInstance().getConnection();) {
+			// Ca c'est important pour ne pas exécuter de commandes partielles
+			con.setAutoCommit(false);
+			PreparedStatement deleteQuestionStatement = con.prepareStatement(deleteQuery);
+			PreparedStatement deleteAnswersStatement = con.prepareStatement(DELETE_UNDERLYING_ANSWERS);
+			deleteQuestionStatement.setInt(1, id);
+			deleteAnswersStatement.setInt(1, id);
+			try {
+				int answerRes = deleteAnswersStatement.executeUpdate();
+				if (answerRes > 0) {
+					System.out.println("Les réponses de la questinon d'id " + id + " a bien été supprimé");
+				} else {
+					con.rollback();
+					System.out.println("Pas de réponse avec cet id");
+				}
+				int questionRes = deleteQuestionStatement.executeUpdate();
+				if (questionRes > 0) {
+					System.out.println("La question d'id " + id + " a bien été supprimé");
+				} else {
+					con.rollback();
+					System.out.println("Pas de question avec cet id");
+				}
+				con.commit();
+				con.setAutoCommit(true);
+				return questionRes;
+			} catch (SQLException e) {
+				con.rollback();
+				e.printStackTrace();
+				throw new DAOException(
+						"Problème dans la suppression de la question d'identifiant : " + id + " en base de donnée.");
+			}
+		} catch (SQLException e) {
+			// TODO : Logger
+			e.printStackTrace();
+			throw new DAOException("Problème dans la connexion à la base de donnée");
+		}
 	}
 
 	public Question getOne(int id) throws SQLException, DAOException {

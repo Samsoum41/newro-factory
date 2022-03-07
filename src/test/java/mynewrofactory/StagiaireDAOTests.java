@@ -72,7 +72,6 @@ class StagiaireDAOTests {
 		Stagiaire testAdrienne;
 		try {
 			testAdrienne = StagiaireDAO.getInstance().getOne(1).get();
-			System.out.println(testAdrienne);
 			assertEquals(testAdrienne, realAdrienne);
 		} catch (DAOException e) {
 			e.printStackTrace();
@@ -86,7 +85,6 @@ class StagiaireDAOTests {
 		Stagiaire testAdrienne;
 		try {
 			testAdrienne = StagiaireDAO.getInstance().getByNames("Adrienne", "Mazet").get();
-			System.out.println(testAdrienne);
 			assertEquals(testAdrienne, realAdrienne);
 		} catch (DAOException e) {
 			fail();
@@ -127,7 +125,9 @@ class StagiaireDAOTests {
 		try {
 			PageStagiaire page = StagiaireDAO.getInstance().getOrderdAndPaginated(StagiaireField.FIRST_NAME, 1, 10);
 			List<Stagiaire> stagiaires = page.getContenu();
-			assertEquals("Adrienne", stagiaires.get(0).getFirst_name());
+			assertEquals("Achille", stagiaires.get(0).getFirst_name());
+			assertEquals("Adrienne", stagiaires.get(1).getFirst_name());
+			assertEquals("Angèle", stagiaires.get(2).getFirst_name());
 		} catch (DAOException e) {
 			e.printStackTrace();
 			fail();
@@ -139,7 +139,10 @@ class StagiaireDAOTests {
 		try {
 			PageStagiaire page = StagiaireDAO.getInstance().getOrderdAndPaginated(StagiaireField.LAST_NAME, 1, 10);
 			List<Stagiaire> stagiaires = page.getContenu();
-			assertEquals("Angèle", stagiaires.get(0).getFirst_name());
+			assertEquals("Charbonnier", stagiaires.get(0).getLast_name());
+			assertEquals("Cochet", stagiaires.get(1).getLast_name());
+			assertEquals("Mazet", stagiaires.get(2).getLast_name());
+
 		} catch (DAOException e) {
 			e.printStackTrace();
 			fail();
@@ -152,6 +155,8 @@ class StagiaireDAOTests {
 			PageStagiaire page = StagiaireDAO.getInstance().getOrderdAndPaginated(StagiaireField.ARRIVAL, 1, 10);
 			List<Stagiaire> stagiaires = page.getContenu();
 			assertEquals("Adrienne", stagiaires.get(0).getFirst_name());
+			assertEquals("Angèle", stagiaires.get(1).getFirst_name());
+			assertEquals("Achille", stagiaires.get(2).getFirst_name());
 		} catch (DAOException e) {
 			e.printStackTrace();
 			fail();
@@ -164,6 +169,51 @@ class StagiaireDAOTests {
 			PageStagiaire page = StagiaireDAO.getInstance().getOrderdAndPaginated(StagiaireField.FORMATION_OVER, 1, 10);
 			List<Stagiaire> stagiaires = page.getContenu();
 			assertEquals("Angèle", stagiaires.get(0).getFirst_name());
+			assertEquals("Adrienne", stagiaires.get(1).getFirst_name());
+			assertEquals("Achille", stagiaires.get(2).getFirst_name());
+		} catch (DAOException e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	@Test
+	public void shouldReturnFilteredByFirstNameAndOrderedByLastNamePage() {
+		try {
+			String recherche = "ien";
+			PageStagiaire page = StagiaireDAO.getInstance().getOrderdAndPaginatedAndFiltered(StagiaireField.LAST_NAME, StagiaireField.FIRST_NAME, recherche, 1, 10);
+			List<Stagiaire> stagiaires = page.getContenu();
+			assertEquals(1,stagiaires.size());
+			assertEquals("Adrienne", stagiaires.get(0).getFirst_name());
+		} catch (DAOException e) {
+			e.printStackTrace();
+			fail();
+		}
+	}	
+	
+	@Test
+	public void shouldReturnFilteredByLastNameAndOrderedByArrivalPage() {
+		try {
+			//Dans H2 c'est sensible à la casse, si je recherche 'c' et 'C' c'est pas pareil
+			String recherche = "C";
+			PageStagiaire page = StagiaireDAO.getInstance().getOrderdAndPaginatedAndFiltered(StagiaireField.ARRIVAL, StagiaireField.LAST_NAME, recherche, 1, 10);
+			List<Stagiaire> stagiaires = page.getContenu();
+			assertEquals(2,stagiaires.size());
+			assertEquals("2003-10-02", stagiaires.get(0).getArrival().toString());
+			assertEquals("2020-10-12", stagiaires.get(1).getArrival().toString());
+		} catch (DAOException e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	@Test
+	public void shouldReturnEverything() {
+		try {
+			String recherche = "";
+			PageStagiaire page = StagiaireDAO.getInstance().getOrderdAndPaginatedAndFiltered(StagiaireField.ARRIVAL, StagiaireField.LAST_NAME, recherche, 1, 10);
+			List<Stagiaire> stagiaires = page.getContenu();
+			assertEquals(3,stagiaires.size());
 		} catch (DAOException e) {
 			e.printStackTrace();
 			fail();
@@ -186,6 +236,7 @@ class StagiaireDAOTests {
 			 * _________________________________________
 			 * 1	|	Adrienne	|	Mazet
 			 * 2	|	Angèle		|	Cochet
+			 * 3	|	Achille		|	Charbonnier
 			 * 
 			 */
 			String path = "/home/oxyl/1-SCHEMA-StagiaireDAOTest.sql";

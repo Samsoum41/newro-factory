@@ -96,6 +96,13 @@ public class StagiaireService {
 			throw new ServiceException();
 		}
 	}
+	public PageStagiaire getOrderdAndPaginatedAndFiltered(StagiaireField orderField, StagiaireField filterField, String filterValue, int page, int rowsPerPage) throws ServiceException {
+		try {
+			return StagiaireDAO.getInstance().getOrderdAndPaginatedAndFiltered(orderField, filterField, filterValue, page, rowsPerPage);
+		} catch (DAOException e) {
+			throw new ServiceException();
+		}
+	}
 
 	public void delete(int id) throws ServiceException {
 		try {

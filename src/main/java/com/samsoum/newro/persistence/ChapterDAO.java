@@ -50,12 +50,29 @@ public class ChapterDAO {
 		}
 	}
 
-	public void delete(int id) throws SQLException, DAOException {
-		try(Connection con = DataSource.getInstance().getConnection(); 
-			PreparedStatement st = con.prepareStatement(deleteQuery);){
+	public int delete(int id) throws SQLException, DAOException {	
+		try (Connection con = DataSource.getInstance().getConnection();) {
+			PreparedStatement st = con.prepareStatement(deleteQuery);
 			st.setInt(1, id);
-			st.executeUpdate();	
-		}	
+			try {
+				System.out.println(st);
+				int res = st.executeUpdate();
+				if (res > 0) {
+					System.out.println("Le chapitre d'id " + id + " a bien été supprimé");
+				} else {
+					System.out.println("Pas de chapitre avec cet id");
+				}
+				return res;
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw new DAOException(
+						"Problème dans la suppression du chapitre d'identifiant : " + id + " en base de donnée.");
+			}
+		} catch (SQLException e) {
+			// TODO : Logger
+			e.printStackTrace();
+			throw new DAOException("Problème dans la connexion à la base de donnée");
+		}
 	}
 
 	public Chapter getOne(int id) throws SQLException, DAOException {
