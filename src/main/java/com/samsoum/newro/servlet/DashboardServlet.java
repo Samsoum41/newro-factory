@@ -8,6 +8,7 @@ import com.samsoum.newro.service.ServiceException;
 import com.samsoum.newro.service.StagiaireService;
 import com.samsoum.newro.ui.PageStagiaire;
 import com.samsoum.newro.ui.PaginationException;
+import com.samsoum.newro.util.Context;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -22,6 +23,7 @@ import jakarta.servlet.http.HttpSession;
 @WebServlet("/dashboard")
 public class DashboardServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private StagiaireService service;
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -29,6 +31,8 @@ public class DashboardServlet extends HttpServlet {
     public DashboardServlet() {
         super();
         // TODO Auto-generated constructor stub
+		
+		service = Context.getInstance().getBean(StagiaireService.class);
     }
     
 	/**
@@ -36,6 +40,7 @@ public class DashboardServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// Order by a field if requested
+
 		HttpSession session = request.getSession(true);
 		String search = getSearchAttribute(request);
 		String orderField = getOrderFieldAttribute(request);
@@ -54,7 +59,7 @@ public class DashboardServlet extends HttpServlet {
 		try {
 			int nbRows = convertRows(rowsParameter);
 			PageStagiaire page = getPageFromParameter(pageIndexParameter, nbRows, orderField, search);
-			int nb_stagiaires = StagiaireService.getInstance().getNumberOfStagiaires();
+			int nb_stagiaires = service.getNumberOfStagiaires();
 			int numOfPages = page.getNumberOfPages();
 			request.setAttribute("nb_stagiaires", nb_stagiaires);
 			request.setAttribute("page_stagiaires", page);
@@ -82,7 +87,7 @@ public class DashboardServlet extends HttpServlet {
 		for(String stringId : selection) {
 			int id = Integer.parseInt(stringId);
 			try {
-				StagiaireService.getInstance().delete(id);
+				service.delete(id);
 			} catch (ServiceException e) {
 				e.printStackTrace();
 				request.getRequestDispatcher("/views/500.jsp").forward(request, response);
@@ -99,19 +104,19 @@ public class DashboardServlet extends HttpServlet {
 		// Puis on choisit l'ordre à mettre sur la page
 		switch(orderField) {
 			case "first_name":
-				page = StagiaireService.getInstance().getOrderdAndPaginatedAndFiltered(StagiaireField.FIRST_NAME, StagiaireField.FIRST_NAME, search, numPage, nbRows);
+				page = service.getOrderdAndPaginatedAndFiltered(StagiaireField.FIRST_NAME, StagiaireField.FIRST_NAME, search, numPage, nbRows);
 				break;
 			case "last_name":
-				page = StagiaireService.getInstance().getOrderdAndPaginatedAndFiltered(StagiaireField.LAST_NAME, StagiaireField.FIRST_NAME, search, numPage, nbRows);
+				page = service.getOrderdAndPaginatedAndFiltered(StagiaireField.LAST_NAME, StagiaireField.FIRST_NAME, search, numPage, nbRows);
 				break;
 			case "arrival":
-				page = StagiaireService.getInstance().getOrderdAndPaginatedAndFiltered(StagiaireField.ARRIVAL, StagiaireField.FIRST_NAME, search, numPage, nbRows);
+				page = service.getOrderdAndPaginatedAndFiltered(StagiaireField.ARRIVAL, StagiaireField.FIRST_NAME, search, numPage, nbRows);
 				break;
 			case "formation_over":
-				page = StagiaireService.getInstance().getOrderdAndPaginatedAndFiltered(StagiaireField.FORMATION_OVER, StagiaireField.FIRST_NAME, search, numPage, nbRows);
+				page = service.getOrderdAndPaginatedAndFiltered(StagiaireField.FORMATION_OVER, StagiaireField.FIRST_NAME, search, numPage, nbRows);
 				break;
 			default:
-				page = StagiaireService.getInstance().getOrderdAndPaginatedAndFiltered(StagiaireField.FIRST_NAME, StagiaireField.FIRST_NAME, search, numPage, nbRows);
+				page = service.getOrderdAndPaginatedAndFiltered(StagiaireField.FIRST_NAME, StagiaireField.FIRST_NAME, search, numPage, nbRows);
 				break;
 		}
 		return page;

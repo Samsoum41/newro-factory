@@ -8,14 +8,18 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Properties;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
+@Component
 public class DataSource {
     private HikariConfig config = new HikariConfig();
     private HikariDataSource ds;
     public static DataSource instance;
-    
+    @Autowired
     private DataSource()
     {
     	ClassLoader classLoader = getClass().getClassLoader();

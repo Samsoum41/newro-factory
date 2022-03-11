@@ -33,6 +33,7 @@ import com.samsoum.newro.ui.PageStagiaire;
 class StagiaireDAOTests {
 	@Mock
 	private StagiaireMapper mapper;
+	private StagiaireDAO dao;
 
 	@Test
 	public void addStagiaireWithCorrectInputShouldWork()  {
@@ -57,7 +58,7 @@ class StagiaireDAOTests {
 		}
 		// Fonction à tester :
 		try {
-			StagiaireDAO.getInstance().add(stagiaire);
+			dao.add(stagiaire);
 		} catch (DAOException e) {
 			e.printStackTrace();
 			fail();
@@ -71,7 +72,7 @@ class StagiaireDAOTests {
 												LocalDate.of(2014, 5, 13), new Promotion(1, "Février 2022"));
 		Stagiaire testAdrienne;
 		try {
-			testAdrienne = StagiaireDAO.getInstance().getOne(1).get();
+			testAdrienne = dao.getOne(1).get();
 			assertEquals(testAdrienne, realAdrienne);
 		} catch (DAOException e) {
 			e.printStackTrace();
@@ -84,7 +85,7 @@ class StagiaireDAOTests {
 												LocalDate.of(2014, 5, 13), new Promotion(1, "Février 2022"));
 		Stagiaire testAdrienne;
 		try {
-			testAdrienne = StagiaireDAO.getInstance().getByNames("Adrienne", "Mazet").get();
+			testAdrienne = dao.getByNames("Adrienne", "Mazet").get();
 			assertEquals(testAdrienne, realAdrienne);
 		} catch (DAOException e) {
 			fail();
@@ -96,8 +97,8 @@ class StagiaireDAOTests {
 		int deletAdrienneResult;
 		int deleteAngeleResult;
 		try {
-			deletAdrienneResult = StagiaireDAO.getInstance().delete(1);
-			deleteAngeleResult = StagiaireDAO.getInstance().delete(2);
+			deletAdrienneResult = dao.delete(1);
+			deleteAngeleResult = dao.delete(2);
 			assertTrue(deletAdrienneResult>0);
 			assertTrue(deleteAngeleResult>0);
 		}
@@ -111,7 +112,7 @@ class StagiaireDAOTests {
 	public void shouldNotDeleteStagiaireThatDoesNotExist() {
 		// Il n'y a aucun stagiaire d'id 1000
 		try {
-			int i = StagiaireDAO.getInstance().delete(1000);
+			int i = dao.delete(1000);
 			assertEquals(0, i);
 		}
 		catch(DAOException e) {
@@ -123,7 +124,7 @@ class StagiaireDAOTests {
 	@Test
 	public void shouldReturnStagiairesOrderedByFirstNamePage() {
 		try {
-			PageStagiaire page = StagiaireDAO.getInstance().getOrderdAndPaginated(StagiaireField.FIRST_NAME, 1, 10);
+			PageStagiaire page = dao.getOrderdAndPaginated(StagiaireField.FIRST_NAME, 1, 10);
 			List<Stagiaire> stagiaires = page.getContenu();
 			assertEquals("Achille", stagiaires.get(0).getFirst_name());
 			assertEquals("Adrienne", stagiaires.get(1).getFirst_name());
@@ -137,7 +138,7 @@ class StagiaireDAOTests {
 	@Test
 	public void shouldReturnStagiairesOrderedByLastNamePage() {
 		try {
-			PageStagiaire page = StagiaireDAO.getInstance().getOrderdAndPaginated(StagiaireField.LAST_NAME, 1, 10);
+			PageStagiaire page = dao.getOrderdAndPaginated(StagiaireField.LAST_NAME, 1, 10);
 			List<Stagiaire> stagiaires = page.getContenu();
 			assertEquals("Charbonnier", stagiaires.get(0).getLast_name());
 			assertEquals("Cochet", stagiaires.get(1).getLast_name());
@@ -152,7 +153,7 @@ class StagiaireDAOTests {
 	@Test
 	public void shouldReturnStagiairesOrderedByArrivalPage() {
 		try {
-			PageStagiaire page = StagiaireDAO.getInstance().getOrderdAndPaginated(StagiaireField.ARRIVAL, 1, 10);
+			PageStagiaire page = dao.getOrderdAndPaginated(StagiaireField.ARRIVAL, 1, 10);
 			List<Stagiaire> stagiaires = page.getContenu();
 			assertEquals("Adrienne", stagiaires.get(0).getFirst_name());
 			assertEquals("Angèle", stagiaires.get(1).getFirst_name());
@@ -166,7 +167,7 @@ class StagiaireDAOTests {
 	@Test
 	public void shouldReturnStagiairesOrderedByFormationOverPage() {
 		try {
-			PageStagiaire page = StagiaireDAO.getInstance().getOrderdAndPaginated(StagiaireField.FORMATION_OVER, 1, 10);
+			PageStagiaire page = dao.getOrderdAndPaginated(StagiaireField.FORMATION_OVER, 1, 10);
 			List<Stagiaire> stagiaires = page.getContenu();
 			assertEquals("Angèle", stagiaires.get(0).getFirst_name());
 			assertEquals("Adrienne", stagiaires.get(1).getFirst_name());
@@ -181,7 +182,7 @@ class StagiaireDAOTests {
 	public void shouldReturnFilteredByFirstNameAndOrderedByLastNamePage() {
 		try {
 			String recherche = "ien";
-			PageStagiaire page = StagiaireDAO.getInstance().getOrderdAndPaginatedAndFiltered(StagiaireField.LAST_NAME, StagiaireField.FIRST_NAME, recherche, 1, 10);
+			PageStagiaire page = dao.getOrderdAndPaginatedAndFiltered(StagiaireField.LAST_NAME, StagiaireField.FIRST_NAME, recherche, 1, 10);
 			List<Stagiaire> stagiaires = page.getContenu();
 			assertEquals(1,stagiaires.size());
 			assertEquals("Adrienne", stagiaires.get(0).getFirst_name());
@@ -196,7 +197,7 @@ class StagiaireDAOTests {
 		try {
 			//Dans H2 c'est sensible à la casse, si je recherche 'c' et 'C' c'est pas pareil
 			String recherche = "C";
-			PageStagiaire page = StagiaireDAO.getInstance().getOrderdAndPaginatedAndFiltered(StagiaireField.ARRIVAL, StagiaireField.LAST_NAME, recherche, 1, 10);
+			PageStagiaire page = dao.getOrderdAndPaginatedAndFiltered(StagiaireField.ARRIVAL, StagiaireField.LAST_NAME, recherche, 1, 10);
 			List<Stagiaire> stagiaires = page.getContenu();
 			assertEquals(2,stagiaires.size());
 			assertEquals("2003-10-02", stagiaires.get(0).getArrival().toString());
@@ -211,7 +212,7 @@ class StagiaireDAOTests {
 	public void shouldReturnEverything() {
 		try {
 			String recherche = "";
-			PageStagiaire page = StagiaireDAO.getInstance().getOrderdAndPaginatedAndFiltered(StagiaireField.ARRIVAL, StagiaireField.LAST_NAME, recherche, 1, 10);
+			PageStagiaire page = dao.getOrderdAndPaginatedAndFiltered(StagiaireField.ARRIVAL, StagiaireField.LAST_NAME, recherche, 1, 10);
 			List<Stagiaire> stagiaires = page.getContenu();
 			assertEquals(3,stagiaires.size());
 		} catch (DAOException e) {

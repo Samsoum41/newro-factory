@@ -3,6 +3,9 @@ package com.samsoum.newro.servlet;
 import java.io.IOException;
 import java.util.List;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
 import com.samsoum.newro.dto.StagiaireDTOWithoutId;
 import com.samsoum.newro.mapper.MapperException;
 import com.samsoum.newro.mapper.StagiaireMapper;
@@ -11,6 +14,7 @@ import com.samsoum.newro.model.Stagiaire;
 import com.samsoum.newro.service.PromotionService;
 import com.samsoum.newro.service.ServiceException;
 import com.samsoum.newro.service.StagiaireService;
+import com.samsoum.newro.util.SpringConfig;
 import com.samsoum.newro.validator.StagiaireValidateur;
 import com.samsoum.newro.validator.exception.InputException;
 
@@ -26,6 +30,7 @@ import jakarta.servlet.http.HttpServletResponse;
 @WebServlet("/addStagiaire")
 public class AddStagiaireServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private StagiaireService service;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -33,6 +38,8 @@ public class AddStagiaireServlet extends HttpServlet {
 	public AddStagiaireServlet() {
 		super();
 		// TODO Auto-generated constructor stub
+		ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
+		service = context.getBean(StagiaireService.class);
 	}
 
 	/**
@@ -76,7 +83,7 @@ public class AddStagiaireServlet extends HttpServlet {
 			System.out.println(2);
 			Stagiaire stagiaire = StagiaireMapper.getInstance().fromDTO(nouveauStagiaire);
 			System.out.println(3);
-			StagiaireService.getInstance().add(stagiaire);
+			service.add(stagiaire);
 			System.out.println(4);
 		} catch (InputException e) {
 			e.printStackTrace();

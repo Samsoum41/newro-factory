@@ -8,13 +8,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.stereotype.Repository;
+
 import com.samsoum.newro.mapper.MapperException;
 import com.samsoum.newro.mapper.StagiaireMapper;
 import com.samsoum.newro.model.Stagiaire;
 import com.samsoum.newro.ui.PageStagiaire;
+import com.samsoum.newro.util.Context;
+import com.samsoum.newro.util.SpringConfig;
 
+@Repository
 public class StagiaireDAO {
-	private static StagiaireDAO instance;
+	private DataSource datasource;
 	// Parfois je ne mets pas le ';' dans les requêtes pour pouvoir les concaténer
 	private String SELECT_QUERY = "SELECT stagiaire.id, first_name, last_name, arrival, formation_over, promotion_id, name FROM stagiaire INNER JOIN promotion ON promotion_id=promotion.id ";
 	private String ORDER_QUERY = "ORDER BY %s ASC ";	
@@ -33,19 +41,21 @@ public class StagiaireDAO {
 	private String UPDATE_QUERY = SELECT_QUERY
 			+ "UPDATE stagiaire SET first_name=?, last_name=?, arrival=?, formation_over=?, promotion_id=? WHERE stagiaire.id=?;";
 
-	private StagiaireDAO() {
-
+	@Autowired
+	public StagiaireDAO(DataSource datasource) {
+		this.datasource = datasource;
 	}
-
-	public static StagiaireDAO getInstance() {
-		if (StagiaireDAO.instance == null) {
-			StagiaireDAO.instance = new StagiaireDAO();
-		}
-		return StagiaireDAO.instance;
-	}
+	
+//
+//	public static StagiaireDAO getInstance() {
+//		if (StagiaireDAO.instance == null) {
+//			StagiaireDAO.instance = new StagiaireDAO();
+//		}
+//		return StagiaireDAO.instance;
+//	}
 
 	public Optional<Stagiaire> getByNames(String first_name, String last_name) throws DAOException {
-		try (Connection con = DataSource.getInstance().getConnection();) {
+		try (Connection con = datasource.getConnection();) {
 			PreparedStatement st = con.prepareStatement(GET_BY_NAMES_QUERY);
 			st.setString(1, first_name);
 			st.setString(2, last_name);
@@ -72,7 +82,7 @@ public class StagiaireDAO {
 	}
 
 	public void add(Stagiaire data) throws DAOException {
-		try (Connection con = DataSource.getInstance().getConnection();) {
+		try (Connection con = datasource.getConnection();) {
 			PreparedStatement st = con.prepareStatement(INSERT_QUERY);
 			st = StagiaireMapper.getInstance().toStatement(data, st);
 			try {
@@ -95,7 +105,7 @@ public class StagiaireDAO {
 	}
 
 	public int delete(int id) throws DAOException {
-		try (Connection con = DataSource.getInstance().getConnection();) {
+		try (Connection con = datasource.getConnection();) {
 			PreparedStatement st = con.prepareStatement(DELETE_QUERY);
 			st.setInt(1, id);
 			try {
@@ -119,7 +129,7 @@ public class StagiaireDAO {
 	}
 
 	public Optional<Stagiaire> getOne(int id) throws DAOException {
-		try (Connection con = DataSource.getInstance().getConnection();
+		try (Connection con = datasource.getConnection();
 				PreparedStatement st = con.prepareStatement(GET_ONE_QUERY);) {
 			st.setInt(1, id);
 			try {
@@ -145,7 +155,7 @@ public class StagiaireDAO {
 	}
 
 	public int getNumberOfStagiaires() throws DAOException {
-		try (Connection con = DataSource.getInstance().getConnection();) {
+		try (Connection con = datasource.getConnection();) {
 			PreparedStatement st = con.prepareStatement(COUNT_QUERY);
 			try {
 				ResultSet res = st.executeQuery();
@@ -165,7 +175,7 @@ public class StagiaireDAO {
 	}
 
 	public List<Stagiaire> getAll() throws DAOException {
-		try (Connection con = DataSource.getInstance().getConnection();) {
+		try (Connection con = datasource.getConnection();) {
 			PreparedStatement st = con.prepareStatement(GET_ALL_QUERY);
 			try {
 				ResultSet res = st.executeQuery();
@@ -191,7 +201,7 @@ public class StagiaireDAO {
 	}
 
 	public PageStagiaire getPaginated(int page) throws DAOException {
-		try (Connection con = DataSource.getInstance().getConnection();) {
+		try (Connection con = datasource.getConnection();) {
 			PreparedStatement st = con.prepareStatement(GET_PAGINATED_QUERY);
 			int premiereLigne = (page - 1) * PageStagiaire.NOMBRES_DE_LIGNES_PAR_DEFAUT;
 			st.setInt(1, premiereLigne);
@@ -218,7 +228,7 @@ public class StagiaireDAO {
 	}
 
 	public PageStagiaire getPaginated(int page, int rowsPerPage) throws DAOException {
-		try (Connection con = DataSource.getInstance().getConnection();) {
+		try (Connection con = datasource.getConnection();) {
 			PreparedStatement st = con.prepareStatement(GET_PAGINATED_QUERY);
 			int premierId = (page - 1) * rowsPerPage;
 			st.setInt(1, premierId);
@@ -229,6 +239,7 @@ public class StagiaireDAO {
 				while (res.next()) {
 					liste.add(StagiaireMapper.getInstance().toModel(res));
 				}
+				
 				return new PageStagiaire(page, rowsPerPage, liste);
 			} catch (SQLException | MapperException e) {
 				e.printStackTrace();
@@ -244,7 +255,7 @@ public class StagiaireDAO {
 	}
 
 	public PageStagiaire getOrderdAndPaginated(StagiaireField field, int page, int rowsPerPage) throws DAOException {
-		try (Connection con = DataSource.getInstance().getConnection();) {
+		try (Connection con = datasource.getConnection();) {
 			String query = String.format(GET_ORDERED_PAGINATED_QUERY, field.getValue());
 			PreparedStatement st = con.prepareStatement(query);
 			int premierId = (page - 1) * rowsPerPage;
@@ -271,7 +282,7 @@ public class StagiaireDAO {
 	}
 
 	public PageStagiaire getOrderdAndPaginatedAndFiltered(StagiaireField orderField, StagiaireField filterField, String filterValue, int page, int rowsPerPage) throws DAOException {
-		try (Connection con = DataSource.getInstance().getConnection();) {
+		try (Connection con = datasource.getConnection();) {
 			String query = String.format(GET_ORDERED_PAGINATED_AND_FILTERED_QUERY, filterField.getValue(), filterValue, orderField.getValue());
 			System.out.println(query);
 			PreparedStatement st = con.prepareStatement(query);
@@ -299,7 +310,7 @@ public class StagiaireDAO {
 	}
 
 	public void update(Stagiaire stagiaire) throws DAOException {
-		try (Connection con = DataSource.getInstance().getConnection();) {
+		try (Connection con = datasource.getConnection();) {
 			PreparedStatement statement = con.prepareStatement(UPDATE_QUERY);
 			statement = StagiaireMapper.getInstance().toUpdateStatement(stagiaire, statement);
 			try {
