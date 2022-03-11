@@ -31,8 +31,6 @@ public class StagiaireDAO {
 	private String GET_ONE_QUERY = SELECT_QUERY + "WHERE stagiaire.id=?;";
 	private String GET_BY_NAMES_QUERY = SELECT_QUERY + "WHERE first_name = ? AND last_name=?;";
 	private String GET_ALL_QUERY = SELECT_QUERY + ";";
-	private String GET_PAGINATED_QUERY = SELECT_QUERY  + PAGINATE_QUERY;
-	private String GET_ORDERED_PAGINATED_QUERY = SELECT_QUERY + ORDER_QUERY + PAGINATE_QUERY;
 	private String GET_ORDERED_PAGINATED_AND_FILTERED_QUERY = SELECT_QUERY + FILTER_QUERY + ORDER_QUERY + PAGINATE_QUERY;
 	private String UPDATE_QUERY = SELECT_QUERY
 			+ "UPDATE stagiaire SET first_name=?, last_name=?, arrival=?, formation_over=?, promotion_id=? WHERE stagiaire.id=?;";
@@ -192,6 +190,18 @@ public class StagiaireDAO {
 		}
 	}
 
+	/**
+	 *  Par défaut on renvoie une liste trié par id
+	 * @param orderField
+	 * @param filterValue
+	 * @param page
+	 * @param rowsPerPage
+	 * @return
+	 * @throws DAOException
+	 */
+	public PageStagiaire getOrderdAndPaginatedAndFiltered(StagiaireField orderField, int page, int rowsPerPage) throws DAOException {
+		return getOrderdAndPaginatedAndFiltered(orderField, StagiaireField.FIRST_NAME, "", page, rowsPerPage);
+	}
 
 	public PageStagiaire getOrderdAndPaginatedAndFiltered(StagiaireField orderField, StagiaireField filterField, String filterValue, int page, int rowsPerPage) throws DAOException {
 		try (Connection con = datasource.getConnection();) {

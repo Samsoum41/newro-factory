@@ -29,6 +29,7 @@ import com.samsoum.newro.persistence.DataSource;
 import com.samsoum.newro.persistence.StagiaireDAO;
 import com.samsoum.newro.persistence.StagiaireField;
 import com.samsoum.newro.ui.PageStagiaire;
+import com.samsoum.newro.util.Context;
 
 class StagiaireDAOTests {
 	@Mock
@@ -124,7 +125,7 @@ class StagiaireDAOTests {
 	@Test
 	public void shouldReturnStagiairesOrderedByFirstNamePage() {
 		try {
-			PageStagiaire page = dao.getOrderdAndPaginated(StagiaireField.FIRST_NAME, 1, 10);
+			PageStagiaire page = dao.getOrderdAndPaginatedAndFiltered(StagiaireField.FIRST_NAME, 1, 10);
 			List<Stagiaire> stagiaires = page.getContenu();
 			assertEquals("Achille", stagiaires.get(0).getFirst_name());
 			assertEquals("Adrienne", stagiaires.get(1).getFirst_name());
@@ -138,7 +139,7 @@ class StagiaireDAOTests {
 	@Test
 	public void shouldReturnStagiairesOrderedByLastNamePage() {
 		try {
-			PageStagiaire page = dao.getOrderdAndPaginated(StagiaireField.LAST_NAME, 1, 10);
+			PageStagiaire page = dao.getOrderdAndPaginatedAndFiltered(StagiaireField.LAST_NAME, 1, 10);
 			List<Stagiaire> stagiaires = page.getContenu();
 			assertEquals("Charbonnier", stagiaires.get(0).getLast_name());
 			assertEquals("Cochet", stagiaires.get(1).getLast_name());
@@ -153,7 +154,7 @@ class StagiaireDAOTests {
 	@Test
 	public void shouldReturnStagiairesOrderedByArrivalPage() {
 		try {
-			PageStagiaire page = dao.getOrderdAndPaginated(StagiaireField.ARRIVAL, 1, 10);
+			PageStagiaire page = dao.getOrderdAndPaginatedAndFiltered(StagiaireField.ARRIVAL, 1, 10);
 			List<Stagiaire> stagiaires = page.getContenu();
 			assertEquals("Adrienne", stagiaires.get(0).getFirst_name());
 			assertEquals("Angèle", stagiaires.get(1).getFirst_name());
@@ -167,7 +168,7 @@ class StagiaireDAOTests {
 	@Test
 	public void shouldReturnStagiairesOrderedByFormationOverPage() {
 		try {
-			PageStagiaire page = dao.getOrderdAndPaginated(StagiaireField.FORMATION_OVER, 1, 10);
+			PageStagiaire page = dao.getOrderdAndPaginatedAndFiltered(StagiaireField.FORMATION_OVER, 1, 10);
 			List<Stagiaire> stagiaires = page.getContenu();
 			assertEquals("Angèle", stagiaires.get(0).getFirst_name());
 			assertEquals("Adrienne", stagiaires.get(1).getFirst_name());
@@ -245,5 +246,6 @@ class StagiaireDAOTests {
 		}
 		// Initialisation des annotations mockito
 		MockitoAnnotations.openMocks(this);
+		dao= Context.getInstance().getBean(StagiaireDAO.class);
 	}
 }
