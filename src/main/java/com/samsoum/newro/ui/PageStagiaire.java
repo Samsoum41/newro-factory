@@ -3,31 +3,33 @@ package com.samsoum.newro.ui;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import com.samsoum.newro.model.Stagiaire;
 import com.samsoum.newro.service.ServiceException;
-import com.samsoum.newro.service.StagiaireService;
 
+
+@Component
+@Scope("prototype")
 public class PageStagiaire {
 	public final static int NOMBRES_DE_LIGNES_PAR_DEFAUT = 10;
 	public static final int STARTING_PAGE = 1;
 	private int numero;
 	private int nbLignes = NOMBRES_DE_LIGNES_PAR_DEFAUT;
 	private ArrayList<Stagiaire> contenu;
-
-	public PageStagiaire(int numero, int nbLignes, ArrayList<Stagiaire> contenu) {
+	private int nbStagiaires;
+	
+	public PageStagiaire(int numero, int nbLignes, ArrayList<Stagiaire> contenu, int nbStagiaires) {
 		super();
 		this.numero = numero;
 		this.setNbLignes(nbLignes);
-		this.contenu = contenu;
+		this.contenu = contenu; 
+		this.nbStagiaires = nbStagiaires;
 	}
 
 	public int getNumberOfPages() throws PaginationException {
-		try {
-			int nbStagiaires = StagiaireService.getInstance().getNumberOfStagiaires();
 			return (nbStagiaires / nbLignes) + 1;
-		} catch (ServiceException e) {
-			throw new PaginationException();
-		}
 	}
 
 	private static boolean hasNext(PageStagiaire page) throws PaginationException {
