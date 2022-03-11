@@ -16,6 +16,16 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>17</maven.compiler.source>
 		<maven.compiler.target>17</maven.compiler.target>
+		<mysql.version>8.0.28</mysql.version>
+		<junit.jupiter.version>5.8.2</junit.jupiter.version>
+		<mockito.version>4.3.1</mockito.version>
+		<jakarta.servlet.api.version>5.0.0</jakarta.servlet.api.version>
+		<jakarta.servlet.jsp.version>3.0.0</jakarta.servlet.jsp.version>
+		<jakarta.servlet.jstl.version>2.0.0</jakarta.servlet.jstl.version>
+		<apache.jstl.version>11.0.0</apache.jstl.version>
+		<h2.version>2.1.210</h2.version>
+		<hikari.version>5.0.1</hikari.version>
+		<spring.context.version>5.3.16</spring.context.version>		
 	</properties>
 
 	<dependencies>
@@ -23,14 +33,14 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>8.0.28</version>
+			<version>${mysql.version}</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
-			<version>5.8.2</version>
+			<version>${junit.jupiter.version}</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -38,37 +48,37 @@
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
-			<version>4.3.1</version>
+			<version>${mockito.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/jakarta.servlet/jakarta.servlet-api -->
 		<dependency>
 			<groupId>jakarta.servlet</groupId>
 			<artifactId>jakarta.servlet-api</artifactId>
-			<version>5.0.0</version>
+			<version>${jakarta.servlet.api.version}</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/jakarta.servlet.jsp/jakarta.servlet.jsp-api -->
 		<dependency>
 			<groupId>jakarta.servlet.jsp</groupId>
 			<artifactId>jakarta.servlet.jsp-api</artifactId>
-			<version>3.0.0</version>
+			<version>${jakarta.servlet.jsp.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>jakarta.servlet.jsp.jstl</groupId>
 			<artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
-			<version>2.0.0</version>
+			<version>${jakarta.servlet.jstl.version}</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.eclipse.jetty/apache-jstl -->
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>apache-jstl</artifactId>
-			<version>11.0.0</version>
+			<version>${apache.jstl.version}</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
-			<version>2.1.210</version>
+			<version>${h2.version}</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -76,14 +86,14 @@
 		<dependency>
 			<groupId>com.zaxxer</groupId>
 			<artifactId>HikariCP</artifactId>
-			<version>5.0.1</version>
+			<version>${hikari.version}</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.springframework/spring-context -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-			<version>5.3.16</version>
+			<version>${spring.context.version}</version>
 		</dependency>
 
 	</dependencies>
