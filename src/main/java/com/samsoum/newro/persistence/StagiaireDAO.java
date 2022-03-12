@@ -1,195 +1,86 @@
 package com.samsoum.newro.persistence;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
-import com.samsoum.newro.mapper.MapperException;
 import com.samsoum.newro.mapper.StagiaireMapper;
 import com.samsoum.newro.model.Stagiaire;
 import com.samsoum.newro.ui.PageStagiaire;
 
 @Repository
 public class StagiaireDAO {
-	private DataSource datasource;
+	private StagiaireMapper mapper;
 	// Parfois je ne mets pas le ';' dans les requêtes pour pouvoir les concaténer
 	private String SELECT_QUERY = "SELECT stagiaire.id, first_name, last_name, arrival, formation_over, promotion_id, name FROM stagiaire INNER JOIN promotion ON promotion_id=promotion.id ";
 	private String ORDER_QUERY = "ORDER BY %s ASC ";	
-	private String PAGINATE_QUERY = "LIMIT ?, ? ";
+	private String PAGINATE_QUERY = "LIMIT :limit, :offset ";
 	private String FILTER_QUERY = "WHERE %s LIKE '%%%s%%' ";
 	// Requêtes composés : 
-	private String INSERT_QUERY = "INSERT INTO stagiaire(first_name, last_name, arrival, formation_over, promotion_id) VALUES(?,?,?,?,?);";
+	private String INSERT_QUERY = "INSERT INTO stagiaire(first_name, last_name, arrival, formation_over, promotion_id) VALUES(:first_name, :last_name, :arrival, :formation_over, :promotion_id);";
 	private String COUNT_QUERY = "SELECT COUNT(*) AS rowcount FROM stagiaire;";
-	private String DELETE_QUERY = "DELETE FROM stagiaire WHERE stagiaire.id=?;";
-	private String GET_ONE_QUERY = SELECT_QUERY + "WHERE stagiaire.id=?;";
-	private String GET_BY_NAMES_QUERY = SELECT_QUERY + "WHERE first_name = ? AND last_name=?;";
-	private String GET_ALL_QUERY = SELECT_QUERY + ";";
+	private String DELETE_QUERY = "DELETE FROM stagiaire WHERE stagiaire.id=:id;";
+	private String UPDATE_QUERY = "UPDATE stagiaire SET first_name=:first_name, last_name=:last_name, arrival=:arrival, formation_over=:formation_over, promotion_id=:promotion_id WHERE stagiaire.id=:id;";
+	private String GET_ONE_QUERY = SELECT_QUERY + "WHERE stagiaire.id=:id;";
+	private String GET_BY_NAMES_QUERY = SELECT_QUERY + "WHERE first_name = :first_name AND last_name= :last_name;";
 	private String GET_ORDERED_PAGINATED_AND_FILTERED_QUERY = SELECT_QUERY + FILTER_QUERY + ORDER_QUERY + PAGINATE_QUERY;
-	private String UPDATE_QUERY = SELECT_QUERY
-			+ "UPDATE stagiaire SET first_name=?, last_name=?, arrival=?, formation_over=?, promotion_id=? WHERE stagiaire.id=?;";
+	
+	private NamedParameterJdbcTemplate namedJdbcTemplate;
+	private JdbcTemplate jdbcTemplate;
 
 	@Autowired
-	public StagiaireDAO(DataSource datasource) {
-		this.datasource = datasource;
+	public StagiaireDAO(StagiaireMapper mapper,NamedParameterJdbcTemplate namedJdbcTemplate, JdbcTemplate jdbcTemplate) {
+		this.mapper = mapper;
+		this.namedJdbcTemplate = namedJdbcTemplate;
+		this.jdbcTemplate = jdbcTemplate;
 	}
-	
-//
-//	public static StagiaireDAO getInstance() {
-//		if (StagiaireDAO.instance == null) {
-//			StagiaireDAO.instance = new StagiaireDAO();
-//		}
-//		return StagiaireDAO.instance;
-//	}
 
-	public Optional<Stagiaire> getByNames(String first_name, String last_name) throws DAOException {
-		try (Connection con = datasource.getConnection();) {
-			PreparedStatement st = con.prepareStatement(GET_BY_NAMES_QUERY);
-			st.setString(1, first_name);
-			st.setString(2, last_name);
-			try {
-				ResultSet res = st.executeQuery();
-				if (res.isBeforeFirst()) {
-					res.next();
-					Optional<Stagiaire> opt = Optional.of(StagiaireMapper.getInstance().toModel(res));
-					return opt;
-				} else {
-					// TODO : changer ce return null
-					return Optional.empty();
-				}
-			} catch (SQLException | MapperException e) {
-				e.printStackTrace();
-				throw new DAOException("Problème dans l'accès au stagiaire d'identifiant : " + first_name
-						+ " dans la base de donnée.");
-			}
-		} catch (SQLException e) {
-			// TODO : Logger
-			e.printStackTrace();
-			throw new DAOException("Problème dans la connexion à la base de donnée");
+	public Optional<Stagiaire> getByNames(String first_name, String last_name) {
+		SqlParameterSource parameters = new MapSqlParameterSource().addValue("first_name", first_name).addValue("last_name", last_name);
+		Stagiaire stagiaire = namedJdbcTemplate.queryForObject(GET_BY_NAMES_QUERY, parameters, mapper);
+		if (stagiaire == null) {
+			return Optional.empty();
+		}
+		else {
+			return Optional.of(stagiaire);
 		}
 	}
 
-	public void add(Stagiaire data) throws DAOException {
-		try (Connection con = datasource.getConnection();) {
-			PreparedStatement st = con.prepareStatement(INSERT_QUERY);
-			st = StagiaireMapper.getInstance().toStatement(data, st);
-			try {
-				st.executeUpdate();
-				System.out.println("L'enregistrement : " + data + " a bien été enregistré");
-			} catch (SQLException e) {
-				// TODO : Logger cette exception
-				e.printStackTrace();
-				throw new DAOException("Problème dans l'enregistrement du stagaiaire " + data + " en base de donnée.");
-			}
-		} catch (SQLException e) {
-			// TODO : Logger
-			e.printStackTrace();
-			throw new DAOException("Problème dans la connexion à la base de donnée");
-		} catch (MapperException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			throw new DAOException();
-		}
+	public void add(Stagiaire stagiaire) {
+		SqlParameterSource parameters = new BeanPropertySqlParameterSource(stagiaire);
+		namedJdbcTemplate.update(INSERT_QUERY, parameters);
 	}
 
-	public int delete(int id) throws DAOException {
-		try (Connection con = datasource.getConnection();) {
-			PreparedStatement st = con.prepareStatement(DELETE_QUERY);
-			st.setInt(1, id);
-			try {
-				int res = st.executeUpdate();
-				if (res > 0) {
-					System.out.println("Le stagiaire d'id " + id + " a bien été supprimé");
-				} else {
-					System.out.println("Pas de stagiaire avec cet id");
-				}
-				return res;
-			} catch (SQLException e) {
-				e.printStackTrace();
-				throw new DAOException(
-						"Problème dans la suppression du stagiaire d'identifiant : " + id + " en base de donnée.");
-			}
-		} catch (SQLException e) {
-			// TODO : Logger
-			e.printStackTrace();
-			throw new DAOException("Problème dans la connexion à la base de donnée");
-		}
+	public int delete(int id) {
+		SqlParameterSource parameters = new MapSqlParameterSource().addValue("id", id);
+		return namedJdbcTemplate.update(DELETE_QUERY, parameters);
 	}
 
-	public Optional<Stagiaire> getOne(int id) throws DAOException {
-		try (Connection con = datasource.getConnection();
-				PreparedStatement st = con.prepareStatement(GET_ONE_QUERY);) {
-			st.setInt(1, id);
-			try {
-				ResultSet res = st.executeQuery();
-				if (res.isBeforeFirst()) {
-					res.next();
-					Optional<Stagiaire> opt = Optional.of(StagiaireMapper.getInstance().toModel(res));
-					return opt;
-				} else {
-					// TODO : changer ce return null
-					return Optional.empty();
-				}
-			} catch (SQLException | MapperException e) {
-				e.printStackTrace();
-				throw new DAOException(
-						"Problème dans l'accès au stagiaire d'identifiant : " + id + " dans la base de donnée.");
-			}
-		} catch (SQLException e) {
-			// TODO : Logger
-			e.printStackTrace();
-			throw new DAOException("Problème dans la connexion à la base de donnée");
+	public Optional<Stagiaire> getById(int id) {
+		SqlParameterSource parameters = new MapSqlParameterSource().addValue("id", id);
+		Stagiaire stagiaire = namedJdbcTemplate.queryForObject(GET_ONE_QUERY, parameters, mapper);
+		if (stagiaire == null) {
+			return Optional.empty();
 		}
+		else {
+			return Optional.of(stagiaire);
+		}	
 	}
 
-	public int getNumberOfStagiaires() throws DAOException {
-		try (Connection con = datasource.getConnection();) {
-			PreparedStatement st = con.prepareStatement(COUNT_QUERY);
-			try {
-				ResultSet res = st.executeQuery();
-				res.next();
-				int numOfRows = res.getInt("rowcount");
-				return numOfRows;
-			} catch (SQLException e) {
-				e.printStackTrace();
-				throw new DAOException("Problème dans la réalisation du décompte de stagiaires en base de donnée.");
-			}
-
-		} catch (SQLException e) {
-			// TODO : Logger
-			e.printStackTrace();
-			throw new DAOException("Problème dans la connexion à la base de donnée");
-		}
+	public int count() {
+		return jdbcTemplate.queryForObject(COUNT_QUERY, Integer.class);
 	}
 
-	public List<Stagiaire> getAll() throws DAOException {
-		try (Connection con = datasource.getConnection();) {
-			PreparedStatement st = con.prepareStatement(GET_ALL_QUERY);
-			try {
-				ResultSet res = st.executeQuery();
-				ArrayList<Stagiaire> liste = new ArrayList<>();
-				while (res.next()) {
-
-					liste.add(StagiaireMapper.getInstance().toModel(res));
-				}
-				return liste;
-			} catch (SQLException | MapperException e) {
-				e.printStackTrace();
-				throw new DAOException("Problème dans l'accès à l'ensemble des stagiaires en base de donnée.");
-			}
-		} catch (SQLException e) {
-			// TODO : Logger
-			e.printStackTrace();
-			throw new DAOException("Problème dans la connexion à la base de donnée");
-		}
+	public PageStagiaire get(int page, int rowsPerPage) {
+		return get(StagiaireField.FIRST_NAME, StagiaireField.FIRST_NAME, "", page, rowsPerPage);
 	}
-
 	/**
 	 *  Par défaut on renvoie une liste trié par id
 	 * @param orderField
@@ -199,54 +90,21 @@ public class StagiaireDAO {
 	 * @return
 	 * @throws DAOException
 	 */
-	public PageStagiaire getOrderdAndPaginatedAndFiltered(StagiaireField orderField, int page, int rowsPerPage) throws DAOException {
-		return getOrderdAndPaginatedAndFiltered(orderField, StagiaireField.FIRST_NAME, "", page, rowsPerPage);
+	public PageStagiaire get(StagiaireField orderField, int page, int rowsPerPage) {
+		return get(orderField, StagiaireField.FIRST_NAME, "", page, rowsPerPage);
+	}
+	
+	public PageStagiaire get(StagiaireField orderField, StagiaireField filterField, String filterValue, int page, int rowsPerPage) {
+		int nbStagiaires = count();
+		int premierId = (page - 1) * rowsPerPage;
+		String query = String.format(GET_ORDERED_PAGINATED_AND_FILTERED_QUERY, filterField.getValue(), filterValue, orderField.getValue());
+		SqlParameterSource parameters  = new MapSqlParameterSource().addValue("limit", premierId).addValue("offset", rowsPerPage);
+		ArrayList<Stagiaire> stagiaires = (ArrayList<Stagiaire>) namedJdbcTemplate.query(query, parameters, mapper);
+		return new PageStagiaire(page, rowsPerPage, stagiaires, nbStagiaires); 
 	}
 
-	public PageStagiaire getOrderdAndPaginatedAndFiltered(StagiaireField orderField, StagiaireField filterField, String filterValue, int page, int rowsPerPage) throws DAOException {
-		try (Connection con = datasource.getConnection();) {
-			String query = String.format(GET_ORDERED_PAGINATED_AND_FILTERED_QUERY, filterField.getValue(), filterValue, orderField.getValue());
-			int premierId = (page - 1) * rowsPerPage;
-			int nbStagiaires = getNumberOfStagiaires();
-			PreparedStatement st = con.prepareStatement(query);
-			st.setInt(1, premierId);
-			st.setInt(2, rowsPerPage);
-			try {
-				ResultSet res = st.executeQuery();
-				ArrayList<Stagiaire> liste = new ArrayList<>();
-				while (res.next()) {
-					liste.add(StagiaireMapper.getInstance().toModel(res));
-				}
-				return new PageStagiaire(page, rowsPerPage, liste, nbStagiaires);
-			} catch (SQLException | MapperException e) {
-				e.printStackTrace();
-				String messageErreur = "Problème dans l'accès à l'ensemble des stagiaires entre les identifiants "
-						+ premierId + " et " + (premierId + rowsPerPage) + " en base de donnée.";
-				throw new DAOException(messageErreur);
-			}
-		} catch (SQLException e) {
-			// TODO : Logger
-			e.printStackTrace();
-			throw new DAOException("Problème dans la connexion à la base de donnée");
-		}
-	}
-
-	public void update(Stagiaire stagiaire) throws DAOException {
-		try (Connection con = datasource.getConnection();) {
-			PreparedStatement statement = con.prepareStatement(UPDATE_QUERY);
-			statement = StagiaireMapper.getInstance().toUpdateStatement(stagiaire, statement);
-			try {
-				statement.executeUpdate();
-				System.out.println("Le stagiaire : " + stagiaire + " a bien été modifié !");
-			} catch (SQLException e) {
-				e.printStackTrace();
-				String messageErreur = "Problème dans la mise à jour du stagiaire " + stagiaire + " en base de donnée.";
-				throw new DAOException(messageErreur);
-			}
-		} catch (SQLException | MapperException e) {
-			// TODO : Logger
-			e.printStackTrace();
-			throw new DAOException("Problème dans la connexion à la base de donnée");
-		}
+	public int update(Stagiaire stagiaire) {
+		SqlParameterSource parameters = new BeanPropertySqlParameterSource(stagiaire);
+		return namedJdbcTemplate.update(UPDATE_QUERY, parameters);
 	}
 }

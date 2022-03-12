@@ -12,27 +12,32 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
+import javax.sql.DataSource;
+
 import org.h2.tools.RunScript;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.samsoum.newro.mapper.MapperException;
 import com.samsoum.newro.mapper.StagiaireMapper;
 import com.samsoum.newro.model.Promotion;
 import com.samsoum.newro.model.Stagiaire;
 import com.samsoum.newro.persistence.DAOException;
-import com.samsoum.newro.persistence.DataSource;
 
 class StagiaireMapperTests {
 
 	@Mock
 	private ResultSet res;
+
+	@Autowired
+	private DataSource datasource;
 	
 	@BeforeEach
 	public void setUp() throws FileNotFoundException, DAOException, SQLException {
-		try (Connection con = DataSource.getInstance().getConnection()) {
+		try (Connection con = datasource.getConnection()) {
 			/**
 			 * Création des tables et de 3 enregistrements dans la table promotion : 
 			 * id	|	name 
@@ -67,9 +72,13 @@ class StagiaireMapperTests {
 			when(res.getDate("formation_over")).thenReturn(Date.valueOf(LocalDate.of(2014, 5, 13)));
 			when(res.getInt("promotion_id")).thenReturn(1);
 			when(res.getString("name")).thenReturn("Février 2022");
-			Stagiaire stagiaire = StagiaireMapper.getInstance().toModel(res);
+			Stagiaire stagiaire = StagiaireMapper.getInstance().mapRow(res, 0);
 			assertEquals(realAdrienne, stagiaire);
-		} catch (SQLException | MapperException e) {
+		} catch (MapperException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			fail();
@@ -85,8 +94,12 @@ class StagiaireMapperTests {
 			when(res.getDate("formation_over")).thenReturn(Date.valueOf(LocalDate.of(2008, 7, 23)));
 			when(res.getInt("promotion_id")).thenReturn(2);
 			when(res.getString("name")).thenReturn("Mars 2023");
-			StagiaireMapper.getInstance().toModel(res);
-		} catch (SQLException | MapperException e) {
+			StagiaireMapper.getInstance().mapRow(res, 0);
+		} catch (MapperException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			fail();

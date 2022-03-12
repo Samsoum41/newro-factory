@@ -93,7 +93,7 @@ public class PageStagiaire {
 
 	@Override
 	public String toString() {
-		return "Page numéro : " + numero;
+		return "Page numéro : " + numero + " contenant : " + contenu;
 	}
 
 }

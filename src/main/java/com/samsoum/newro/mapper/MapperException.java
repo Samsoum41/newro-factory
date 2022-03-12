@@ -1,6 +1,8 @@
 package com.samsoum.newro.mapper;
 
-public class MapperException extends Exception {
+import java.sql.SQLException;
+
+public class MapperException extends SQLException {
 	public MapperException() {
 		
 	}

@@ -3,9 +3,6 @@ package com.samsoum.newro.servlet;
 import java.io.IOException;
 import java.util.List;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
 import com.samsoum.newro.dto.StagiaireDTOWithId;
 import com.samsoum.newro.mapper.MapperException;
 import com.samsoum.newro.mapper.StagiaireMapper;
@@ -14,7 +11,7 @@ import com.samsoum.newro.model.Stagiaire;
 import com.samsoum.newro.service.PromotionService;
 import com.samsoum.newro.service.ServiceException;
 import com.samsoum.newro.service.StagiaireService;
-import com.samsoum.newro.util.SpringConfig;
+import com.samsoum.newro.util.Context;
 import com.samsoum.newro.validator.StagiaireValidateur;
 import com.samsoum.newro.validator.exception.InputException;
 
@@ -38,8 +35,7 @@ public class EditStagiaireServlet extends HttpServlet {
     public EditStagiaireServlet() {
         super();
         // TODO Auto-generated constructor stub
-		ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
-		service = context.getBean(StagiaireService.class);
+		service = Context.getInstance().getBean(StagiaireService.class);
     }
 
 	/**
@@ -84,8 +80,6 @@ public class EditStagiaireServlet extends HttpServlet {
 		} catch (InputException e) {
 			e.printStackTrace();
 		} catch (MapperException e) {
-			e.printStackTrace();
-		} catch (ServiceException e) {
 			e.printStackTrace();
 		}
 		doGet(request, response);

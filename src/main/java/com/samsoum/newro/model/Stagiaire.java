@@ -112,4 +112,7 @@ public class Stagiaire {
 	public void setPromotion(Promotion promotion) {
 		this.promotion = promotion;
 	}
+	public int getPromotion_id() {
+		return promotion.getId();
+	}
 }

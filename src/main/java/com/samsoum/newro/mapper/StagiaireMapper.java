@@ -7,6 +7,9 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Component;
+
 import com.samsoum.newro.dto.StagiaireDTOWithId;
 import com.samsoum.newro.dto.StagiaireDTOWithoutId;
 import com.samsoum.newro.model.Promotion;
@@ -14,7 +17,8 @@ import com.samsoum.newro.model.Stagiaire;
 import com.samsoum.newro.service.PromotionService;
 import com.samsoum.newro.service.ServiceException;
 
-public class StagiaireMapper {
+@Component
+public class StagiaireMapper implements RowMapper<Stagiaire> {
 	private static StagiaireMapper instance;
 
 	private StagiaireMapper() {
@@ -63,16 +67,19 @@ public class StagiaireMapper {
 		return new Stagiaire(id, first_name, last_name, arrival, formation_over, promotion);
 	}
 
-	public Stagiaire toModel(ResultSet res) throws MapperException {
-		// TODO : Remplacer les instructions ternaires par des Optionals
+	@Override
+	public Stagiaire mapRow(ResultSet rs, int rowNum) throws MapperException{
+		LocalDate arrival;
 		try {
-			LocalDate arrival = res.getDate("arrival") == null ? null : res.getDate("arrival").toLocalDate();
-			LocalDate formation_over = res.getDate("formation_over") == null ? null
-					: res.getDate("formation_over").toLocalDate();
-			Promotion stagiairePromotion = new Promotion(res.getInt("promotion_id"), res.getString("name"));
-			return new Stagiaire(res.getInt("id"), res.getString("first_name"), res.getString("last_name"), arrival,
+			arrival = rs.getDate("arrival") == null ? null : rs.getDate("arrival").toLocalDate();
+			LocalDate formation_over = rs.getDate("formation_over") == null ? null
+					: rs.getDate("formation_over").toLocalDate();
+			Promotion stagiairePromotion = new Promotion(rs.getInt("promotion_id"), rs.getString("name"));
+			return new Stagiaire(rs.getInt("id"), rs.getString("first_name"), rs.getString("last_name"), arrival,
 					formation_over, stagiairePromotion);
 		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 			throw new MapperException();
 		}
 	}
