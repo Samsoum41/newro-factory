@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE suppressions PUBLIC
+    "-//Puppy Crawl//DTD Suppressions 1.1//EN"
+    "http://www.puppycrawl.com/dtds/suppressions_1_1.dtd">
+
+<suppressions>
+  <suppress files="[\\/]generated-sources[\\/]" checks="[a-zA-Z0-9]*"/>
+  <suppress files="[/\\]target[/\\]" checks=".*"/>
+  <suppress files="src/main/java/com/samsoum/newro/model" checks="LocalVariableName"/>
+  <suppress files="src/main/java/com/samsoum/newro/model" checks="ParameterName"/>
+  <suppress files="src/main/java/com/samsoum/newro/model" checks="MethodName"/>
+  <suppress files="src/main/java/com/samsoum/newro/dto" checks="LocalVariableName"/>
+  <suppress files="src/main/java/com/samsoum/newro/dto" checks="ParameterName"/>
+  <suppress files="src/main/java/com/samsoum/newro/dto" checks="MethodName"/>
+</suppressions>

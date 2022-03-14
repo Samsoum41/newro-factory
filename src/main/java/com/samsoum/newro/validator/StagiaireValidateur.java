@@ -4,6 +4,9 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.time.format.DateTimeParseException;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.samsoum.newro.dto.StagiaireDTO;
 import com.samsoum.newro.service.PromotionService;
 import com.samsoum.newro.service.ServiceException;
@@ -15,20 +18,17 @@ import com.samsoum.newro.validator.exception.NotValidDateFormatInputException;
 import com.samsoum.newro.validator.exception.OutOfBoundsDateInputException;
 import com.samsoum.newro.validator.exception.PromotionNotFoundInputException;
 
+@Component
 public class StagiaireValidateur {
-	private static StagiaireValidateur instance;
+	private PromotionService promotionService;
 	private LocalDate LIMIT_DOWN_MYSQL_TIMESTAMP = LocalDate.of(1970, Month.JANUARY, 1);
 	private LocalDate LIMIT_UP_MYSQL_TIMESTAMP = LocalDate.of(2038, Month.JANUARY, 19);
 
-	private StagiaireValidateur() {
+	@Autowired
+	private StagiaireValidateur(PromotionService promotionService) {
+		this.promotionService = promotionService;
 	}
 
-	public static StagiaireValidateur getInstance() {
-		if (instance == null) {
-			instance = new StagiaireValidateur();
-		}
-		return instance;
-	}
 
 	public void check(StagiaireDTO stagiaire) throws InputException {
 		// Validation du prénom
@@ -62,7 +62,7 @@ public class StagiaireValidateur {
 		try {
 			int id = Integer.parseInt(promotion_id);
 			try {
-				if (!PromotionService.getInstance().getOne(id).isPresent()) {
+				if (!promotionService.getOne(id).isPresent()) {
 					throw new PromotionNotFoundInputException();
 				}
 			} catch (ServiceException e) {

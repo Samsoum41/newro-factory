@@ -35,6 +35,9 @@ class StagiaireMapperTests {
 	@Autowired
 	private DataSource datasource;
 	
+	@Autowired
+	private StagiaireMapper mapper;
+	
 	@BeforeEach
 	public void setUp() throws FileNotFoundException, DAOException, SQLException {
 		try (Connection con = datasource.getConnection()) {
@@ -72,7 +75,7 @@ class StagiaireMapperTests {
 			when(res.getDate("formation_over")).thenReturn(Date.valueOf(LocalDate.of(2014, 5, 13)));
 			when(res.getInt("promotion_id")).thenReturn(1);
 			when(res.getString("name")).thenReturn("Février 2022");
-			Stagiaire stagiaire = StagiaireMapper.getInstance().mapRow(res, 0);
+			Stagiaire stagiaire = mapper.mapRow(res, 0);
 			assertEquals(realAdrienne, stagiaire);
 		} catch (MapperException e) {
 			// TODO Auto-generated catch block
@@ -94,7 +97,7 @@ class StagiaireMapperTests {
 			when(res.getDate("formation_over")).thenReturn(Date.valueOf(LocalDate.of(2008, 7, 23)));
 			when(res.getInt("promotion_id")).thenReturn(2);
 			when(res.getString("name")).thenReturn("Mars 2023");
-			StagiaireMapper.getInstance().mapRow(res, 0);
+			mapper.mapRow(res, 0);
 		} catch (MapperException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

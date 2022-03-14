@@ -27,7 +27,10 @@ import jakarta.servlet.http.HttpServletResponse;
 @WebServlet("/editStagiaire")
 public class EditStagiaireServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private StagiaireService service;
+	private StagiaireService stagiaireService;
+	private PromotionService promotionService;
+	private StagiaireValidateur validateur;
+	private StagiaireMapper mapper;
 
     /**
      * @see HttpServlet#HttpServlet()
@@ -35,7 +38,11 @@ public class EditStagiaireServlet extends HttpServlet {
     public EditStagiaireServlet() {
         super();
         // TODO Auto-generated constructor stub
-		service = Context.getInstance().getBean(StagiaireService.class);
+		stagiaireService = Context.getInstance().getBean(StagiaireService.class);
+		promotionService = Context.getInstance().getBean(PromotionService.class);
+		validateur = Context.getInstance().getBean(StagiaireValidateur.class);
+		mapper = Context.getInstance().getBean(StagiaireMapper.class);
+
     }
 
 	/**
@@ -47,8 +54,8 @@ public class EditStagiaireServlet extends HttpServlet {
 		int id = Integer.parseInt(stringId);
 		request.setAttribute("id", id);
 		try {
-			List<Promotion> allPromotions = PromotionService.getInstance().getAll();
-			Stagiaire stagiaireAModifier = service.getOne(id).get(); 
+			List<Promotion> allPromotions = promotionService.getAll();
+			Stagiaire stagiaireAModifier = stagiaireService.getOne(id).get(); 
 			request.setAttribute("stagiaire", stagiaireAModifier);
 			request.setAttribute("promotions", allPromotions);
 			request.getRequestDispatcher("/views/editStagiaire.jsp").forward(request, response);
@@ -74,9 +81,9 @@ public class EditStagiaireServlet extends HttpServlet {
 		StagiaireDTOWithId nouveauStagiaire = new StagiaireDTOWithId(id, first_name, last_name, arrival, formation_over, promotionId);
 		// Validation du DTO
 		try {
-			StagiaireValidateur.getInstance().check(nouveauStagiaire);
-			Stagiaire stagiaire = StagiaireMapper.getInstance().fromDTO(nouveauStagiaire);
-			service.update(stagiaire);
+			validateur.check(nouveauStagiaire);
+			Stagiaire stagiaire = mapper.fromDTO(nouveauStagiaire);
+			stagiaireService.update(stagiaire);
 		} catch (InputException e) {
 			e.printStackTrace();
 		} catch (MapperException e) {

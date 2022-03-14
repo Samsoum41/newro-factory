@@ -8,11 +8,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.samsoum.newro.mapper.MapperException;
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
 import com.samsoum.newro.mapper.PromotionMapper;
 import com.samsoum.newro.model.Promotion;
 
+@Repository
 public class PromotionDAO{
+	private DataSource dataSource;
 	public static int page = 1;
 	private static PromotionDAO instance;
 	private String insertQuery = "INSERT INTO promotion(name) VALUES(?);";
@@ -22,17 +28,13 @@ public class PromotionDAO{
 	//private String getPaginatedQuery = "SELECT * FROM promotion ORDER BY id LIMIT ?, ?;";
 	private String updateQuery = "UPDATE promotion SET name=? WHERE id=?;";
 	
-	private PromotionDAO() {
-		 
+	@Autowired
+	private PromotionDAO(DataSource datasource) {
+		 this.dataSource= datasource;
 	}
-	public static PromotionDAO getInstance() {
-		if (PromotionDAO.instance == null) {
-			PromotionDAO.instance = new PromotionDAO();
-		}
-		return PromotionDAO.instance;
-	}
+
 	public void add(Promotion data) throws DAOException {
-		try(Connection con = DataSource.getInstance().getConnection(); ){
+		try(Connection con = dataSource.getConnection(); ){
 			PreparedStatement st =	con.prepareStatement(insertQuery);
 			st.setString(1, data.getName());
 
@@ -53,7 +55,7 @@ public class PromotionDAO{
 	}
 
 	public void delete(int id) throws DAOException {
-		try(Connection con = DataSource.getInstance().getConnection(); 
+		try(Connection con = dataSource.getConnection(); 
 			PreparedStatement st = con.prepareStatement(deleteQuery);){
 			st.setInt(1, id);
 			try {
@@ -71,7 +73,7 @@ public class PromotionDAO{
 	}
 
 	public Optional<Promotion> getOne(int id) throws DAOException {
-		try(Connection con = DataSource.getInstance().getConnection(); 
+		try(Connection con = dataSource.getConnection(); 
 			PreparedStatement st = con.prepareStatement(getOneQuery); ) {
 			st.setInt(1, id);
 			try {
@@ -85,7 +87,7 @@ public class PromotionDAO{
 					return Optional.empty();
 				}
 			}
-			catch(SQLException | MapperException e) {
+			catch(SQLException e) {
 				e.printStackTrace();
 				throw new DAOException("Problème dans l'accès à la promotion d'identifiant : " + id + " dans la base de donnée.");
 			}
@@ -98,7 +100,7 @@ public class PromotionDAO{
 	}
 
 	public List<Promotion> getAll() throws DAOException {
-		try(Connection con = DataSource.getInstance().getConnection(); 
+		try(Connection con = dataSource.getConnection(); 
 			PreparedStatement st = con.prepareStatement(getAllQuery);){
 			try {
 				ResultSet res = st.executeQuery();
@@ -108,7 +110,7 @@ public class PromotionDAO{
 				}
 				return liste;
 			}
-			catch(SQLException | MapperException e) {
+			catch(SQLException e) {
 				e.printStackTrace();
 				throw new DAOException("Problème dans l'accès à l'ensemble des promotions en base de donnée.");
 			}
@@ -122,7 +124,7 @@ public class PromotionDAO{
 	
 	/*
 	public List<Promotion> getPaginated() throws DAOException{
-		try(Connection con = DataSource.getInstance().getConnection(); ){
+		try(Connection con = dataSource.getConnection(); ){
 			PreparedStatement st = con.prepareStatement(getPaginatedQuery);
 			st.setInt(1, (PromotionDAO.page -1)*PromotionDAO.ROWS_PER_PAGE);
 			st.setInt(2, PromotionDAO.ROWS_PER_PAGE);
@@ -137,13 +139,13 @@ public class PromotionDAO{
 	*/
 
 	public void update(Promotion data) throws DAOException {
-		try(Connection con = DataSource.getInstance().getConnection(); ){
+		try(Connection con = dataSource.getConnection(); ){
 			PreparedStatement st = con.prepareStatement(updateQuery);
 			try {
 				st = PromotionMapper.getInstance().toUpdateStatement(data, st);
 				st.executeUpdate();
 			}
-			catch(SQLException | MapperException e) {
+			catch(SQLException e) {
 				e.printStackTrace();
 				String messageErreur = "Problème dans la mise à jour de la promotion " + data + " en base de donnée.";
 				throw new DAOException(messageErreur);

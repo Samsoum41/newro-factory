@@ -4,15 +4,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.springframework.stereotype.Component;
+
 import com.samsoum.newro.model.Promotion;
 
+@Component
 public class PromotionMapper {
-	private static PromotionMapper instance;
-	
 	private PromotionMapper() {
-		
 	}
-	
 	public Promotion toModel(ResultSet res) throws MapperException {
 		// TODO : Remplacer les instructions ternaires par des Optionals
 		try {
@@ -30,12 +29,6 @@ public class PromotionMapper {
 		catch(SQLException e) {
 			throw new MapperException();
 		}
-	}
-	public static PromotionMapper getInstance() {
-		if(instance == null) {
-			instance = new PromotionMapper();
-		}
-		return instance;
 	}
 	
 	public PreparedStatement toUpdateStatement(Promotion promotion, PreparedStatement statement) throws MapperException {

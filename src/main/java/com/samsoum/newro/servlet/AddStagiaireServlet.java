@@ -27,7 +27,10 @@ import jakarta.servlet.http.HttpServletResponse;
 @WebServlet("/addStagiaire")
 public class AddStagiaireServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private StagiaireService service;
+	private StagiaireService stagiaireService;
+	private PromotionService promotionService;
+	private StagiaireValidateur validateur;
+	private StagiaireMapper mapper;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -35,8 +38,10 @@ public class AddStagiaireServlet extends HttpServlet {
 	public AddStagiaireServlet() {
 		super();
 		// TODO Auto-generated constructor stub
-		service = Context.getInstance().getBean(StagiaireService.class);
-	}
+		stagiaireService = Context.getInstance().getBean(StagiaireService.class);
+		promotionService = Context.getInstance().getBean(PromotionService.class);
+		validateur = Context.getInstance().getBean(StagiaireValidateur.class);
+		mapper = Context.getInstance().getBean(StagiaireMapper.class);	}
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
@@ -47,7 +52,7 @@ public class AddStagiaireServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		System.out.println(4);
 		try {
-			List<Promotion> allPromotions = PromotionService.getInstance().getAll();
+			List<Promotion> allPromotions = promotionService.getAll();
 			request.setAttribute("promotions", allPromotions);
 			request.getRequestDispatcher("/views/addStagiaire.jsp").forward(request, response);
 		} catch (ServiceException e) {
@@ -75,11 +80,11 @@ public class AddStagiaireServlet extends HttpServlet {
 		StagiaireDTOWithoutId nouveauStagiaire = new StagiaireDTOWithoutId(first_name, last_name, arrival, formation_over, promotionId);
 		// Validation du DTO
 		try {
-			StagiaireValidateur.getInstance().check(nouveauStagiaire);
+			validateur.check(nouveauStagiaire);
 			System.out.println(2);
-			Stagiaire stagiaire = StagiaireMapper.getInstance().fromDTO(nouveauStagiaire);
+			Stagiaire stagiaire = mapper.fromDTO(nouveauStagiaire);
 			System.out.println(3);
-			service.add(stagiaire);
+			stagiaireService.add(stagiaire);
 			System.out.println(4);
 		} catch (InputException e) {
 			e.printStackTrace();

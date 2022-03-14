@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
@@ -19,17 +20,12 @@ import com.samsoum.newro.service.ServiceException;
 
 @Component
 public class StagiaireMapper implements RowMapper<Stagiaire> {
-	private static StagiaireMapper instance;
+	private PromotionService promotionService;
 
-	private StagiaireMapper() {
-
-	}
-
-	public static StagiaireMapper getInstance() {
-		if (instance == null) {
-			instance = new StagiaireMapper();
-		}
-		return instance;
+	
+	@Autowired
+	private StagiaireMapper(PromotionService promotionService) {
+		this.promotionService = promotionService;
 	}
 
 	public Stagiaire fromDTO(StagiaireDTOWithoutId stagiaire) throws MapperException {
@@ -41,7 +37,7 @@ public class StagiaireMapper implements RowMapper<Stagiaire> {
 		int promotion_id = Integer.parseInt(stagiaire.getPromotion_id());
 		Promotion promotion;
 		try {
-			promotion = PromotionService.getInstance().getOne(promotion_id)
+			promotion = promotionService.getOne(promotion_id)
 					.orElseThrow(() -> new MapperException("Pas de promotion de ce id"));
 		} catch (ServiceException e) {
 			throw new MapperException();
@@ -59,7 +55,7 @@ public class StagiaireMapper implements RowMapper<Stagiaire> {
 		int promotion_id = Integer.parseInt(stagiaire.getPromotion_id());
 		Promotion promotion;
 		try {
-			promotion = PromotionService.getInstance().getOne(promotion_id)
+			promotion = promotionService.getOne(promotion_id)
 					.orElseThrow(() -> new MapperException("Pas de promotion de ce id"));
 		} catch (ServiceException e) {
 			throw new MapperException();
