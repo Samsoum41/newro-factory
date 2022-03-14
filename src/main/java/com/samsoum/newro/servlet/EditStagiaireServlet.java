@@ -9,7 +9,6 @@ import com.samsoum.newro.mapper.StagiaireMapper;
 import com.samsoum.newro.model.Promotion;
 import com.samsoum.newro.model.Stagiaire;
 import com.samsoum.newro.service.PromotionService;
-import com.samsoum.newro.service.ServiceException;
 import com.samsoum.newro.service.StagiaireService;
 import com.samsoum.newro.util.Context;
 import com.samsoum.newro.validator.StagiaireValidateur;
@@ -53,16 +52,11 @@ public class EditStagiaireServlet extends HttpServlet {
 		String stringId = request.getParameter("id");
 		int id = Integer.parseInt(stringId);
 		request.setAttribute("id", id);
-		try {
-			List<Promotion> allPromotions = promotionService.getAll();
-			Stagiaire stagiaireAModifier = stagiaireService.getOne(id).get(); 
-			request.setAttribute("stagiaire", stagiaireAModifier);
-			request.setAttribute("promotions", allPromotions);
-			request.getRequestDispatcher("/views/editStagiaire.jsp").forward(request, response);
-		} catch (ServiceException e) {
-			request.getRequestDispatcher("/views/500.jsp").forward(request, response);
-			e.printStackTrace();
-		}
+		List<Promotion> allPromotions = promotionService.getAll();
+		Stagiaire stagiaireAModifier = stagiaireService.getOne(id).get(); 
+		request.setAttribute("stagiaire", stagiaireAModifier);
+		request.setAttribute("promotions", allPromotions);
+		request.getRequestDispatcher("/views/editStagiaire.jsp").forward(request, response);
 	}
 
 	/**
@@ -76,7 +70,6 @@ public class EditStagiaireServlet extends HttpServlet {
 		String arrival = request.getParameter("arrival");
 		String formation_over = request.getParameter("formation_over");
 		String promotionId = request.getParameter("promotionId");
-		
 		int id = Integer.parseInt(stringId);
 		StagiaireDTOWithId nouveauStagiaire = new StagiaireDTOWithId(id, first_name, last_name, arrival, formation_over, promotionId);
 		// Validation du DTO

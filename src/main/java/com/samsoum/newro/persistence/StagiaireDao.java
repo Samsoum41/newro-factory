@@ -36,14 +36,14 @@ public class StagiaireDao {
 	private JdbcTemplate jdbcTemplate;
 
 	@Autowired
-	public StagiaireDao(StagiaireMapper mapper,NamedParameterJdbcTemplate namedJdbcTemplate, JdbcTemplate jdbcTemplate) {
+	public StagiaireDao(StagiaireMapper mapper, NamedParameterJdbcTemplate namedJdbcTemplate, JdbcTemplate jdbcTemplate) {
 		this.mapper = mapper;
 		this.namedJdbcTemplate = namedJdbcTemplate;
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
-	public Optional<Stagiaire> getByNames(String first_name, String last_name) {
-		SqlParameterSource parameters = new MapSqlParameterSource().addValue("first_name", first_name).addValue("last_name", last_name);
+	public Optional<Stagiaire> getByNames(String firstName, String lastName) {
+		SqlParameterSource parameters = new MapSqlParameterSource().addValue("first_name", firstName).addValue("last_name", lastName);
 		Stagiaire stagiaire = namedJdbcTemplate.queryForObject(GET_BY_NAMES_QUERY, parameters, mapper);
 		if (stagiaire == null) {
 			return Optional.empty();

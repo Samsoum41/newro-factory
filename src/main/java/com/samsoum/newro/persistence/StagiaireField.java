@@ -9,7 +9,7 @@ public enum StagiaireField {
 	PROMOTION_ID("promotion_id");
 	
 	private String value;
-	private StagiaireField(String val) {
+	StagiaireField(String val) {
 		this.value = val;
 	}
 	public String getValue() {
