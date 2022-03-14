@@ -1,0 +1,25 @@
+image : maven:3.8-openjdk-17
+
+stages: 
+ - build
+ - tests
+
+build:
+ stage: build
+ script : 
+  - echo "LE PROGRAMME DE SAMY VA BUILDEEERRRRRR"
+  - mvn install
+  - mvn compile
+
+tests:
+ stage: tests
+ script:
+  - echo "Démarrage des tests"
+  - mvn test
+  
+checkstyle:
+ stage: tests
+ script:
+  - echo "Test des checkstyles leur grand meres"
+  - mvn checkstyle:check
+ 

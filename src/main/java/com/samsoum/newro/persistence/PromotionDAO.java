@@ -20,7 +20,7 @@ import com.samsoum.newro.model.Promotion;
 public class PromotionDAO{
 	private DataSource dataSource;
 	public static int page = 1;
-	private static PromotionDAO instance;
+	private PromotionMapper mapper;
 	private String insertQuery = "INSERT INTO promotion(name) VALUES(?);";
 	private String deleteQuery = "DELETE FROM promotion WHERE id=?;"; 
 	private String getOneQuery = "SELECT * FROM promotion WHERE id=?;"; 
@@ -29,8 +29,9 @@ public class PromotionDAO{
 	private String updateQuery = "UPDATE promotion SET name=? WHERE id=?;";
 	
 	@Autowired
-	private PromotionDAO(DataSource datasource) {
+	private PromotionDAO(DataSource datasource, PromotionMapper mapper) {
 		 this.dataSource= datasource;
+		 this.mapper = mapper;
 	}
 
 	public void add(Promotion data) throws DAOException {
@@ -80,7 +81,7 @@ public class PromotionDAO{
 				ResultSet res = st.executeQuery();
 				if(res.isBeforeFirst()) {
 					res.next();
-					Optional<Promotion> opt = Optional.of(PromotionMapper.getInstance().toModel(res));
+					Optional<Promotion> opt = Optional.of(mapper.toModel(res));
 					return opt;	
 				}
 				else {
@@ -106,7 +107,7 @@ public class PromotionDAO{
 				ResultSet res = st.executeQuery();
 				ArrayList<Promotion> liste = new ArrayList<>();
 				while(res.next()) {
-					liste.add(PromotionMapper.getInstance().toModel(res)); 
+					liste.add(mapper.toModel(res)); 
 				}
 				return liste;
 			}
@@ -142,7 +143,7 @@ public class PromotionDAO{
 		try(Connection con = dataSource.getConnection(); ){
 			PreparedStatement st = con.prepareStatement(updateQuery);
 			try {
-				st = PromotionMapper.getInstance().toUpdateStatement(data, st);
+				st = mapper.toUpdateStatement(data, st);
 				st.executeUpdate();
 			}
 			catch(SQLException e) {
