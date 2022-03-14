@@ -13,7 +13,7 @@ import com.samsoum.newro.service.ServiceException;
 @Component
 @Scope("prototype")
 public class PageStagiaire {
-	public final static int NOMBRES_DE_LIGNES_PAR_DEFAUT = 10;
+	public static final int NOMBRES_DE_LIGNES_PAR_DEFAUT = 10;
 	public static final int STARTING_PAGE = 1;
 	private int numero;
 	private int nbLignes = NOMBRES_DE_LIGNES_PAR_DEFAUT;

@@ -31,24 +31,19 @@ public class StagiaireValidateur {
 
 
 	public void check(StagiaireDTO stagiaire) throws InputException {
-		// Validation du prénom
 		checkFirstName(stagiaire.getFirst_name());
-		// Validation du nom
 		checkLastName(stagiaire.getLast_name());
-		// Validation de la date d'arrivée
 		checkArrival(stagiaire.getArrival());
-		// Validation de la date de départ
 		checkFormationOver(stagiaire.getFormation_over(), stagiaire.getArrival());
-		// Validation de la promotion
 		checkPromotion(stagiaire.getPromotion_id());
 	}
 
-	private void checkFirstName(String first_name) throws EmptyInputException {
-		checkEmptyString(first_name);
+	private void checkFirstName(String firstName) throws EmptyInputException {
+		checkEmptyString(firstName);
 	}
 
-	private void checkLastName(String last_name) throws EmptyInputException {
-		checkEmptyString(last_name); 
+	private void checkLastName(String lastName) throws EmptyInputException {
+		checkEmptyString(lastName); 
 	}
 
 	private void checkEmptyString(String str) throws EmptyInputException {
@@ -57,10 +52,10 @@ public class StagiaireValidateur {
 		}
 	}
 
-	private void checkPromotion(String promotion_id) throws InputException {
-		checkEmptyString(promotion_id);
+	private void checkPromotion(String promotionId) throws InputException {
+		checkEmptyString(promotionId);
 		try {
-			int id = Integer.parseInt(promotion_id);
+			int id = Integer.parseInt(promotionId);
 			try {
 				if (!promotionService.getOne(id).isPresent()) {
 					throw new PromotionNotFoundInputException();
@@ -95,9 +90,9 @@ public class StagiaireValidateur {
 	private void checkFormationOver(String formationOverString, String arrivalString) throws InputException {
 		try {
 			checkEmptyString(formationOverString);
-			LocalDate formation_over = checkDateFormat(formationOverString);
+			LocalDate formationOver = checkDateFormat(formationOverString);
 			LocalDate arrival = checkDateFormat(arrivalString);
-			if (formation_over.isBefore(arrival)) {
+			if (formationOver.isBefore(arrival)) {
 				throw new DepartureBeforeArrivalInputException();
 			}
 		} catch (EmptyInputException e) {

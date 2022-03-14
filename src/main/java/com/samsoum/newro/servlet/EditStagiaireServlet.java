@@ -65,13 +65,13 @@ public class EditStagiaireServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		String stringId = request.getParameter("id");
-		String first_name = request.getParameter("first_name");
-		String last_name = request.getParameter("last_name");
+		String firstName = request.getParameter("first_name");
+		String lastName = request.getParameter("last_name");
 		String arrival = request.getParameter("arrival");
-		String formation_over = request.getParameter("formation_over");
+		String formationOver = request.getParameter("formation_over");
 		String promotionId = request.getParameter("promotionId");
 		int id = Integer.parseInt(stringId);
-		StagiaireDTOWithId nouveauStagiaire = new StagiaireDTOWithId(id, first_name, last_name, arrival, formation_over, promotionId);
+		StagiaireDTOWithId nouveauStagiaire = new StagiaireDTOWithId(id, firstName, lastName, arrival, formationOver, promotionId);
 		// Validation du DTO
 		try {
 			validateur.check(nouveauStagiaire);

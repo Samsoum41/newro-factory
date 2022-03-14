@@ -17,22 +17,19 @@ public class PromotionService {
 	private PromotionService(PromotionDao dao) {
 		this.dao = dao;
 	}
-
 	public void add(Promotion data) throws ServiceException {
 		dao.add(data);
 	}
 	public Optional<Promotion> getOne(int id) throws ServiceException {
 		return dao.getById(id);
 	}
-	
-	public List<Promotion> getAll(){
+	public List<Promotion> getAll() {
 		return dao.getAll();
 	}
-	
-	public void delete(int id) throws ServiceException{
+	public void delete(int id) throws ServiceException {
 		dao.delete(id);
 	}
-	public void update(Promotion promotion) throws ServiceException{
+	public void update(Promotion promotion) throws ServiceException {
 		dao.update(promotion);
 	}
 }

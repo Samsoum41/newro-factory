@@ -60,12 +60,12 @@ public class AddStagiaireServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		String first_name = request.getParameter("first_name");
-		String last_name = request.getParameter("last_name");
+		String firstName = request.getParameter("first_name");
+		String lastName = request.getParameter("last_name");
 		String arrival = request.getParameter("arrival");
-		String formation_over = request.getParameter("formation_over");
+		String formationOver = request.getParameter("formation_over");
 		String promotionId = request.getParameter("promotionId");
-		StagiaireDTOWithoutId nouveauStagiaire = new StagiaireDTOWithoutId(first_name, last_name, arrival, formation_over, promotionId);
+		StagiaireDTOWithoutId nouveauStagiaire = new StagiaireDTOWithoutId(firstName, lastName, arrival, formationOver, promotionId);
 		// Validation du DTO
 		try {
 			validateur.check(nouveauStagiaire);

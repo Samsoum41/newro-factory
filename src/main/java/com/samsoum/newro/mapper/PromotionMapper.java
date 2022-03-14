@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import com.samsoum.newro.model.Promotion;
 
 @Component
-public class PromotionMapper implements RowMapper<Promotion>{
+public class PromotionMapper implements RowMapper<Promotion> {
 	private PromotionMapper() {
 	}
 	

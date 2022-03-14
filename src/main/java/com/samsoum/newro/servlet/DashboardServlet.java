@@ -64,9 +64,9 @@ public class DashboardServlet extends HttpServlet {
 		try {
 			int nbRows = convertRows(rowsParameter);
 			PageStagiaire page = getPageFromParameter(pageIndexParameter, nbRows, orderField, search);
-			int nb_stagiaires = service.count();
+			int nbStagiaires = service.count();
 			int numOfPages = page.getNumberOfPages();
-			request.setAttribute("nb_stagiaires", nb_stagiaires);
+			request.setAttribute("nb_stagiaires", nbStagiaires);
 			request.setAttribute("page_stagiaires", page);
 			request.setAttribute("rows", nbRows);
 			request.setAttribute("numOfPages", numOfPages);

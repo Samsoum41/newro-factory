@@ -15,7 +15,7 @@ import com.samsoum.newro.mapper.PromotionMapper;
 import com.samsoum.newro.model.Promotion;
 
 @Repository
-public class PromotionDao{
+public class PromotionDao {
 	private PromotionMapper mapper;
 	private NamedParameterJdbcTemplate namedJdbcTemplate;
 	private JdbcTemplate jdbcTemplate;
@@ -53,7 +53,7 @@ public class PromotionDao{
 		}	
 	}
 	
-	public List<Promotion> getAll(){
+	public List<Promotion> getAll() {
 		return jdbcTemplate.query(GET_ALL_QUERY, mapper);
 	}
 
