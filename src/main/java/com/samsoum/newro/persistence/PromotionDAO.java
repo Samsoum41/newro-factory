@@ -23,7 +23,7 @@ public class PromotionDAO{
 	private String updateQuery = "UPDATE promotion SET name=? WHERE id=?;";
 	
 	private PromotionDAO() {
-		
+		 
 	}
 	public static PromotionDAO getInstance() {
 		if (PromotionDAO.instance == null) {
