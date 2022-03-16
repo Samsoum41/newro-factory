@@ -62,13 +62,13 @@
 								</a>
 							</span>
 						</th>
-						<th><a href="dashboard?order=first_name">Prénom du stagiaire</a></th>
-						<th><a href="dashboard?order=last_name">Nom du stagiaire</a></th>
-						<th><a href="dashboard?order=arrival">Date d'arrivée</a></th>
+						<th><a href="dashboard?page=${page}&rows=${rows}&order=firstName">Prénom du stagiaire</a></th>
+						<th><a href="dashboard?page=${page}&rows=${rows}&order=lastName">Nom du stagiaire</a></th>
+						<th><a href="dashboard?page=${page}&rows=${rows}&order=arrival">Date d'arrivée</a></th>
 						<!-- Table header for Discontinued Date -->
-						<th><a href="dashboard?order=formation_over">Date de fin de formation</a></th>
+						<th><a href="dashboard?page=${page}&rows=${rows}&order=formationOver">Date de fin de formation</a></th>
 						<!-- Table header for Company -->
-						<th><a href="dashboard?order=promotion">Promotion</a></th>
+						<th><a href="dashboard?page=${page}&rows=${rows}&order=promotion">Promotion</a></th>
 
 					</tr>
 				</thead>
@@ -102,12 +102,12 @@
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center flex-center">
 			<ul class="pagination">
-				<li><a href="dashboard?page=${ previousPage }&rows=${rows}"
+				<li><a href="dashboard?page=${ previousPage }&rows=${rows}&order=${order}"
 					aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
-				</a></li>
+				</a></li> 
 				<c:forEach items="${navigationPages}" var="page">
 					<li><c:choose>
-							<c:when test="${ page==page_stagiaire.numero }">
+							<c:when test="${ page==page_stagiaires.numero }">
 								<a href="dashboard?page=${page}&rows=${rows}"
 									id="highlighted-li">${page}</a>
 							</c:when>
@@ -122,9 +122,9 @@
 			</ul>
 
 			<div class="btn-group btn-group-sm pull-right" role="group">
-				<a href="dashboard?rows=10" class="btn btn-default">10</a> <a
-					href="dashboard?rows=50" class="btn btn-default">50</a> <a
-					href="dashboard?rows=100" class="btn btn-default">100</a>
+				<a href="dashboard?page=${page}&rows=10&order=${order}" class="btn btn-default">10</a> <a
+					href="dashboard?page=${page}&rows=50&order=${order}" class="btn btn-default">50</a> <a
+					href="dashboard?page=${page}&rows=100&order=${order}" class="btn btn-default">100</a>
 			</div>
 		</div>
 	</footer>
