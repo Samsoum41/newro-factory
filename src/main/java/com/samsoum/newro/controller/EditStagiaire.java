@@ -9,9 +9,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.samsoum.newro.dto.StagiaireDTOWithoutId;
+import com.samsoum.newro.dto.StagiaireDTOWithId;
 import com.samsoum.newro.mapper.MapperException;
 import com.samsoum.newro.mapper.StagiaireMapper;
 import com.samsoum.newro.model.Promotion;
@@ -21,16 +22,16 @@ import com.samsoum.newro.service.StagiaireService;
 import com.samsoum.newro.validator.StagiaireValidateur;
 import com.samsoum.newro.validator.exception.InputException;
 
-@RequestMapping("/addStagiaire")
+@RequestMapping("/editStagiaire")
 @Controller
-public class AddStagiaire {
+public class EditStagiaire {
 	private StagiaireService stagiaireService;
 	private PromotionService promotionService;
 	private StagiaireValidateur validateur;
 	private StagiaireMapper mapper;
 	
 	@Autowired
-	private AddStagiaire(
+	private EditStagiaire(
 			StagiaireService stagiaireService, 
 			PromotionService promotionService, 
 			StagiaireValidateur validateur,
@@ -42,19 +43,22 @@ public class AddStagiaire {
 	}
 	
 	@GetMapping("")
-	public String get(Model model) {
+	public String get(@RequestParam int id, Model model) {
+		model.addAttribute("id", id);
 		List<Promotion> allPromotions = promotionService.getAll();
+		Stagiaire stagiaireAModifier = stagiaireService.getOne(id).get(); 
+		model.addAttribute("stagiaire", stagiaireAModifier);
 		model.addAttribute("promotions", allPromotions);
-		return "addStagiaire";
+		return "editStagiaire";
 	}
 	
 	@PostMapping("")
-	public ModelAndView post(@ModelAttribute StagiaireDTOWithoutId nouveauStagiaire, Model model) {
-		// Validation du DTO
+	public ModelAndView post(@ModelAttribute StagiaireDTOWithId nouveauStagiaire) {
+		System.out.println(nouveauStagiaire);
 		try {
 			validateur.check(nouveauStagiaire);
 			Stagiaire stagiaire = mapper.fromDTO(nouveauStagiaire);
-			stagiaireService.add(stagiaire);
+			stagiaireService.update(stagiaire);
 		} catch (InputException e) {
 			e.printStackTrace();
 		} catch (MapperException e) {

@@ -21,16 +21,17 @@ public class PromotionDao {
 	private JdbcTemplate jdbcTemplate;
 	
 	// Queries
-	private String INSERT_QUERY = "INSERT INTO promotion(name) VALUES(?);";
-	private String DELETE_QUERY = "DELETE FROM promotion WHERE id=?;"; 
-	private String GET_BY_ID_QUERY = "SELECT id, name FROM promotion WHERE id=?;"; 
+	private String INSERT_QUERY = "INSERT INTO promotion(name) VALUES(:name);";
+	private String DELETE_QUERY = "DELETE FROM promotion WHERE id=:id;"; 
+	private String GET_BY_ID_QUERY = "SELECT id, name FROM promotion WHERE id=:id;"; 
 	private String GET_ALL_QUERY = "SELECT id, name FROM promotion;"; 
-	private String UPDATE_QUERY = "UPDATE promotion SET name=? WHERE id=?;";
+	private String UPDATE_QUERY = "UPDATE promotion SET name=? WHERE id=:id;";
 	
 	@Autowired
 	private PromotionDao(PromotionMapper mapper, NamedParameterJdbcTemplate namedJdbcTemplate, JdbcTemplate jdbcTemplate) {
 		 this.mapper = mapper;
 		 this.namedJdbcTemplate = namedJdbcTemplate;
+		 this.jdbcTemplate = jdbcTemplate;
 	}
 
 	public void add(Promotion promotion) {

@@ -1,5 +1,7 @@
 package com.samsoum.newro.controller;
 
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,16 +26,17 @@ public class Dashboard {
 	@GetMapping("")
 	public String getDefault(Model model) {
 		PageStagiaire pageStagiaire = service.get(StagiaireField.FIRST_NAME, StagiaireField.FIRST_NAME, "", 1, 10);
-		model.addAttribute("page_stagiaires", pageStagiaire);
 		model.addAttribute("rows", 10);
 		model.addAttribute("page", 1);
 		model.addAttribute("order", StagiaireField.FIRST_NAME);
 		try {
+			List<Integer> navigationPages = pageStagiaire.getNavigationPages();
+			model.addAttribute("page_stagiaires", pageStagiaire);
 			model.addAttribute("numOfPages", pageStagiaire.getNumberOfPages());
 			model.addAttribute("nextPage", PageStagiaire.next(pageStagiaire));
 			model.addAttribute("page", pageStagiaire.getNumero());
 			model.addAttribute("previousPage", PageStagiaire.previous(pageStagiaire));
-			model.addAttribute("navigationPages", pageStagiaire.getNavigationPages());
+			model.addAttribute("navigationPages", navigationPages);
 		} catch (PaginationException | ServiceException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

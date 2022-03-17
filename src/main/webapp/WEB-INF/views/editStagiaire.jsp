@@ -32,11 +32,11 @@
                         <fieldset>
                             <div class="form-group">
                                 <label for="lastName">Nom</label>
-                                <input type="text" class="form-control" name="last_name" id="lastName" placeholder="Nom du stagiaire" value="${stagiaire.last_name}">
+                                <input type="text" class="form-control" name="lastName" id="lastName" placeholder="Nom du stagiaire" value="${stagiaire.last_name}">
                             </div>
                             <div class="form-group">
                                 <label for="firstName">Pr�nom</label>
-                                <input type="text" class="form-control" name="first_name" id="firstName" placeholder="Prénom du stagiaire" value="${stagiaire.first_name}">
+                                <input type="text" class="form-control" name="firstName" id="firstName" placeholder="Prénom du stagiaire" value="${stagiaire.first_name}">
                             </div>
                             <div class="form-group">
                                 <label for="arrival">Date d'arrivée</label>
@@ -44,12 +44,12 @@
                             </div>
                             <div class="form-group">
                                 <label for="finFormation">Date de fin de formation</label>
-                                <input type="date" class="form-control" name="formation_over" id="formation_over" placeholder="Date de fin de formation" value="${stagiaire.formation_over}">
+                                <input type="date" class="form-control" name="formationOver" id="formationver" placeholder="Date de fin de formation" value="${stagiaire.formation_over}">
                             </div>
                             <div class="form-group">
                                 <label for="promotionId">Promotion</label>
                                 <select class="form-control" name="promotionId" id="promotionId" >
-                                	<option selected="selected" value="${stagiaire.promotion.name}"></option>
+                                	<option selected="selected" value="${stagiaire.promotion.id}">${stagiaire.promotion.name}</option>
                                 	<c:forEach items="${promotions}" var="promotion">
 										<option value="${promotion.id}">${promotion.name} </option>     	
                                 	</c:forEach>
