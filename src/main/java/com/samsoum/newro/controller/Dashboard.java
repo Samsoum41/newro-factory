@@ -1,7 +1,5 @@
 package com.samsoum.newro.controller;
 
-import java.util.ArrayList;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +24,6 @@ public class Dashboard {
 	@GetMapping("")
 	public String getDefault(Model model) {
 		PageStagiaire pageStagiaire = service.get(StagiaireField.FIRST_NAME, StagiaireField.FIRST_NAME, "", 1, 10);
-		System.out.println(pageStagiaire.getContenu());
 		model.addAttribute("page_stagiaires", pageStagiaire);
 		model.addAttribute("rows", 10);
 		model.addAttribute("page", 1);
@@ -36,7 +33,7 @@ public class Dashboard {
 			model.addAttribute("nextPage", PageStagiaire.next(pageStagiaire));
 			model.addAttribute("page", pageStagiaire.getNumero());
 			model.addAttribute("previousPage", PageStagiaire.previous(pageStagiaire));
-			model.addAttribute("navigationPages", getNavigationPages(pageStagiaire.getNumero(), pageStagiaire.getNumberOfPages()));
+			model.addAttribute("navigationPages", pageStagiaire.getNavigationPages());
 		} catch (PaginationException | ServiceException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -44,14 +41,13 @@ public class Dashboard {
 		return "dashboard";
 	}
 
-	@GetMapping(value = "", params = {"order", "rows", "page"})
+	@GetMapping(value = "", params = {"order", "rows", "page"}) 
 	public String get(
 			@RequestParam String order, 
 			@RequestParam int rows, 
 			@RequestParam int page,
 			Model model) {
-		System.out.println(rows);
-		PageStagiaire pageStagiaire = service.get(convertToEnum(order), StagiaireField.FIRST_NAME, "", page, rows);
+		PageStagiaire pageStagiaire = service.get(StagiaireField.valueFromSnakeCase(order), StagiaireField.FIRST_NAME, "", page, rows);
 		model.addAttribute("page_stagiaires", pageStagiaire);
 		model.addAttribute("rows", rows);
 		model.addAttribute("order", order);
@@ -60,7 +56,7 @@ public class Dashboard {
 			model.addAttribute("nextPage", PageStagiaire.next(pageStagiaire));
 			model.addAttribute("page", pageStagiaire.getNumero());
 			model.addAttribute("previousPage", PageStagiaire.previous(pageStagiaire));
-			model.addAttribute("navigationPages", getNavigationPages(pageStagiaire.getNumero(), pageStagiaire.getNumberOfPages()));
+			model.addAttribute("navigationPages", pageStagiaire.getNavigationPages());
 		} catch (PaginationException | ServiceException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -68,45 +64,5 @@ public class Dashboard {
 		return "dashboard";
 	}
 
-	private StagiaireField convertToEnum(String order) {
-		StagiaireField result;
-		switch (order) {
-		case "firstName":
-			result = StagiaireField.FIRST_NAME;
-			break;
-		case "lastName":
-			result = StagiaireField.LAST_NAME;
-			break;
-		case "arrival":
-			result = StagiaireField.ARRIVAL;
-			break;
-		case "formationOver":
-			result = StagiaireField.ARRIVAL;
-			break;
-		case "promotion":
-			result = StagiaireField.PROMOTION_ID;
-			break;
-		default:
-			result = StagiaireField.FORMATION_OVER;
-			break;
-		}
-		return result;
-	}
-	private ArrayList<Integer> getNavigationPages(int currentPage, int nbOfPages) {
-		ArrayList<Integer> result = new ArrayList<Integer>();
-		if (currentPage == nbOfPages) {
-			result.add(currentPage - 2);
-			result.add(currentPage - 1);
-			result.add(currentPage);
-		} else if (currentPage == nbOfPages - 1) {
-			result.add(currentPage - 1);
-			result.add(currentPage);
-			result.add(currentPage + 1);
-		} else {
-			result.add(currentPage);
-			result.add(currentPage + 1);
-			result.add(currentPage + 2);
-		}
-		return result;
-	}
+
 }

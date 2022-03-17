@@ -102,21 +102,21 @@
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center flex-center">
 			<ul class="pagination">
-				<li><a href="dashboard?page=${ previousPage }&rows=${rows}&order=${order}"
+				<li><a href="dashboard?page=${previousPage}&rows=${rows}&order=${order}"
 					aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
 				</a></li> 
 				<c:forEach items="${navigationPages}" var="page">
 					<li><c:choose>
 							<c:when test="${ page==page_stagiaires.numero }">
-								<a href="dashboard?page=${page}&rows=${rows}"
+								<a href="dashboard?page=${page}&rows=${rows}&order=${order}"
 									id="highlighted-li">${page}</a>
 							</c:when>
 							<c:otherwise>
-								<a href="dashboard?page=${page}&rows=${rows}">${page}</a>
+								<a href="dashboard?page=${page}&rows=${rows}&order=${order}">${page}</a>
 							</c:otherwise>
 						</c:choose></li>
 				</c:forEach>
-				<li><a href="dashboard?page=${ nextPage }&rows=${rows}"
+				<li><a href="dashboard?page=${nextPage}&rows=${rows}&order=${order}"
 					aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 				</a></li>
 			</ul>

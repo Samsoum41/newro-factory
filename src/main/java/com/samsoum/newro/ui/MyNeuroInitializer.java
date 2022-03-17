@@ -15,13 +15,13 @@ public class MyNeuroInitializer extends AbstractAnnotationConfigDispatcherServle
 	@Override
 	protected Class<?>[] getServletConfigClasses() {
 		// TODO Auto-generated method stub
-		return new Class[] { SpringConfig.class };
+		return new Class[] {SpringConfig.class};
 	}
 
 	@Override
 	protected String[] getServletMappings() {
 		// TODO Auto-generated method stub
-		return new String[] { "/" };
+		return new String[] {"/"};
 	}
 
 }

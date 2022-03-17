@@ -57,6 +57,18 @@ public class PageStagiaire {
 			return page.getNumero();
 		}
 	}
+	
+	public ArrayList<Integer> getNavigationPages() throws PaginationException {
+		int start, middle, end;
+		ArrayList<Integer> result = new ArrayList<Integer>();
+		end = Math.min(numero + 2, getNumberOfPages());
+		start = Math.max(numero - 1, Math.max(STARTING_PAGE, end - 2));
+		middle = start + 1;
+		result.add(start);
+		result.add(middle);
+		result.add(end);
+		return result;
+	}
 
 	public int getNumero() {
 		return numero;
