@@ -13,7 +13,7 @@ import com.samsoum.newro.service.ServiceException;
 @Component
 @Scope("prototype")
 public class PageStagiaire {
-	public final static int NOMBRES_DE_LIGNES_PAR_DEFAUT = 10;
+	public static final int NOMBRES_DE_LIGNES_PAR_DEFAUT = 10;
 	public static final int STARTING_PAGE = 1;
 	private int numero;
 	private int nbLignes = NOMBRES_DE_LIGNES_PAR_DEFAUT;
@@ -57,6 +57,25 @@ public class PageStagiaire {
 			return page.getNumero();
 		}
 	}
+	
+	public ArrayList<Integer> getNavigationPages() throws PaginationException {
+		ArrayList<Integer> result = new ArrayList<Integer>();
+		int nbOfPages = getNumberOfPages();
+		if (numero == nbOfPages) {
+			result.add(numero - 2);
+			result.add(numero - 1);
+			result.add(numero);
+		} else if (numero == nbOfPages - 1) {
+			result.add(numero - 1);
+			result.add(numero);
+			result.add(numero + 1);
+		} else {
+			result.add(numero);
+			result.add(numero + 1);
+			result.add(numero + 2);
+		}
+		return result;
+	}
 
 	public int getNumero() {
 		return numero;
@@ -81,12 +100,15 @@ public class PageStagiaire {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}	
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		PageStagiaire other = (PageStagiaire) obj;
 		return Objects.equals(contenu, other.contenu) && nbLignes == other.nbLignes && numero == other.numero;
 	}

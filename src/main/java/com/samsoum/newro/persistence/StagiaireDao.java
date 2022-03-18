@@ -16,7 +16,7 @@ import com.samsoum.newro.model.Stagiaire;
 import com.samsoum.newro.ui.PageStagiaire;
 
 @Repository
-public class StagiaireDAO {
+public class StagiaireDao {
 	private StagiaireMapper mapper;
 	// Parfois je ne mets pas le ';' dans les requêtes pour pouvoir les concaténer
 	private String SELECT_QUERY = "SELECT stagiaire.id, first_name, last_name, arrival, formation_over, promotion_id, name FROM stagiaire INNER JOIN promotion ON promotion_id=promotion.id ";
@@ -36,19 +36,18 @@ public class StagiaireDAO {
 	private JdbcTemplate jdbcTemplate;
 
 	@Autowired
-	public StagiaireDAO(StagiaireMapper mapper,NamedParameterJdbcTemplate namedJdbcTemplate, JdbcTemplate jdbcTemplate) {
+	public StagiaireDao(StagiaireMapper mapper, NamedParameterJdbcTemplate namedJdbcTemplate, JdbcTemplate jdbcTemplate) {
 		this.mapper = mapper;
 		this.namedJdbcTemplate = namedJdbcTemplate;
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
-	public Optional<Stagiaire> getByNames(String first_name, String last_name) {
-		SqlParameterSource parameters = new MapSqlParameterSource().addValue("first_name", first_name).addValue("last_name", last_name);
+	public Optional<Stagiaire> getByNames(String firstName, String lastName) {
+		SqlParameterSource parameters = new MapSqlParameterSource().addValue("first_name", firstName).addValue("last_name", lastName);
 		Stagiaire stagiaire = namedJdbcTemplate.queryForObject(GET_BY_NAMES_QUERY, parameters, mapper);
 		if (stagiaire == null) {
 			return Optional.empty();
-		}
-		else {
+		} else {
 			return Optional.of(stagiaire);
 		}
 	}
@@ -68,8 +67,7 @@ public class StagiaireDAO {
 		Stagiaire stagiaire = namedJdbcTemplate.queryForObject(GET_ONE_QUERY, parameters, mapper);
 		if (stagiaire == null) {
 			return Optional.empty();
-		}
-		else {
+		} else {
 			return Optional.of(stagiaire);
 		}	
 	}

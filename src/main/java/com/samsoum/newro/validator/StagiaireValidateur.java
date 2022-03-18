@@ -4,6 +4,9 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.time.format.DateTimeParseException;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.samsoum.newro.dto.StagiaireDTO;
 import com.samsoum.newro.service.PromotionService;
 import com.samsoum.newro.service.ServiceException;
@@ -15,40 +18,32 @@ import com.samsoum.newro.validator.exception.NotValidDateFormatInputException;
 import com.samsoum.newro.validator.exception.OutOfBoundsDateInputException;
 import com.samsoum.newro.validator.exception.PromotionNotFoundInputException;
 
+@Component
 public class StagiaireValidateur {
-	private static StagiaireValidateur instance;
+	private PromotionService promotionService;
 	private LocalDate LIMIT_DOWN_MYSQL_TIMESTAMP = LocalDate.of(1970, Month.JANUARY, 1);
 	private LocalDate LIMIT_UP_MYSQL_TIMESTAMP = LocalDate.of(2038, Month.JANUARY, 19);
 
-	private StagiaireValidateur() {
+	@Autowired
+	private StagiaireValidateur(PromotionService promotionService) {
+		this.promotionService = promotionService;
 	}
 
-	public static StagiaireValidateur getInstance() {
-		if (instance == null) {
-			instance = new StagiaireValidateur();
-		}
-		return instance;
-	}
 
 	public void check(StagiaireDTO stagiaire) throws InputException {
-		// Validation du prénom
 		checkFirstName(stagiaire.getFirst_name());
-		// Validation du nom
 		checkLastName(stagiaire.getLast_name());
-		// Validation de la date d'arrivée
 		checkArrival(stagiaire.getArrival());
-		// Validation de la date de départ
 		checkFormationOver(stagiaire.getFormation_over(), stagiaire.getArrival());
-		// Validation de la promotion
 		checkPromotion(stagiaire.getPromotion_id());
 	}
 
-	private void checkFirstName(String first_name) throws EmptyInputException {
-		checkEmptyString(first_name);
+	private void checkFirstName(String firstName) throws EmptyInputException {
+		checkEmptyString(firstName);
 	}
 
-	private void checkLastName(String last_name) throws EmptyInputException {
-		checkEmptyString(last_name); 
+	private void checkLastName(String lastName) throws EmptyInputException {
+		checkEmptyString(lastName); 
 	}
 
 	private void checkEmptyString(String str) throws EmptyInputException {
@@ -57,12 +52,12 @@ public class StagiaireValidateur {
 		}
 	}
 
-	private void checkPromotion(String promotion_id) throws InputException {
-		checkEmptyString(promotion_id);
+	private void checkPromotion(String promotionId) throws InputException {
+		checkEmptyString(promotionId);
 		try {
-			int id = Integer.parseInt(promotion_id);
+			int id = Integer.parseInt(promotionId);
 			try {
-				if (!PromotionService.getInstance().getOne(id).isPresent()) {
+				if (!promotionService.getOne(id).isPresent()) {
 					throw new PromotionNotFoundInputException();
 				}
 			} catch (ServiceException e) {
@@ -95,9 +90,9 @@ public class StagiaireValidateur {
 	private void checkFormationOver(String formationOverString, String arrivalString) throws InputException {
 		try {
 			checkEmptyString(formationOverString);
-			LocalDate formation_over = checkDateFormat(formationOverString);
+			LocalDate formationOver = checkDateFormat(formationOverString);
 			LocalDate arrival = checkDateFormat(arrivalString);
-			if (formation_over.isBefore(arrival)) {
+			if (formationOver.isBefore(arrival)) {
 				throw new DepartureBeforeArrivalInputException();
 			}
 		} catch (EmptyInputException e) {

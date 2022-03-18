@@ -9,10 +9,34 @@ public enum StagiaireField {
 	PROMOTION_ID("promotion_id");
 	
 	private String value;
-	private StagiaireField(String val) {
+	StagiaireField(String val) {
 		this.value = val;
 	}
 	public String getValue() {
 		return this.value;
+	}
+	public static StagiaireField valueFromSnakeCase(String field) {
+		StagiaireField result;
+		switch (field) {
+		case "firstName":
+			result = StagiaireField.FIRST_NAME;
+			break;
+		case "lastName":
+			result = StagiaireField.LAST_NAME;
+			break;
+		case "arrival":
+			result = StagiaireField.ARRIVAL;
+			break;
+		case "formationOver":
+			result = StagiaireField.ARRIVAL;
+			break;
+		case "promotion":
+			result = StagiaireField.PROMOTION_ID;
+			break;
+		default:
+			result = StagiaireField.FORMATION_OVER;
+			break;
+		}
+		return result;
 	}
 }

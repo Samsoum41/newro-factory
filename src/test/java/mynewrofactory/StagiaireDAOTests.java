@@ -26,17 +26,20 @@ import com.samsoum.newro.mapper.StagiaireMapper;
 import com.samsoum.newro.model.Promotion;
 import com.samsoum.newro.model.Stagiaire;
 import com.samsoum.newro.persistence.DAOException;
-import com.samsoum.newro.persistence.StagiaireDAO;
+import com.samsoum.newro.persistence.StagiaireDao;
 import com.samsoum.newro.persistence.StagiaireField;
 import com.samsoum.newro.ui.PageStagiaire;
 import com.samsoum.newro.util.Context;
 
-class StagiaireDAOTests {
+class StagiaireDaoTests {
 	@Mock
 	private StagiaireMapper mapper;
 
+	/**
+	 * Bean DataSource Hikari
+	 */
 	private DataSource datasource;
-	private StagiaireDAO dao;
+	private StagiaireDao dao;
 
 	@Test
 	public void addStagiaireWithCorrectInputShouldWork() throws MapperException, SQLException {
@@ -179,7 +182,7 @@ class StagiaireDAOTests {
 
 	@BeforeEach
 	public void setupDatabase() throws FileNotFoundException, DAOException, SQLException {
-		dao = Context.getInstance().getBean(StagiaireDAO.class);
+		dao = Context.getInstance().getBean(StagiaireDao.class);
 		datasource = Context.getInstance().getBean(DataSource.class);
 		try (Connection con = datasource.getConnection()) {
 			/**
@@ -192,7 +195,7 @@ class StagiaireDAOTests {
 			 * Angèle | Cochet 3 | Achille | Charbonnier
 			 * 
 			 */
-			String path = "/home/oxyl/1-SCHEMA-StagiaireDAOTest.sql";
+			String path = "/home/oxyl/1-SCHEMA-StagiaireDaoTest.sql";
 			RunScript.execute(con, new FileReader(path));
 		}
 		// Initialisation des annotations mockito
