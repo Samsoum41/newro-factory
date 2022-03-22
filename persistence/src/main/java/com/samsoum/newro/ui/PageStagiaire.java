@@ -3,14 +3,9 @@ package com.samsoum.newro.ui;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
 import com.samsoum.newro.model.Stagiaire;
 
 
-@Component
-@Scope("prototype")
 public class PageStagiaire {
 	public static final int NOMBRES_DE_LIGNES_PAR_DEFAUT = 10;
 	public static final int STARTING_PAGE = 1;

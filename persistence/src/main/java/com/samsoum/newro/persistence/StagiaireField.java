@@ -28,13 +28,13 @@ public enum StagiaireField {
 			result = StagiaireField.ARRIVAL;
 			break;
 		case "formationOver":
-			result = StagiaireField.ARRIVAL;
+			result = StagiaireField.FORMATION_OVER;
 			break;
 		case "promotion":
 			result = StagiaireField.PROMOTION_ID;
 			break;
 		default:
-			result = StagiaireField.FORMATION_OVER;
+			result = StagiaireField.FIRST_NAME;
 			break;
 		}
 		return result;

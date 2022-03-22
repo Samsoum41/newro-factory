@@ -27,8 +27,7 @@ public class Dashboard {
 		PageStagiaire pageStagiaire = service.get(StagiaireField.FIRST_NAME, StagiaireField.FIRST_NAME, "", 1, 10);
 		model.addAttribute("rows", 10);
 		model.addAttribute("page", 1);
-		model.addAttribute("order", StagiaireField.FIRST_NAME);
-		System.out.println("EHHHHHHH");
+		model.addAttribute("order", StagiaireField.FIRST_NAME.getValue());
 		try {
 			List<Integer> navigationPages = pageStagiaire.getNavigationPages();
 			model.addAttribute("page_stagiaires", pageStagiaire);
@@ -50,8 +49,6 @@ public class Dashboard {
 			@RequestParam int rows, 
 			@RequestParam int page,
 			Model model) {
-		System.out.println("EHHHHHHH");
-
 		PageStagiaire pageStagiaire = service.get(StagiaireField.valueFromSnakeCase(order), StagiaireField.FIRST_NAME, "", page, rows);
 		model.addAttribute("page_stagiaires", pageStagiaire);
 		model.addAttribute("rows", rows);

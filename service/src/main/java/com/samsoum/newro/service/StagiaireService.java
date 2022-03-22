@@ -42,6 +42,7 @@ public class StagiaireService {
 
 	public PageStagiaire get(StagiaireField orderField, StagiaireField filterField,
 			String filterValue, int page, int rowsPerPage) {
+		System.out.println(orderField);
 		return dao.get(orderField, filterField, filterValue, page, rowsPerPage);
 
 	}
