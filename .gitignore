@@ -1,8 +1,23 @@
+# Pour ignorer les fichiers d'Eclipse dans le projet global
 .classpath
 .metadata
 .project
 .settings
+
+# Pour ignorer les fichiers de Maven dans le projet global
 build/
 target/
 my_model.mwb
-src/main/resources/config.properties
+
+# Pour ignorer les fichiers d'Eclipse dans les modules
+*/.classpath
+*/.metadata
+*/.project
+*/.settings
+
+# Pour ignorer les fichiers de Maven
+*/target/
+
+# Pour ignorer la configurationd de la BDD
+
+*/src/main/resources/config.properties
