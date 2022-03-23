@@ -15,7 +15,7 @@ import org.springframework.web.servlet.view.JstlView;
 @ComponentScan(basePackages = {
 		"com.samsoum.newro.service", 
 		"com.samsoum.newro.validator", 
-		"com.samsoum.newro.mapper", 
+		"com.samsoum.newro.binding.front", 
 		"com.samsoum.newro.webapp.controller", 
 		"com.samsoum.newro.persistence"
 		})

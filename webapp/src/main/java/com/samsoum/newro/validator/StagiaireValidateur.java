@@ -31,11 +31,11 @@ public class StagiaireValidateur {
 
 
 	public void check(StagiaireDTO stagiaire) throws InputException {
-		checkFirstName(stagiaire.getFirst_name());
-		checkLastName(stagiaire.getLast_name());
-		checkArrival(stagiaire.getArrival());
-		checkFormationOver(stagiaire.getFormation_over(), stagiaire.getArrival());
-		checkPromotion(stagiaire.getPromotion_id());
+//		checkFirstName(stagiaire.getFirst_name());
+//		checkLastName(stagiaire.getLast_name());
+//		checkArrival(stagiaire.getArrival());
+//		checkFormationOver(stagiaire.getFormation_over(), stagiaire.getArrival());
+//		checkPromotion(stagiaire.getPromotion_id());
 	}
 
 	private void checkFirstName(String firstName) throws EmptyInputException {

@@ -11,7 +11,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
-import com.samsoum.newro.mapper.PromotionMapper;
+import com.samsoum.newro.binding.persistence.mapper.PromotionMapper;
 import com.samsoum.newro.model.Promotion;
 
 @Repository

@@ -13,32 +13,26 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.samsoum.newro.binding.front.dto.StagiaireDTOWithId;
-import com.samsoum.newro.mapper.MapperException;
-import com.samsoum.newro.mapper.StagiaireMapper;
+import com.samsoum.newro.binding.front.mapper.StagiaireFrontMapper;
 import com.samsoum.newro.model.Promotion;
 import com.samsoum.newro.model.Stagiaire;
 import com.samsoum.newro.service.PromotionService;
 import com.samsoum.newro.service.StagiaireService;
-import com.samsoum.newro.validator.StagiaireValidateur;
-import com.samsoum.newro.validator.exception.InputException;
 
 @RequestMapping("/editStagiaire")
 @Controller
 public class EditStagiaire {
 	private StagiaireService stagiaireService;
 	private PromotionService promotionService;
-	private StagiaireValidateur validateur;
-	private StagiaireMapper mapper;
+	private StagiaireFrontMapper mapper;
 	
 	@Autowired
 	private EditStagiaire(
 			StagiaireService stagiaireService, 
 			PromotionService promotionService, 
-			StagiaireValidateur validateur,
-			StagiaireMapper mapper) {
+			StagiaireFrontMapper mapper) {
 		this.stagiaireService = stagiaireService;
 		this.promotionService = promotionService;
-		this.validateur = validateur;
 		this.mapper = mapper;
 	}
 	
@@ -55,15 +49,9 @@ public class EditStagiaire {
 	@PostMapping("")
 	public ModelAndView post(@ModelAttribute StagiaireDTOWithId nouveauStagiaire) {
 		System.out.println(nouveauStagiaire);
-		try {
-			validateur.check(nouveauStagiaire);
-			Stagiaire stagiaire = mapper.fromDTO(nouveauStagiaire);
-			stagiaireService.update(stagiaire);
-		} catch (InputException e) {
-			e.printStackTrace();
-		} catch (MapperException e) {
-			e.printStackTrace();
-		}
+//		validateur.check(nouveauStagiaire);
+		Stagiaire stagiaire = mapper.toModel(nouveauStagiaire);
+		stagiaireService.update(stagiaire);
 		return new ModelAndView("redirect:/dashboard");
 	}
 }

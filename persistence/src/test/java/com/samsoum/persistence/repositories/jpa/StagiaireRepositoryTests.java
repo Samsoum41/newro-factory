@@ -24,9 +24,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+import com.samsoum.newro.binding.persistence.dto.PromotionEntity;
+import com.samsoum.newro.binding.persistence.dto.StagiaireEntity;
 import com.samsoum.newro.persistence.DAOException;
-import com.samsoum.newro.persistence.dto.PromotionEntity;
-import com.samsoum.newro.persistence.dto.StagiaireEntity;
 import com.samsoum.newro.persistence.repositories.jpa.StagiaireRepository;
 import com.samsoum.newro.persistence.util.Context;
 

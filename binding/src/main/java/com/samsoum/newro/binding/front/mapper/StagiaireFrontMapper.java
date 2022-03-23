@@ -3,11 +3,13 @@ package com.samsoum.newro.binding.front.mapper;
 import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.samsoum.newro.binding.front.dto.StagiaireDTO;
 import com.samsoum.newro.model.Promotion;
 import com.samsoum.newro.model.Stagiaire;
 
+@Component
 public class StagiaireFrontMapper {
 	private PromotionFrontMapper promotionMapper;
 	

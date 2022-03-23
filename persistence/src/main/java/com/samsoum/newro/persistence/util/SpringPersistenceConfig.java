@@ -25,11 +25,11 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
-@ComponentScan(basePackages = "com.samsoum.newro.mapper")
 @EnableJpaRepositories(basePackages = {"com.samsoum.newro.persistence.repositories.jpa"})
 @EnableTransactionManagement
+@ComponentScan(basePackages = "com.samsoum.newro.binding.persistence.mapper")
 public class SpringPersistenceConfig {
-	String ENTITY_PACKAGE_TO_SCAN = "com.samsoum.newro.persistence.dto";
+	String ENTITY_PACKAGE_TO_SCAN = "com.samsoum.newro.binding.persistence.dto";
 	
 	@Bean
 	public DataSource dataSource() throws IOException {
