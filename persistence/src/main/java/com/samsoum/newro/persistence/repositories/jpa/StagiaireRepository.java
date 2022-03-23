@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.samsoum.newro.persistence.dto.StagiaireEntity;
+import com.samsoum.newro.binding.persistence.dto.StagiaireEntity;
 
 @Repository
 public interface StagiaireRepository extends JpaRepository<StagiaireEntity, Integer> {

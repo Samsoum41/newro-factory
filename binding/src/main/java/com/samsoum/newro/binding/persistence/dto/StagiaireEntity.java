@@ -1,4 +1,4 @@
-package com.samsoum.newro.persistence.dto;
+package com.samsoum.newro.binding.persistence.dto;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -10,7 +10,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.validation.constraints.NotNull;
 
 @Entity(name = "stagiaire")
 public class StagiaireEntity {
@@ -19,23 +18,19 @@ public class StagiaireEntity {
 	private int id;
 
 	@Basic
-	@NotNull
 	@Column(name = "first_name")
 	private String firstName;
 
 	@Basic
-	@NotNull
 	@Column(name = "last_name")
 	private String lastName;
 
 	@Column(name = "arrival")
-	@NotNull
 	private LocalDate arrival;
 
 	@Column(name = "formation_over")
 	private LocalDate formationOver;
 
-	@NotNull
 	@ManyToOne(targetEntity = PromotionEntity.class)
 	private PromotionEntity promotion;
 	

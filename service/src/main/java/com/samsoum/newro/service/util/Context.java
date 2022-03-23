@@ -3,7 +3,7 @@ package com.samsoum.newro.service.util;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import com.samsoum.newro.binding.util.SpringConfig;
+import com.samsoum.newro.binding.config.SpringConfig;
 
 public class Context {
 	private static ApplicationContext context;

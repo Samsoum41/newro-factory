@@ -9,10 +9,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.samsoum.newro.mapper.StagiairePersistenceMapper;
+import com.samsoum.newro.binding.persistence.dto.StagiaireEntity;
+import com.samsoum.newro.binding.persistence.mapper.StagiairePersistenceMapper;
 import com.samsoum.newro.model.Stagiaire;
 import com.samsoum.newro.model.field.StagiaireField;
-import com.samsoum.newro.persistence.dto.StagiaireEntity;
 import com.samsoum.newro.persistence.repositories.jpa.StagiaireRepository;
 
 @Service

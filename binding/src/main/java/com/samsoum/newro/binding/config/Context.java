@@ -1,4 +1,4 @@
-package com.samsoum.newro.binding.util;
+package com.samsoum.newro.binding.config;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;

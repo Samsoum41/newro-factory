@@ -1,9 +1,9 @@
-package com.samsoum.newro.mapper;
+package com.samsoum.newro.binding.persistence.mapper;
 
 import org.springframework.stereotype.Component;
 
+import com.samsoum.newro.binding.persistence.dto.PromotionEntity;
 import com.samsoum.newro.model.Promotion;
-import com.samsoum.newro.persistence.dto.PromotionEntity;
 
 @Component
 public class PromotionPersistenceMapper {

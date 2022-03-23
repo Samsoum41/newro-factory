@@ -7,7 +7,7 @@ import java.time.format.DateTimeParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.samsoum.newro.dto.StagiaireDTO;
+import com.samsoum.newro.binding.front.dto.StagiaireDTO;
 import com.samsoum.newro.service.PromotionService;
 import com.samsoum.newro.service.ServiceException;
 import com.samsoum.newro.validator.exception.DepartureBeforeArrivalInputException;

@@ -1,14 +1,14 @@
-package com.samsoum.newro.mapper;
+package com.samsoum.newro.binding.persistence.mapper;
 
 import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.samsoum.newro.binding.persistence.dto.PromotionEntity;
+import com.samsoum.newro.binding.persistence.dto.StagiaireEntity;
 import com.samsoum.newro.model.Promotion;
 import com.samsoum.newro.model.Stagiaire;
-import com.samsoum.newro.persistence.dto.PromotionEntity;
-import com.samsoum.newro.persistence.dto.StagiaireEntity;
 
 @Component
 public class StagiairePersistenceMapper {

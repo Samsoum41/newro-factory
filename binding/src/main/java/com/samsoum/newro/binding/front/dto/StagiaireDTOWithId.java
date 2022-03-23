@@ -1,13 +1,13 @@
-package com.samsoum.newro.dto;
+package com.samsoum.newro.binding.front.dto;
 
+import java.time.LocalDate;
 import java.util.Objects;
 
 public class StagiaireDTOWithId extends StagiaireDTO {
 	private int id;
 
-	public StagiaireDTOWithId(int id, String firstName, String lastName, String arrival, String formationOver,
-			String promotionId) {
-		super(firstName, lastName, arrival, formationOver, promotionId);
+	public StagiaireDTOWithId(int id, String firstName, String lastName, LocalDate arrival, LocalDate formationOver, PromotionDTO promotion) {
+		super(firstName, lastName, arrival, formationOver, promotion);
 		this.id = id;
 	}
 

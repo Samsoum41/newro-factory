@@ -1,4 +1,4 @@
-package com.samsoum.newro.persistence.dto;
+package com.samsoum.newro.binding.persistence.dto;
 
 import java.util.Objects;
 
@@ -8,7 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.validation.constraints.NotNull;
 
 @Entity(name = "promotion")
 public class PromotionEntity {
@@ -18,7 +17,6 @@ public class PromotionEntity {
 	private int id;
 
 	@Basic
-	@NotNull
 	@Column(name = "name")
 	private String name;
 	
