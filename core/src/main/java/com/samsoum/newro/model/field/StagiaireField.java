@@ -1,21 +1,24 @@
-package com.samsoum.newro.persistence;
+package com.samsoum.newro.model.field;
 
 public enum StagiaireField {
 	ID("id"),
-	FIRST_NAME("first_name"),
-	LAST_NAME("last_name"),
+	FIRST_NAME("firstName"),
+	LAST_NAME("lastName"),
 	ARRIVAL("arrival"),
-	FORMATION_OVER("formation_over"),
-	PROMOTION_ID("promotion_id");
+	FORMATION_OVER("formationOver"),
+	PROMOTION_ID("promotionId");
 	
 	private String value;
+	
 	StagiaireField(String val) {
 		this.value = val;
 	}
+	
 	public String getValue() {
 		return this.value;
 	}
-	public static StagiaireField valueFromSnakeCase(String field) {
+	
+	public static StagiaireField valueFromString(String field) {
 		StagiaireField result;
 		switch (field) {
 		case "firstName":

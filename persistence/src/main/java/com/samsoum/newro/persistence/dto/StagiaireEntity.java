@@ -53,8 +53,7 @@ public class StagiaireEntity {
 		this.promotion = promotion;
 	}
 
-	public StagiaireEntity(int id, String firstName, String lastName, LocalDate arrival, LocalDate formationOver,
-			PromotionEntity promotion) {
+	public StagiaireEntity(int id, String firstName, String lastName, LocalDate arrival, LocalDate formationOver, PromotionEntity promotion) {
 		super();
 		this.id = id;
 		this.firstName = firstName;
@@ -64,8 +63,7 @@ public class StagiaireEntity {
 		this.promotion = promotion;
 	}
 
-	public StagiaireEntity(String firstName, String lastName, LocalDate arrival, LocalDate formationOver,
-			PromotionEntity promotion) {
+	public StagiaireEntity(String firstName, String lastName, LocalDate arrival, LocalDate formationOver, PromotionEntity promotion) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;

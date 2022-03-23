@@ -3,6 +3,7 @@ package com.samsoum.newro.webapp.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,16 +12,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.samsoum.newro.model.Stagiaire;
-import com.samsoum.newro.persistence.StagiaireField;
+import com.samsoum.newro.model.field.StagiaireField;
 import com.samsoum.newro.service.StagiaireService;
-import com.samsoum.newro.ui.PageStagiaire;
-import com.samsoum.newro.ui.PaginationException;
 
 @RequestMapping("/dashboard")
 @Controller
 public class Dashboard {
 	private StagiaireService service;
 
+	@Autowired
 	private Dashboard(StagiaireService service) {
 		this.service = service;
 	}
@@ -33,13 +33,14 @@ public class Dashboard {
 		model.addAttribute("page", 1);
 		model.addAttribute("order", StagiaireField.FIRST_NAME.getValue());
 		List<Integer> navigationPages = getNavigationPages(page, pageStagiaire.getTotalPages());
-		model.addAttribute("page_stagiaires", pageStagiaire);
+		model.addAttribute("page_stagiaires", pageStagiaire.toList());
 		model.addAttribute("nb_stagiaires", pageStagiaire.getTotalElements());
 		model.addAttribute("numOfPages", pageStagiaire.getTotalPages());
 		model.addAttribute("nextPage", Math.min(page + 1, pageStagiaire.getTotalPages()));
 		model.addAttribute("page", page);
 		model.addAttribute("previousPage", Math.max(page - 1, 1));
 		model.addAttribute("navigationPages", navigationPages);
+		model.addAttribute("search", "");
 		return "dashboard";
 	}
 
@@ -50,14 +51,13 @@ public class Dashboard {
 			@RequestParam int page,
 			@RequestParam String search,
 			Model model) {
-		Page<Stagiaire> pageStagiaire = service.get(StagiaireField.valueFromSnakeCase(order), search, page - 1, 10);
-
-		PageStagiaire pageStagiaire = service.get(StagiaireField.valueFromSnakeCase(order), StagiaireField.FIRST_NAME, "", page, rows);
-		model.addAttribute("page_stagiaires", pageStagiaire);
+		System.out.println("En entrée, on a : " + order);
+		System.out.println("Avec StagiaireField.valueFromString on obtient : " + StagiaireField.valueFromString(order));
+		Page<Stagiaire> pageStagiaire = service.get(StagiaireField.valueFromString(order), search, page - 1, rows);
 		model.addAttribute("rows", rows);
 		model.addAttribute("order", order);
 		List<Integer> navigationPages = getNavigationPages(page, pageStagiaire.getTotalPages());
-		model.addAttribute("page_stagiaires", pageStagiaire);
+		model.addAttribute("page_stagiaires", pageStagiaire.toList());
 		model.addAttribute("nb_stagiaires", pageStagiaire.getTotalElements());
 		model.addAttribute("numOfPages", pageStagiaire.getTotalPages());
 		model.addAttribute("nextPage", Math.min(page + 1, pageStagiaire.getTotalPages()));

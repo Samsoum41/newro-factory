@@ -5,10 +5,10 @@ import java.util.Objects;
 public class Chapter {
 	private int id;
 	private String name;
-	private String parent_path;
+	private String parentPath;
 
 	public String getParent_path() {
-		return parent_path;
+		return parentPath;
 	}
 
 	public int getId() {
@@ -17,19 +17,19 @@ public class Chapter {
 
 	@Override
 	public String toString() {
-		return "Chapter [id=" + id + ", name=" + name + ", parent_path=" + parent_path + "]";
+		return "Chapter [id=" + id + ", name=" + name + ", parent_path=" + parentPath + "]";
 	}
 
-	public Chapter(int id, String name, String parent_path) {
+	public Chapter(int id, String name, String parentPath) {
 		super();
 		this.id = id;
 		this.name = name;
-		this.parent_path = parent_path;
+		this.parentPath = parentPath;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, name, parent_path);
+		return Objects.hash(id, name, parentPath);
 	}
 
 	@Override
@@ -44,7 +44,7 @@ public class Chapter {
 			return false;
 		}
 		Chapter other = (Chapter) obj;
-		return id == other.id && Objects.equals(name, other.name) && Objects.equals(parent_path, other.parent_path);
+		return id == other.id && Objects.equals(name, other.name) && Objects.equals(parentPath, other.parentPath);
 	}
 
 	public void setId(int id) {
@@ -60,7 +60,7 @@ public class Chapter {
 	}
 
 	public void setParent_path(String parent_path) {
-		this.parent_path = parent_path;
+		this.parentPath = parent_path;
 	}
 
 }

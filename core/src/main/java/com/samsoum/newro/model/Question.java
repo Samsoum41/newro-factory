@@ -6,7 +6,7 @@ public class Question {
 	private int id;
 	private String title;
 	private String statement;
-	private int chapter_id;
+	private int chapterId;
 
 	public int getId() {
 		return id;
@@ -22,7 +22,7 @@ public class Question {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(chapter_id, id, statement, title);
+		return Objects.hash(chapterId, id, statement, title);
 	}
 
 	@Override
@@ -37,13 +37,13 @@ public class Question {
 			return false;
 		}
 		Question other = (Question) obj;
-		return chapter_id == other.chapter_id && id == other.id && Objects.equals(statement, other.statement)
+		return chapterId == other.chapterId && id == other.id && Objects.equals(statement, other.statement)
 				&& Objects.equals(title, other.title);
 	}
 
 	@Override
 	public String toString() {
-		return "Question [id=" + id + ", title=" + title + ", statement=" + statement + ", chapter_id=" + chapter_id
+		return "Question [id=" + id + ", title=" + title + ", statement=" + statement + ", chapterId=" + chapterId
 				+ "]";
 	}
 
@@ -51,12 +51,12 @@ public class Question {
 		this.title = title;
 	}
 
-	public Question(int id, String title, String statement, int chapter_id) {
+	public Question(int id, String title, String statement, int chapterId) {
 		super();
 		this.id = id;
 		this.title = title;
 		this.statement = statement;
-		this.chapter_id = chapter_id;
+		this.chapterId = chapterId;
 	}
 
 	public String getStatement() {
@@ -67,12 +67,12 @@ public class Question {
 		this.statement = statement;
 	}
 
-	public int getChapter_id() {
-		return chapter_id;
+	public int getChapterId() {
+		return chapterId;
 	}
 
-	public void setChapter_id(int chapter_id) {
-		this.chapter_id = chapter_id;
+	public void setChapterId(int chapterId) {
+		this.chapterId = chapterId;
 	}
 
 }

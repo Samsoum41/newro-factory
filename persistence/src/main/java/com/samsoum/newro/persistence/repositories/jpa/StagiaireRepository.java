@@ -13,13 +13,13 @@ import com.samsoum.newro.persistence.dto.StagiaireEntity;
 
 @Repository
 public interface StagiaireRepository extends JpaRepository<StagiaireEntity, Integer> {
-	public Optional<StagiaireEntity> findById(int id);
-	public Optional<StagiaireEntity> findByFirstName(String firstName);
+	Optional<StagiaireEntity> findById(int id);
+	Optional<StagiaireEntity> findByFirstName(String firstName);
 	@Query("select u from stagiaire u where u.firstName like %:searchedName or u.lastName like %:searchedName")
-	public Optional<StagiaireEntity> findByFirstNameContainingOrLastNameContaining(@Param("searchedName") String searchedName);
+	Optional<StagiaireEntity> findByFirstNameContainingOrLastNameContaining(@Param("searchedName") String searchedName);
 	
 	@Query("select u from stagiaire u where u.firstName like %:searchedName or u.lastName like %:searchedName")
-	public Page<StagiaireEntity> findByFirstNameContainingOrLastNameContaining(@Param("searchedName") String searchedName,Pageable page);
-	public long count();
-	public void deleteById(int i);
+	Page<StagiaireEntity> findByFirstNameContainingOrLastNameContaining(@Param("searchedName") String searchedName, Pageable page);
+	long count();
+	void deleteById(int i);
 }

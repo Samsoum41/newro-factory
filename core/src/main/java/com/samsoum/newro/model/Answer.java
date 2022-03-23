@@ -6,10 +6,10 @@ public class Answer {
 	private int id;
 	private String label;
 	private String text;
-	private int valid_answer;
+	private int validAnswer;
 
-	public void setValid_answer(int valid_answer) {
-		this.valid_answer = valid_answer;
+	public void setValidAnswer(int validAnswer) {
+		this.validAnswer = validAnswer;
 	}
 
 	private int question_id;
@@ -34,12 +34,12 @@ public class Answer {
 		return text;
 	}
 
-	public Answer(int id, String label, String text, int valid_answer, int question_id) {
+	public Answer(int id, String label, String text, int validAnswer, int question_id) {
 		super();
 		this.id = id;
 		this.label = label;
 		this.text = text;
-		this.valid_answer = valid_answer;
+		this.validAnswer = validAnswer;
 		this.question_id = question_id;
 	}
 
@@ -47,12 +47,12 @@ public class Answer {
 		this.text = text;
 	}
 
-	public int getValid_answer() {
-		return valid_answer;
+	public int getValidAnswer() {
+		return validAnswer;
 	}
 
-	public void setValid_answer(short valid_answer) {
-		this.valid_answer = valid_answer;
+	public void setValidAnswer(short validAnswer) {
+		this.validAnswer = validAnswer;
 	}
 
 	public int getQuestion_id() {
@@ -70,7 +70,7 @@ public class Answer {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, label, question_id, text, valid_answer);
+		return Objects.hash(id, label, question_id, text, validAnswer);
 	}
 
 	@Override
@@ -86,6 +86,6 @@ public class Answer {
 		}
 		Answer other = (Answer) obj;
 		return id == other.id && Objects.equals(label, other.label) && question_id == other.question_id
-				&& Objects.equals(text, other.text) && valid_answer == other.valid_answer;
+				&& Objects.equals(text, other.text) && validAnswer == other.validAnswer;
 	}
 }
