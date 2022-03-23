@@ -10,4 +10,11 @@ public class PromotionPersistenceMapper {
 		// Mapping
 		return new Promotion(promotionEntity.getId(), promotionEntity.getName());
 	}
+	
+	public PromotionEntity toEntity(Promotion promotion) {
+		// TODO : Validation
+		
+		// Mapping
+		return new PromotionEntity(promotion.getId(), promotion.getName());
+	}
 }

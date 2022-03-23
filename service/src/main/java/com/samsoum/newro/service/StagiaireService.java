@@ -3,22 +3,28 @@ package com.samsoum.newro.service;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.samsoum.newro.mapper.StagiairePersistenceMapper;
 import com.samsoum.newro.model.Stagiaire;
-import com.samsoum.newro.persistence.StagiaireRepository;
 import com.samsoum.newro.persistence.StagiaireField;
+import com.samsoum.newro.persistence.dto.StagiaireEntity;
 import com.samsoum.newro.persistence.repositories.jpa.StagiaireRepository;
-import com.samsoum.newro.ui.PageStagiaire;
 
 @Service
 public class StagiaireService {
 //	private static StagiaireService instance;
 	private StagiaireRepository dao;
+	private StagiairePersistenceMapper stagiairePersistenceMapper;
 
 	@Autowired
-	public StagiaireService(StagiaireRepository dao) {
+	public StagiaireService(StagiaireRepository dao, StagiairePersistenceMapper stagiairePersistenceMapper) {
 		this.dao = dao;
+		this.stagiairePersistenceMapper = stagiairePersistenceMapper;
 	}
 
 	public StagiaireRepository getDao() {
@@ -30,29 +36,32 @@ public class StagiaireService {
 	}
 
 	public void save(Stagiaire data) {
-		dao.save(data);
+		StagiaireEntity entity = stagiairePersistenceMapper.toEntity(data);
+		dao.save(entity);
 	}
 
-	public Optional<Stagiaire> getOne(int id) {
-		return dao.getById(id);
+	public Optional<Stagiaire> findById(int id) {
+		Optional<StagiaireEntity> entity = dao.findById(id);
+		return entity.map(stagiairePersistenceMapper::toModel);
 	}
 
-	public int count() {
+	public long count() {
 		return dao.count();
 	}
 
-	public PageStagiaire get(StagiaireField orderField, StagiaireField filterField,
-			String filterValue, int page, int rowsPerPage) {
+	public Page<Stagiaire> get(StagiaireField orderField, String filterValue, int page, int rowsPerPage) {
 		System.out.println(orderField);
-		return dao.get(orderField, filterField, filterValue, page, rowsPerPage);
-
+		Pageable p = PageRequest.of(page, rowsPerPage, Sort.by(orderField.getValue()).ascending());
+		Page<StagiaireEntity> pageStagiaire = dao.findByFirstNameContainingOrLastNameContaining(filterValue, p);
+		return pageStagiaire.map(stagiairePersistenceMapper::toModel);
 	}
 
 	public void delete(int id) {
-		dao.delete(id);
+		dao.deleteById(id);
 	}
 
 	public void update(Stagiaire stagiaire) {
-		dao.update(stagiaire);
+		StagiaireEntity entity = stagiairePersistenceMapper.toEntity(stagiaire);
+		dao.save(entity);
 	}
 }
