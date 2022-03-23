@@ -6,30 +6,31 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.samsoum.newro.model.Stagiaire;
-import com.samsoum.newro.persistence.StagiaireDao;
+import com.samsoum.newro.persistence.StagiaireRepository;
 import com.samsoum.newro.persistence.StagiaireField;
+import com.samsoum.newro.persistence.repositories.jpa.StagiaireRepository;
 import com.samsoum.newro.ui.PageStagiaire;
 
 @Service
 public class StagiaireService {
 //	private static StagiaireService instance;
-	private StagiaireDao dao;
+	private StagiaireRepository dao;
 
 	@Autowired
-	public StagiaireService(StagiaireDao dao) {
+	public StagiaireService(StagiaireRepository dao) {
 		this.dao = dao;
 	}
 
-	public StagiaireDao getDao() {
+	public StagiaireRepository getDao() {
 		return dao;
 	}
 
-	public void setDao(StagiaireDao dao) {
+	public void setDao(StagiaireRepository dao) {
 		this.dao = dao;
 	}
 
-	public void add(Stagiaire data) {
-		dao.add(data);
+	public void save(Stagiaire data) {
+		dao.save(data);
 	}
 
 	public Optional<Stagiaire> getOne(int id) {
