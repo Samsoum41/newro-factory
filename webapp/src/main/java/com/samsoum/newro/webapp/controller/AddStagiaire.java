@@ -44,7 +44,6 @@ public class AddStagiaire {
 	
 	@PostMapping("")
 	public ModelAndView post(@ModelAttribute StagiaireDTOWithoutId nouveauStagiaire, Model model) {
-//		validateur.check(nouveauStagiaire);
 		Stagiaire stagiaire = mapper.toModel(nouveauStagiaire);
 		stagiaireService.save(stagiaire); 
 		return new ModelAndView("redirect:/dashboard");
