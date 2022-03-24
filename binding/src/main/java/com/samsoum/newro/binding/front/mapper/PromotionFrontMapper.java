@@ -11,4 +11,8 @@ public class PromotionFrontMapper {
 		// TODO : Validation
 		return new Promotion(promotion.getId(), promotion.getName());
 	}
+	
+	public PromotionDTO toDto(Promotion promotion) {
+		return new PromotionDTO(promotion.getId(), promotion.getName());
+	}
 }

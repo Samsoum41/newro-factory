@@ -3,10 +3,14 @@ package com.samsoum.newro.binding.front.dto;
 import java.time.LocalDate;
 import java.util.Objects;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 public class StagiaireDTO {
 	private String firstName;
 	private String lastName;
+	@DateTimeFormat(iso=DateTimeFormat.ISO.DATE)
 	private LocalDate arrival;
+	@DateTimeFormat(iso=DateTimeFormat.ISO.DATE)
 	private LocalDate formationOver;
 	private PromotionDTO promotion;
 
@@ -85,7 +89,7 @@ public class StagiaireDTO {
 		return promotion;
 	}
 
-	public void setPromotion_id(PromotionDTO promotion) {
+	public void setPromotion(PromotionDTO promotion) {
 		this.promotion = promotion;
 	}
 }

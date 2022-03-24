@@ -50,7 +50,6 @@ public class StagiaireService {
 	}
 
 	public Page<Stagiaire> get(StagiaireField orderField, String filterValue, int page, int rowsPerPage) {
-		System.out.println("L'ordre passé ici est : " + orderField);
 		Pageable p = PageRequest.of(page, rowsPerPage, Sort.by(orderField.getValue()).ascending());
 		Page<StagiaireEntity> pageStagiaire = dao.findByFirstNameContainingOrLastNameContaining(filterValue, p);
 		return pageStagiaire.map(stagiairePersistenceMapper::toModel);

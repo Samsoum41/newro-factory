@@ -8,8 +8,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.samsoum.newro.model.Stagiaire;
 import com.samsoum.newro.model.field.StagiaireField;
@@ -65,6 +67,15 @@ public class Dashboard {
 		model.addAttribute("previousPage", Math.max(page - 1, 1));
 		model.addAttribute("navigationPages", navigationPages);
 		return "dashboard";
+	}
+	
+	@PostMapping(value = "", params = {"selection"})
+	public ModelAndView delete(@RequestParam List<Integer> selection, Model model) {
+		System.out.println(selection);
+		for (int id : selection) {
+			service.delete(id);
+		}
+		return new ModelAndView("redirect:/dashboard");
 	}
 
 	private List<Integer> getNavigationPages(int page, int nbPages) {

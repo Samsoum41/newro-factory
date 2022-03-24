@@ -80,6 +80,8 @@
 								<input type="checkbox" name="cb" class="cb" value="${stagiaire.id}">
 							</td>
 							<td>
+								
+								<span>${stagiaire.id}</span>
 								<a href="editStagiaire?id=${stagiaire.id}" onclick="">
 									${stagiaire.firstName }
 								</a>

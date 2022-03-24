@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <head>
 <title>Newro Factory</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,41 +28,46 @@
                     </div>
                     <h1>Modification stagiaire</h1>
 
-                    <form action="editStagiaire" method="POST">
-                        <input type="hidden" name="id" value="${id}" id="id"/> <!-- TODO: Change this value with the computer id -->
+                    <form:form action="editStagiaire" method="POST" modelAttribute="stagiairedto">
+                        <form:input path="id" type="hidden" name="id" value="${id}" id="id"/> 
                         <fieldset>
                             <div class="form-group">
-                                <label for="lastName">Nom</label>
-                                <input type="text" class="form-control" name="lastName" id="lastName" placeholder="Nom du stagiaire" value="${stagiaire.last_name}">
+                                <form:label path="lastName" for="lastName">Nom</form:label>
+                                <form:input path="lastName" type="text" class="form-control" name="lastName" id="lastName" placeholder="Nom du stagiaire" value="${stagiairedto.lastName}"/>
                             </div>
                             <div class="form-group">
-                                <label for="firstName">Prénom</label>
-                                <input type="text" class="form-control" name="firstName" id="firstName" placeholder="PrÃ©nom du stagiaire" value="${stagiaire.first_name}">
+                                <form:label path="firstName" for="firstName">Prénom</form:label>
+                                <form:input path="firstName" type="text" class="form-control" name="firstName" id="firstName" placeholder="PrÃ©nom du stagiaire" value="${stagiairedto.firstName}"/>
                             </div>
                             <div class="form-group">
-                                <label for="arrival">Date d'arrivÃ©e</label>
-                                <input type="date" class="form-control" name="arrival" id="arrival" placeholder="Date d'arrivÃ©e" value="${stagiaire.arrival}">
+                                <form:label path="arrival" for="arrival">Date d'arrivée</form:label>
+                                <form:input path="arrival" type="date" class="form-control" name="arrival" id="arrival" placeholder="Date d'arrivÃ©e" value="${stagiairedto.arrival}"/>
                             </div>
                             <div class="form-group">
-                                <label for="finFormation">Date de fin de formation</label>
-                                <input type="date" class="form-control" name="formationOver" id="formationver" placeholder="Date de fin de formation" value="${stagiaire.formation_over}">
+                                <form:label path="formationOver" for="finFormation">Date de fin de formation</form:label>
+                                <form:input path="formationOver" type="date" class="form-control" name="formationOver" id="formationOver" placeholder="Date de fin de formation" value="${stagiairedto.formationOver}"/>
                             </div>
                             <div class="form-group">
-                                <label for="promotionId">Promotion</label>
-                                <select class="form-control" name="promotionId" id="promotionId" >
-                                	<option selected="selected" value="${stagiaire.promotion.id}">${stagiaire.promotion.name}</option>
+                                <form:label path="promotion" for="promotion">Promotion</form:label>
+                                <form:select path="promotion.id promotion.name"  class="form-control" name="promotion" id="promotion">
+                                	<form:option path="promotion" selected="selected" value="${stagiairedto.promotion}">
+                                		${stagiairedto.promotion.name}
+                                	</form:option>
                                 	<c:forEach items="${promotions}" var="promotion">
-										<option value="${promotion.id}">${promotion.name} </option>     	
+										<option path="promotion.name" value="${promotion.name}">
+											${promotion.name}
+					                        <form:input path="promotion.id" type="hidden" name="id" value="${promotion.id}" id="id"/> 
+										</option>     	
                                 	</c:forEach>
-                                </select>
+                                </form:select>
                             </div>                            
                         </fieldset>
                         <div class="actions pull-right">
                             <input type="submit" value="Edit" class="btn btn-primary">
                             or
-                            <a href="dashboard.html" class="btn btn-default">Cancel</a>
+                            <a href="dashboard" class="btn btn-default">Cancel</a>
                         </div>
-                    </form>
+                    </form:form>
                 </div>
             </div>
         </div>

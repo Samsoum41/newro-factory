@@ -5,6 +5,11 @@ import java.util.Objects;
 public class PromotionDTO {
 	private int id;
 	private String name;
+	
+	public PromotionDTO() {
+		
+	}
+	
 	public PromotionDTO(int id, String name) {
 		super();
 		this.id = id;
@@ -42,6 +47,7 @@ public class PromotionDTO {
 	}
 	@Override
 	public String toString() {
-		return "[" + id + " \\t  " + name + "]";
+		return "PromotionDTO [id=" + id + ", name=" + name + "]";
 	}
+
 }
