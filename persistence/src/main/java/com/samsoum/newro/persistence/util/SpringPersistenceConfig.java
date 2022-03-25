@@ -64,7 +64,7 @@ public class SpringPersistenceConfig {
 	@Bean
 	public LocalContainerEntityManagerFactoryBean entityManagerFactory() throws IOException {
 		HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-		vendorAdapter.setGenerateDdl(false);
+		vendorAdapter.setGenerateDdl(true);
 		LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
 		factory.setJpaVendorAdapter(vendorAdapter);
 		factory.setPackagesToScan(ENTITY_PACKAGE_TO_SCAN);
