@@ -30,6 +30,7 @@ public class Dashboard {
 	@GetMapping("")
 	public String getDefault(Model model) {
 		int page = 1;
+		System.out.println("DANS LE GETTTT");
 		Page<Stagiaire> pageStagiaire = service.get(StagiaireField.FIRST_NAME, "", page - 1, 10);
 		model.addAttribute("rows", 10);
 		model.addAttribute("page", 1);

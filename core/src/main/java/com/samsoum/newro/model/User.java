@@ -5,13 +5,13 @@ import java.util.Objects;
 
 public class User {
 	private String identifiant;
-	private String password;
+	private String hashedPassword;
 	private List<Role> roles;
 
-	public User(String identifiant, String password, List<Role> roles) {
+	public User(String identifiant, String hashedPassword, List<Role> roles) {
 		super();
 		this.identifiant = identifiant;
-		this.password = password;
+		this.hashedPassword = hashedPassword;
 		this.roles = roles;
 	}
 
@@ -23,12 +23,12 @@ public class User {
 		this.identifiant = identifiant;
 	}
 
-	public String getPassword() {
-		return password;
+	public String getHashedPassword() {
+		return hashedPassword;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public void setHashedPassword(String hashedPassword) {
+		this.hashedPassword = hashedPassword;
 	}
 
 	public List<Role> getRoles() {
@@ -41,7 +41,7 @@ public class User {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(identifiant, password, roles);
+		return Objects.hash(identifiant, hashedPassword, roles);
 	}
 
 	@Override
@@ -53,12 +53,12 @@ public class User {
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
-		return Objects.equals(identifiant, other.identifiant) && Objects.equals(password, other.password)
+		return Objects.equals(identifiant, other.identifiant) && Objects.equals(hashedPassword, other.hashedPassword)
 				&& Objects.equals(roles, other.roles);
 	}
 
 	@Override
 	public String toString() {
-		return "[" + identifiant + " \\t  " + password + " \\t  " + roles + "]";
+		return "[" + identifiant + " \\t  " + hashedPassword + " \\t  " + roles + "]";
 	}
 }

@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.samsoum.newro.binding.front.dto.PromotionDTO;
-import com.samsoum.newro.binding.front.dto.StagiaireDTO;
 import com.samsoum.newro.binding.front.dto.StagiaireDTOWithId;
 import com.samsoum.newro.binding.front.mapper.PromotionFrontMapper;
 import com.samsoum.newro.binding.front.mapper.StagiaireFrontMapper;

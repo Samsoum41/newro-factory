@@ -2,7 +2,9 @@ package com.samsoum.newro.webapp.util;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
+import com.samsoum.newro.binding.config.SpringBindingConfig;
 import com.samsoum.newro.persistence.util.SpringPersistenceConfig;
+import com.samsoum.newro.service.util.SpringServiceConfig;
 
 public class MyNeuroInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
@@ -13,7 +15,7 @@ public class MyNeuroInitializer extends AbstractAnnotationConfigDispatcherServle
 
 	@Override
 	protected Class<?>[] getServletConfigClasses() {
-		return new Class[] {SpringWebConfig.class, SpringPersistenceConfig.class};
+		return new Class[] {SpringWebConfig.class, SpringServiceConfig.class, SpringBindingConfig.class, SpringPersistenceConfig.class};
 	}
 
 	@Override

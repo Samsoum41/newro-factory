@@ -6,7 +6,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 public class Context {
 	private static ApplicationContext context;
 	private Context() {
-		context = new AnnotationConfigApplicationContext(SpringConfig.class);
+		context = new AnnotationConfigApplicationContext(SpringBindingConfig.class);
 	}
 	public static ApplicationContext getInstance() {
 		if (context == null) {

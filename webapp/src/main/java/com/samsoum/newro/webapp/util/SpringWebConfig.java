@@ -6,20 +6,21 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = {
-		"com.samsoum.newro.service", 
-		"com.samsoum.newro.validator", 
-		"com.samsoum.newro.binding.front", 
-		"com.samsoum.newro.webapp.controller", 
-		"com.samsoum.newro.persistence"
-		})
+@ComponentScan(basePackages = { "com.samsoum.newro.webapp.controller", "com.samsoum.newro.webapp.util" })
 public class SpringWebConfig implements WebMvcConfigurer {
+
+	@Override
+	public void addViewControllers(ViewControllerRegistry registry) {
+		registry.addViewController("/login").setViewName("login");
+        registry.addViewController("/").setViewName("login");	
+    }
 
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {

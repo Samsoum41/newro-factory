@@ -32,6 +32,6 @@ public class UserPersistenceMapper {
 		for (Role role : user.getRoles()) {
 			roles.add(mapper.toEntity(role));
 		}
-		return new UserEntity(user.getIdentifiant(), user.getPassword(), roles);
+		return new UserEntity(user.getIdentifiant(), user.getHashedPassword(), roles);
 	}
 }
