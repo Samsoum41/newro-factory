@@ -3,8 +3,6 @@ package com.samsoum.newro.binding.front.mapper;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.samsoum.newro.binding.front.dto.UserDto;
@@ -13,12 +11,6 @@ import com.samsoum.newro.model.User;
 
 @Component
 public class UserFrontMapper {
-	private PasswordEncoder encoder;
-	
-	@Autowired
-	private UserFrontMapper(PasswordEncoder encoder) {
-		this.encoder = encoder;
-	}
 	
 	public User toModel(UserDto user) {
 		// TODO : Validation
@@ -28,7 +20,7 @@ public class UserFrontMapper {
 		for (String role : user.getRoles()) {
 			roles.add(new Role(role));
 		}
-		return new User(user.getIdentifiant(), encoder.encode(user.getNonHashedPassword()), roles);
+		return new User(user.getUsername(),user.getPassword(), roles);
 	}
 	
 	public UserDto toDto(User user) {
@@ -39,6 +31,6 @@ public class UserFrontMapper {
 		for (Role role : user.getRoles()) {
 			roles.add(role.getRole());
 		}
-		return new UserDto(user.getIdentifiant(), user.getHashedPassword(), roles);
+		return new UserDto(user.getUsername(), user.getPassword(), roles);
 	}
 }

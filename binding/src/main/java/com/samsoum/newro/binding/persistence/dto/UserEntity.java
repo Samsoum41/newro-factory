@@ -13,10 +13,10 @@ import javax.persistence.ManyToMany;
 @Entity(name="user")
 public class UserEntity {
 	@Id
-	private String identifiant;
+	private String username;
 	private String password;
 	
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(	name = "user_roles", 
     			joinColumns = @JoinColumn(name = "user_id"), 
     			inverseJoinColumns = @JoinColumn(name = "role_id")
@@ -27,19 +27,19 @@ public class UserEntity {
 		
 	}
 	
-	public UserEntity(String identifiant, String password, List<RoleEntity> roles) {
+	public UserEntity(String username, String password, List<RoleEntity> roles) {
 		super();
-		this.identifiant = identifiant;
+		this.username = username;
 		this.password = password;
 		this.roles = roles;
 	}
 
-	public String getIdentifiant() {
-		return identifiant;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setIdentifiant(String identifiant) {
-		this.identifiant = identifiant;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public String getPassword() {
@@ -60,7 +60,7 @@ public class UserEntity {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(identifiant, password, roles);
+		return Objects.hash(username, password, roles);
 	}
 
 	@Override
@@ -72,7 +72,7 @@ public class UserEntity {
 		if (getClass() != obj.getClass())
 			return false;
 		UserEntity other = (UserEntity) obj;
-		return Objects.equals(identifiant, other.identifiant) && Objects.equals(password, other.password)
+		return Objects.equals(username, other.username) && Objects.equals(password, other.password)
 				&& Objects.equals(roles, other.roles);
 	}
 }

@@ -23,24 +23,32 @@
 			<a class="navbar-brand" href="dashboard"> Newro Factory </a>
 		</div>
 	</header>
-
-	<section id="main">
+	<section id="main"
+		style="margin-right: auto; margin-left: auto; width: fit-content;">
 		<h1>Login</h1>
-		<form:form name='f' action="login" method='POST'>
-			<table>
-				<tr>
-					<td>User:</td>
-					<td><form:input path="identifiant" type='text' name='username' value=''/></td>
-				</tr>
-				<tr>
-					<td>Password:</td>
-					<td><form:input path="password" type='password' name='password' /></td>
-				</tr>
-				<tr>
-					<td><input name="submit" type="submit" value="submit" /></td>
-				</tr>
-			</table>
-		</form:form>
+		<c:url value="/login" var="loginUrl" />
+		<form action="${loginUrl}" method="post">
+			<c:if test="${param.error != null}">
+				<p>Invalid username and password.</p>
+			</c:if>
+			<c:if test="${param.logout != null}">
+				<p>You have been logged out.</p>
+			</c:if>
+			<p>
+				<label for="username">Username</label> <input type="text"
+					id="username" name="username" />
+			</p>
+			<p>
+				<label for="password">Password</label> <input type="password"
+					id="password" name="password" />
+			</p>
+			<input type="hidden" name="${_csrf.parameterName}"
+				value="${_csrf.token}" />
+			<button type="submit" class="btn">Log in</button>
+		</form>
+		<form method="get" action="signup">
+			<button type="submit" class="btn">Sign up</button>
+		</form>
 	</section>
 	<script src="<c:url value="/resources/js/jquery.min.js"/>"></script>
 </body>

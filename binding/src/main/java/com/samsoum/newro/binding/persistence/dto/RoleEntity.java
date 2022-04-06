@@ -4,8 +4,10 @@ import java.util.Objects;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity(name = "role")
+@Table(name = "role")
 public class RoleEntity {
 	@Id
 	private String role;

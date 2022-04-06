@@ -12,6 +12,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.samsoum.newro.binding.front.dto.UserDto;
+import com.samsoum.newro.binding.front.mapper.UserFrontMapper;
 import com.samsoum.newro.binding.persistence.dto.UserEntity;
 import com.samsoum.newro.binding.persistence.mapper.UserPersistenceMapper;
 import com.samsoum.newro.model.User;
@@ -24,28 +26,25 @@ public class UserService implements UserDetailsService {
         
     private UserPersistenceMapper persistenceMapper;
     
+    private UserFrontMapper frontMapper;
+    
     @Autowired
-    private UserService(UserRepository userRepository, UserPersistenceMapper persistenceMapper) {
+    private UserService(UserRepository userRepository, UserPersistenceMapper persistenceMapper, UserFrontMapper frontMapper) {
     	this.userRepository = userRepository;
     	this.persistenceMapper = persistenceMapper;
+    	this.frontMapper = frontMapper;
     }
     
     public UserDetails loadUserByUsername(String identifiant) throws UsernameNotFoundException {
-        UserEntity userEntity = userRepository.findByIdentifiant(identifiant).get();
-        User user = persistenceMapper.toModel(userEntity);
-        
-        if (user == null) {
+        UserEntity userEntity = userRepository.findByUsername(identifiant).get();
+        if (userEntity == null) {
             throw new UsernameNotFoundException("No user found with username: " + identifiant);
         }
-        boolean enabled = true;
-        boolean accountNonExpired = true;
-        boolean credentialsNonExpired = true;
-        boolean accountNonLocked = true;
-        List<String> roles = user.getRoles().stream().map(role -> role.getRole()).collect(Collectors.toList());
+
+        List<String> roles = userEntity.getRoles().stream().map(role -> role.getRole()).collect(Collectors.toList());
         
         return new org.springframework.security.core.userdetails.User(
-          user.getIdentifiant(), user.getHashedPassword(), enabled, accountNonExpired,
-          credentialsNonExpired, accountNonLocked, getAuthorities(roles));
+        		userEntity.getUsername(), userEntity.getPassword(), getAuthorities(roles));
     }
     
     private static List<GrantedAuthority> getAuthorities (List<String> roles) {
@@ -54,5 +53,11 @@ public class UserService implements UserDetailsService {
             authorities.add(new SimpleGrantedAuthority(role));
         }
         return authorities;
+    }
+    
+    public void register(UserDto userDto) {
+    	User user = frontMapper.toModel(userDto);
+    	UserEntity userEntity = persistenceMapper.toEntity(user);
+    	userRepository.save(userEntity);
     }
 }

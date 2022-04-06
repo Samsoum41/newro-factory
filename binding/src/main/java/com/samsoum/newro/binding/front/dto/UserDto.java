@@ -4,31 +4,31 @@ import java.util.List;
 import java.util.Objects;
 
 public class UserDto {
-	private String identifiant;
-	private String nonHashedPassword;
+	private String username;
+	private String password;
 	private List<String> roles;
 
-	public UserDto(String identifiant, String nonHashedPassword, List<String> roles) {
+	public UserDto(String username, String password, List<String> roles) {
 		super();
-		this.identifiant = identifiant;
-		this.nonHashedPassword = nonHashedPassword;
+		this.username = username;
+		this.password = password;
 		this.roles = roles;
 	}
 
-	public String getIdentifiant() {
-		return identifiant;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setIdentifiant(String identifiant) {
-		this.identifiant = identifiant;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
-	public String getNonHashedPassword() {
-		return nonHashedPassword;
+	public String getPassword() {
+		return password;
 	}
 
-	public void setNonHashedPassword(String nonHashedPassword) {
-		this.nonHashedPassword = nonHashedPassword;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public List<String> getRoles() {
@@ -41,7 +41,7 @@ public class UserDto {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(identifiant, nonHashedPassword, roles);
+		return Objects.hash(username, password, roles);
 	}
 
 	@Override
@@ -53,12 +53,12 @@ public class UserDto {
 		if (getClass() != obj.getClass())
 			return false;
 		UserDto other = (UserDto) obj;
-		return Objects.equals(identifiant, other.identifiant) && Objects.equals(nonHashedPassword, other.nonHashedPassword)
+		return Objects.equals(username, other.username) && Objects.equals(password, other.password)
 				&& Objects.equals(roles, other.roles);
 	}
 
 	@Override
 	public String toString() {
-		return "[" + identifiant + " \\t  " + nonHashedPassword + " \\t  " + roles + "]";
+		return "[" + username + " \\t  " + password + " \\t  " + roles + "]";
 	}
 }

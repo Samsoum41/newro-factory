@@ -24,22 +24,23 @@
 		</div>
 	</header>
 
-	<section id="main">
-		<h1>Login</h1>
-		<form:form name='f' action="login" method='POST'>
-			<table>
-				<tr>
-					<td>User:</td>
-					<td><form:input path="identifiant" type='text' name='username' value=''/></td>
-				</tr>
-				<tr>
-					<td>Password:</td>
-					<td><form:input path="password" type='password' name='password' /></td>
-				</tr>
-				<tr>
-					<td><input name="submit" type="submit" value="submit" /></td>
-				</tr>
-			</table>
+	<section id="main" style="margin-right:auto; margin-left:auto; width:fit-content;">
+		<h1>Sign Up</h1>
+		<form:form action="signup" method="post" modelAttribute="userdto">
+			<p>
+				<form:label path="identifiant" for="identifiant">Username</form:label> 
+				<form:input path="identifiant" type="text"
+					id="identifiant" name="identifiant" /> 
+			</p>
+			<p>
+				<form:label path="password" for="password">Password</form:label> 
+				<form:input path="password" type="password"
+					id="password" name="password" /> 
+			</p>
+			<input type="hidden" 
+								name="${_csrf.parameterName}"
+										value="${_csrf.token}" />
+			<button type="submit" class="btn">Log in</button>
 		</form:form>
 	</section>
 	<script src="<c:url value="/resources/js/jquery.min.js"/>"></script>

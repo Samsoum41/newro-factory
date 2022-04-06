@@ -13,12 +13,17 @@ import org.springframework.web.servlet.view.JstlView;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = { "com.samsoum.newro.webapp.controller", "com.samsoum.newro.webapp.util" })
+@ComponentScan(basePackages = { 
+		"com.samsoum.newro.webapp.controller", 
+		"com.samsoum.newro.webapp.util", 
+		"com.samsoum.newro.webapp.security",
+		"com.samsoum.newro.service"
+		})
 public class SpringWebConfig implements WebMvcConfigurer {
 
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {
-		registry.addViewController("/login").setViewName("login");
+		registry.addViewController("/connect").setViewName("connect");
         registry.addViewController("/").setViewName("login");	
     }
 

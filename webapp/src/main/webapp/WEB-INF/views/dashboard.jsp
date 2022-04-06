@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <head>
 
 <title>Newro Factory</title>
@@ -17,21 +17,29 @@
 
 
 <body>
-	<header class="navbar navbar-inverse navbar-fixed-top">
+	<header class="navbar navbar-inverse navbar-fixed-top" style="display:flex;">
 		<div class="container">
 			<a class="navbar-brand" href="dashboard"> Newro Factory </a>
+		</div>
+		<div class="navbar-brand">
+			<form method="post" action="logout">
+				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+				<button type="submit" class="btn">Log out</button>
+			</form>
 		</div>
 	</header>
 
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle"><span>${nb_stagiaires}</span> Stagiaires found</h1>
+			<h1 id="homeTitle">
+				<span>${nb_stagiaires}</span> Stagiaires found
+			</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
 
 						<input type="search" id="searchbox" name="search"
-							class="form-control" placeholder="Search name" value="${search}"/> 
+							class="form-control" placeholder="Search name" value="${search}" />
 						<input type="submit" id="searchsubmit" value="Filter by name"
 							class="btn btn-primary" />
 					</form>
@@ -54,21 +62,29 @@
 					<tr>
 						<!-- Variable declarations for passing labels as parameters -->
 						<!-- Table header for Computer Name -->
-						<th class="editMode" style="width: 60px; height: 22px;">
-							<input type="checkbox" id="selectall" /> 
-							<span style="vertical-align: top;"> - 
-								<a href="#" id="deleteSelected" onclick="$.fn.deleteSelected();"> 
-									<i class="fa fa-trash-o fa-lg"></i>
-								</a>
-							</span>
-						</th>
-						<th><a href="dashboard?page=${page}&rows=${rows}&order=firstName&search=${search}">Prénom du stagiaire</a></th>
-						<th><a href="dashboard?page=${page}&rows=${rows}&order=lastName&search=${search}">Nom du stagiaire</a></th>
-						<th><a href="dashboard?page=${page}&rows=${rows}&order=arrival&search=${search}">Date d'arrivée</a></th>
+						<th class="editMode" style="width: 60px; height: 22px;"><input
+							type="checkbox" id="selectall" /> <span
+							style="vertical-align: top;"> - <a href="#"
+								id="deleteSelected" onclick="$.fn.deleteSelected();"> <i
+									class="fa fa-trash-o fa-lg"></i>
+							</a>
+						</span></th>
+						<th><a
+							href="dashboard?page=${page}&rows=${rows}&order=firstName&search=${search}">Prénom
+								du stagiaire</a></th>
+						<th><a
+							href="dashboard?page=${page}&rows=${rows}&order=lastName&search=${search}">Nom
+								du stagiaire</a></th>
+						<th><a
+							href="dashboard?page=${page}&rows=${rows}&order=arrival&search=${search}">Date
+								d'arrivée</a></th>
 						<!-- Table header for Discontinued Date -->
-						<th><a href="dashboard?page=${page}&rows=${rows}&order=formationOver&search=${search}">Date de fin de formation</a></th>
+						<th><a
+							href="dashboard?page=${page}&rows=${rows}&order=formationOver&search=${search}">Date
+								de fin de formation</a></th>
 						<!-- Table header for Company -->
-						<th><a href="dashboard?page=${page}&rows=${rows}&order=promotion&search=${search}">Promotion</a></th>
+						<th><a
+							href="dashboard?page=${page}&rows=${rows}&order=promotion&search=${search}">Promotion</a></th>
 
 					</tr>
 				</thead>
@@ -76,21 +92,13 @@
 				<tbody id="results">
 					<c:forEach items="${page_stagiaires}" var="stagiaire">
 						<tr>
-							<td class="editMode">
-								<input type="checkbox" name="cb" class="cb" value="${stagiaire.id}">
-							</td>
-							<td>
-								
-								<span>${stagiaire.id}</span>
-								<a href="editStagiaire?id=${stagiaire.id}" onclick="">
-									${stagiaire.firstName }
-								</a>
-							</td>
-							<td>
-								<a href="editStagiaire?id=${stagiaire.id}" onclick="">
-									${stagiaire.lastName}
-								</a>
-							</td>
+							<td class="editMode"><input type="checkbox" name="cb"
+								class="cb" value="${stagiaire.id}"></td>
+							<td><span>${stagiaire.id}</span> <a
+								href="editStagiaire?id=${stagiaire.id}" onclick="">
+									${stagiaire.firstName } </a></td>
+							<td><a href="editStagiaire?id=${stagiaire.id}" onclick="">
+									${stagiaire.lastName} </a></td>
 							<td>${stagiaire.arrival }</td>
 							<td>${stagiaire.formationOver }</td>
 							<td>${stagiaire.promotion.name }</td>
@@ -104,29 +112,37 @@
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center flex-center">
 			<ul class="pagination">
-				<li><a href="dashboard?page=${previousPage}&rows=${rows}&order=${order}&search=${search}"
+				<li><a
+					href="dashboard?page=${previousPage}&rows=${rows}&order=${order}&search=${search}"
 					aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
-				</a></li> 
+				</a></li>
 				<c:forEach items="${navigationPages}" var="navPage">
 					<li><c:choose>
 							<c:when test="${ navPage==page }">
-								<a href="dashboard?page=${navPage}&rows=${rows}&order=${order}&search=${search}"
+								<a
+									href="dashboard?page=${navPage}&rows=${rows}&order=${order}&search=${search}"
 									id="highlighted-li">${navPage}</a>
 							</c:when>
 							<c:otherwise>
-								<a href="dashboard?page=${navPage}&rows=${rows}&order=${order}&search=${search}">${navPage}</a>
+								<a
+									href="dashboard?page=${navPage}&rows=${rows}&order=${order}&search=${search}">${navPage}</a>
 							</c:otherwise>
 						</c:choose></li>
 				</c:forEach>
-				<li><a href="dashboard?page=${nextPage}&rows=${rows}&order=${order}&search=${search}"
+				<li><a
+					href="dashboard?page=${nextPage}&rows=${rows}&order=${order}&search=${search}"
 					aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 				</a></li>
 			</ul>
 
 			<div class="btn-group btn-group-sm pull-right" role="group">
-				<a href="dashboard?page=${page}&rows=10&order=${order}&search=${search}" class="btn btn-default">10</a> <a
-					href="dashboard?page=${page}&rows=50&order=${order}&search=${search}" class="btn btn-default">50</a> <a
-					href="dashboard?page=${page}&rows=100&order=${order}&search=${search}" class="btn btn-default">100</a>
+				<a
+					href="dashboard?page=${page}&rows=10&order=${order}&search=${search}"
+					class="btn btn-default">10</a> <a
+					href="dashboard?page=${page}&rows=50&order=${order}&search=${search}"
+					class="btn btn-default">50</a> <a
+					href="dashboard?page=${page}&rows=100&order=${order}&search=${search}"
+					class="btn btn-default">100</a>
 			</div>
 		</div>
 	</footer>

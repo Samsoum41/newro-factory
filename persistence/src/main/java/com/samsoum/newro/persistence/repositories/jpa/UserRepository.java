@@ -9,7 +9,7 @@ import com.samsoum.newro.binding.persistence.dto.UserEntity;
 
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Integer> {
-	Optional<UserEntity> findByIdentifiant(String identifiant);
+	Optional<UserEntity> findByUsername(String identifiant);
 
 	long count();
 
